@@ -32,6 +32,7 @@
     "ng2-completer": "^9.0.1",
     "rxjs": "~7.8.0",
     "sass-loader": "^13.3.2",
+    "sweetalert2": "^11.10.8",
     "tslib": "^2.5.0",
     "xng-breadcrumb": "^9.0.0",
     "zone.js": "~0.12.0"

@@ -13,7 +13,7 @@ export const routes: Routes = [
     // canActivateChild: [AuthGuard],
     loadChildren: () => import('./pages/pages.module')
       .then(m => m.PagesModule),
-    data: {breadcrumb: 'Home'},
+    data: {breadcrumb: 'Trang chủ'},
   },
   {
     path: 'error',

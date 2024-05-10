@@ -1,8 +1,9 @@
-import {RouterModule, Routes} from '@angular/router';
-import {NgModule} from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
 
-import {PagesComponent} from './pages.component';
-import {DashboardComponent} from "./dashboard/dashboard.component";
+import { PagesComponent } from './pages.component';
+import { DashboardComponent } from "./dashboard/dashboard.component";
+import { NotFoundComponent } from 'app/error/not-found/not-found.component';
 
 const routes: Routes = [{
   path: '',
@@ -11,7 +12,23 @@ const routes: Routes = [{
     {
       path: 'dashboard',
       component: DashboardComponent,
-      data: {breadcrumb: 'Dashboard'},
+      data: { breadcrumb: 'Dashboard' },
+    },
+    {
+      path: 'categories',
+      loadChildren: () => import('./categories/categories.module')
+        .then(m => m.CategoriesModule),
+      data: { breadcrumb: 'Danh Mục' },
+
+    },
+    {
+      path: '',
+      redirectTo: 'dashboard',
+      pathMatch: 'full',
+    },
+    {
+      path: '**',
+      component: NotFoundComponent,
     },
   ],
 }];
