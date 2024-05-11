@@ -1,0 +1,121 @@
+<nb-card>
+    <nb-card-body>
+        <div class="container">
+            <!-- Form để thêm sản phẩm mới -->
+            <div class="card my-2">
+                <div class="card-body">
+                    <h3 class="card-title">Thêm / Cập nhật sản phẩm</h3>
+                    <form [formGroup]="form" (ngSubmit)="addProduct()" #productForm="ngForm">
+                        <div class="form-group my-3">
+                            <label for="productName">Tên sản phẩm:</label>
+                            <input type="text" class="form-control" id="productName" [(ngModel)]="newProduct.name"
+                                formControlName="name">
+                            <div *ngIf="form.get('name').invalid && form.get('name').touched" class="text-danger">
+                                <small *ngIf="form.get('name').hasError('required')">
+                                    Vui lòng nhập tên sản phẩm.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group my-3">
+                            <label for="productPrice">Giá niêm yết:</label>
+                            <input type="number" class="form-control" id="productPrice" [(ngModel)]="newProduct.price"
+                                formControlName="price" placeholder="đ">
+                            <div *ngIf="form.get('price').invalid && form.get('price').touched" class="text-danger">
+                                <small *ngIf="form.get('price').hasError('required')">
+                                    Vui lòng nhập giá niêm yết.
+                                </small>
+                                <small *ngIf="form.get('price').hasError('min')">
+                                    Giá niêm yết không được nhỏ hơn 0.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group my-3">
+                            <label for="productSalePrice">Giá khuyến mãi:</label>
+                            <input type="number" class="form-control" id="productSalePrice"
+                                [(ngModel)]="newProduct.sale_price" formControlName="sale_price" placeholder="đ">
+                            <div *ngIf="form.get('sale_price').invalid && form.get('sale_price').touched"
+                                class="text-danger">
+                                <small *ngIf="form.get('sale_price').hasError('required')">
+                                    Vui lòng nhập giá khuyến mãi.
+                                </small>
+                                <small *ngIf="form.get('sale_price').hasError('min')">
+                                    Giá khuyến mãi không được nhỏ hơn 0.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group my-3">
+                            <label for="productImage">Hình ảnh sản phẩm:</label>
+                            <input type="file" class="form-control" id="productImage" name="productImage"
+                                formControlName="image" (change)="onFileSelected($event)">
+                            <div *ngIf="form.get('image').invalid && form.get('image').touched" class="text-danger">
+                                <small *ngIf="form.get('image').hasError('required')">
+                                    Vui lòng chọn hình ảnh sản phẩm.
+                                </small>
+                                <small *ngIf="form.get('image').hasError('invalidFormat')">
+                                    Định dạng file không hợp lệ.
+                                </small>
+                                <small *ngIf="form.get('image').hasError('invalidSize')">
+                                    Kích thước file vượt quá giới hạn.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group my-3">
+                            <label for="cateOption">Danh mục sản phẩm*:</label>
+                            <select class="form-control" id="cateOption" formControlName="category_id">
+                                <option value="" disabled selected>Vui lòng chọn danh mục</option>
+                                <option value="1">Trà sữa</option>
+                            </select>
+                            <div *ngIf="form.get('category_id').invalid && form.get('category_id').touched"
+                                class="text-danger">
+                                <small>Vui lòng chọn một danh mục sản phẩm.</small>
+                            </div>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-primary float-end" [disabled]="!form.valid">Lưu</button>
+                        <!-- Nút hủy chỉnh sửa -->
+                        <button type="button" class="btn btn-secondary float-end mx-2" (click)="Reset()">Reset</button>
+                    </form>
+
+                </div>
+            </div>
+            <div class="card my-2">
+                <div class="card-body">
+                    <h3 class="card-title">Danh sách sản phẩm</h3>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Giá niêm yết</th>
+                                    <th>Giá khuyến mãi</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let product of products">
+                                    <td>{{ product.id }}</td>
+                                    <td>{{ product.name }}</td>
+                                    <td>{{ formatCurrency(product.price) }}</td>
+                                    <td>{{ formatCurrency(product.sale_price) }}</td>
+                                    <td><img src="../../../../assets/images/{{product.image}}" alt="{{ product.name }}"
+                                            style="max-width: 100px;"></td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-warning btn-sm mr-2 mx-1"
+                                                (click)="editProduct(product.id)">Sửa</button>
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                                (click)="deleteProduct(product.id)">Xóa</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nb-card-body>
+</nb-card>

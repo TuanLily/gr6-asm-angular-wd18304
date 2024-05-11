@@ -15,10 +15,10 @@ const routes: Routes = [{
       data: { breadcrumb: 'Dashboard' },
     },
     {
-      path: 'categories',
-      loadChildren: () => import('./categories/categories.module')
-        .then(m => m.CategoriesModule),
-      data: { breadcrumb: 'Danh Mục' },
+      path: 'products',
+      loadChildren: () => import('./products/products.module')
+        .then(m => m.ProductsModule),
+      data: { breadcrumb: 'Sản Phẩm' },
 
     },
     {

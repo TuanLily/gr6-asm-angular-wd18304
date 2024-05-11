@@ -11,12 +11,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/dashboard',
   },
   {
-    title: 'Danh Mục',
-    icon: 'list-outline',
+    title: 'Sản phẩm',
+    icon: 'archive-outline',
     children: [
       {
         title: 'Danh Sách',
-        link: '/pages/categories/list',
+        link: '/pages/products/list',
       },
     ],
   },
