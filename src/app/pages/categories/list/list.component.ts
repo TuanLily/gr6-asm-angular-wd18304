@@ -5,6 +5,6 @@ import { Component } from '@angular/core';
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss']
 })
-export class CategoriesComponent {
+export class ListComponent {
 
 }

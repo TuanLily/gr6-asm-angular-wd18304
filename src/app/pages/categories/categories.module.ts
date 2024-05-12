@@ -19,7 +19,8 @@ import { ThemeModule } from '../../@theme/theme.module';
 
 import { NewsService } from './news.service';
 import { CategorieRoutingModule } from './categories-routing.module';
-import { CategoriesComponent } from './list/list.component';
+import { CategoriesComponent } from './categories.component';
+import { ListComponent } from './list/list.component';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { CategoriesComponent } from './list/list.component';
     CategorieRoutingModule,
   ],
   declarations: [
-    CategoriesComponent
+    CategoriesComponent,
+    ListComponent
   ],
   providers: [
     NewsService,
