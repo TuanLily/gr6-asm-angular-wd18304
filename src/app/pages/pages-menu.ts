@@ -20,4 +20,14 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
     ],
   },
+  {
+    title: 'Danh Mục',
+    icon: 'list-outline',
+    children: [
+      {
+        title: 'Danh Sách',
+        link: '/pages/categories/list',
+      },
+    ],
+  },
 ];

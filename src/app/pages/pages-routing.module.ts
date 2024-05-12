@@ -22,6 +22,13 @@ const routes: Routes = [{
 
     },
     {
+      path: 'categories',
+      loadChildren: () => import('./categories/categories.module')
+        .then(m => m.CategoriesModule),
+      data: { breadcrumb: 'Danh Mục' },
+
+    },
+    {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',
