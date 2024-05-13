@@ -1,0 +1,63 @@
+<p>Vouchers works!</p>
+
+<nb-card>
+    <nb-card-body>
+        <div class="container">
+            <div class="card my-2">
+                <div class="card-body">
+                    <h3 class="card-title">Thêm / Cập nhật voucher</h3>
+                    <form>
+                        <div class="form-group my-3">
+                            <label for="voucherCode">Mã voucher:</label>
+                            <input type="text" class="form-control" id="voucherCode" formControlName="code">
+                            <div class="text-danger">
+                                <small>Vui lòng nhập mã voucher.</small>
+                            </div>
+                        </div>
+                        <div class="form-group my-3">
+                            <label for="voucherValue">Giá trị:</label>
+                            <input type="number" class="form-control" id="voucherValue" formControlName="value">
+                            <div class="text-danger">
+                                <small>Vui lòng nhập giá trị cho voucher.</small>
+                            </div>
+                        </div>
+                        <div class="form-group my-3">
+                            <label for="voucherStartDate">Thời gian có hiệu lực:</label>
+                            <input type="datetime-local" class="form-control" id="voucherStartDate" formControlName="startDate">
+                        </div>
+                        <div class="form-group my-3">
+                            <label for="voucherEndDate">Thời gian hết hiệu lực:</label>
+                            <input type="datetime-local" class="form-control" id="voucherEndDate" formControlName="endDate">
+                        </div>
+                        <button type="submit" class="btn btn-primary float-end">Lưu</button>
+                        <button type="button" class="btn btn-secondary float-end mx-2">Reset</button>
+                    </form>
+
+                </div>
+            </div>
+            <div class="card my-2">
+                <div class="card-body">
+                    <h3 class="card-title">Danh sách voucher</h3>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Mã voucher</th>
+                                    <th>Giá trị</th>
+                                    <th>Thời gian tạo</th>
+                                    <th>Thời gian hết hiệu lực</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nb-card-body>
+</nb-card>

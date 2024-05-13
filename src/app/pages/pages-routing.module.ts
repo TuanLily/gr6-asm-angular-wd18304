@@ -29,6 +29,13 @@ const routes: Routes = [{
 
     },
     {
+      path: 'vouchers',
+      loadChildren: () => import('./vouchers/vouchers.module')
+        .then(m => m.VouchersModule),
+      data: { breadcrumb: 'Mã giảm giá' },
+
+    },
+    {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',

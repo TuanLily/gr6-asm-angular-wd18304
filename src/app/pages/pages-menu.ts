@@ -30,4 +30,14 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
     ],
   },
+  {
+    title: 'Mã giảm giá',
+    icon: 'pricetags-outline',
+    children: [
+      {
+        title: 'Danh Sách',
+        link: '/pages/vouchers/list',
+      },
+    ],
+  },
 ];

@@ -19,7 +19,7 @@ import {PaginatorModule} from "../@theme/components/paginator/paginator.module";
   ],
   declarations: [
     PagesComponent,
-    
+
   ],
   providers: []
 })
