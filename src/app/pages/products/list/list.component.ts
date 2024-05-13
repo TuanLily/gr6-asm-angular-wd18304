@@ -6,6 +6,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { IProduct } from 'app/@core/interfaces/products.interface';
 import { ProductService } from 'app/@core/services/apis/product.service';
+import { SpinnerService } from "../../../@theme/components/spinner/spinner.service";
 
 
 @Component({
@@ -21,21 +22,39 @@ export class ListComponent implements OnInit {
   isAddingNewProduct: boolean = true;
   isEditing: boolean = false;
 
-
   products: IProduct[] = [];
+  oldImages: string = '';
 
-  constructor(private toastrService: NbToastrService, private productService: ProductService) { }
+  constructor(private toastrService: NbToastrService, private productService: ProductService, private spinner: SpinnerService) { }
 
   ngOnInit(): void {
     this.loadProducts();
+    if (!this.isAddingNewProduct && this.isEditing) {
+      this.form = new FormGroup({
+        name: new FormControl('', Validators.required),
+        price: new FormControl('', [Validators.required, Validators.min(0)]),
+        sale_price: new FormControl('', [Validators.required, Validators.min(0)]),
+        image: new FormControl('', [Validators.required]),
+        category_id: new FormControl('', [Validators.required])
+      });
+    } else {
+      this.form = new FormGroup({
+        name: new FormControl('', Validators.required),
+        price: new FormControl('', [Validators.required, Validators.min(0)]),
+        sale_price: new FormControl('', [Validators.required, Validators.min(0)]),
+        image: new FormControl(''), // Loại bỏ validators required khi chế độ chỉnh sửa
+        category_id: new FormControl('', [Validators.required])
+      });
+    }
 
-    this.form = new FormGroup({
-      name: new FormControl('', Validators.required),
-      price: new FormControl('', [Validators.required, Validators.min(0)]),
-      sale_price: new FormControl('', [Validators.required, Validators.min(0)]),
-      image: new FormControl('', [Validators.required]),
-      category_id: new FormControl('', [Validators.required])
-    });
+  }
+
+  //* Hàm xử lý upload file
+  onImageSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.form.get('image').setValue(file.name);
+    }
   }
 
   // *Định dạng tiền tệ
@@ -50,16 +69,6 @@ export class ListComponent implements OnInit {
     });
   }
 
-
-  // *Xử lý sự kiện khi chọn file ảnh
-  onFileSelected(event: any): void {
-    const file: File = event.target.files[0];
-    const fileNamePath: string = file.name;
-    const fileName: string = fileNamePath.split('\\').pop() || fileNamePath;
-    console.log(fileName);
-    this.newProduct.image = fileName;
-  }
-
   //* Hàm xử lý thêm mới hoặc cập nhật sản phẩm
   addProduct(): void {
     if (!this.form.valid) {
@@ -71,17 +80,43 @@ export class ListComponent implements OnInit {
     const price = this.form.get('price').value;
     const salePrice = this.form.get('sale_price').value;
     if (salePrice >= price) {
-      this.toastrService.danger('Giá khuyễn mãi phải nhỏ hơn giá niêm yết!', 'Error');
+      this.toastrService.danger('Giá khuyến mãi phải nhỏ hơn giá niêm yết!', 'Error');
       return;
+    }
+
+    let productData: IProduct;
+    const imageValue = this.form.get('image').value;
+    if (this.isEditing && !this.isAddingNewProduct && !imageValue) {
+      // Nếu là chế độ sửa và không có ảnh mới được chọn, sử dụng lại ảnh cũ
+      productData = {
+        name: this.form.get('name').value,
+        price: this.form.get('price').value,
+        sale_price: this.form.get('sale_price').value,
+        image: this.oldImages,
+        category_id: this.form.get('category_id').value
+      };
+    } else {
+      // Sử dụng ảnh mới nếu có hoặc nếu không ở chế độ thêm mới
+      productData = {
+        name: this.form.get('name').value,
+        price: this.form.get('price').value,
+        sale_price: this.form.get('sale_price').value,
+        image: imageValue,
+        category_id: this.form.get('category_id').value
+      };
     }
 
     if (this.isEditing === true && !this.isAddingNewProduct) {
       // Nếu đang trong chế độ sửa, cập nhật thông tin cho sản phẩm được chọn
       const productId = this.newProduct.id;
-      this.productService.updateProduct(productId, this.form.value).subscribe(
+      this.productService.updateProduct(productId, productData).subscribe(
         () => {
           this.toastrService.success('Cập nhật thành công!', 'Success');
           this.isEditing = false;
+          setTimeout(() => {
+            this.spinner.show();
+            window.location.reload();
+          }, 1500);
         },
         error => {
           this.toastrService.danger('Đã xảy ra lỗi khi cập nhật sản phẩm!', 'Error');
@@ -90,9 +125,13 @@ export class ListComponent implements OnInit {
       );
     } else {
       // Nếu không đang trong chế độ sửa, thêm sản phẩm mới vào danh sách
-      this.productService.addProduct(this.form.value).subscribe(
+      this.productService.addProduct(productData).subscribe(
         () => {
           this.toastrService.success('Thêm mới thành công!', 'Success');
+          setTimeout(() => {
+            this.spinner.show();
+            window.location.reload();
+          }, 1500);
         },
         error => {
           this.toastrService.danger('Đã xảy ra lỗi khi thêm sản phẩm!', 'Error');
@@ -103,6 +142,8 @@ export class ListComponent implements OnInit {
     this.form.reset();
   }
 
+
+
   //* Hàm xử lý dữ liệu đưa lên form đề cập nhật sản phẩm
   editProduct(productId: number): void {
     if (this.isEditing) {
@@ -112,6 +153,10 @@ export class ListComponent implements OnInit {
     const productIndex = this.products.findIndex(product => product.id === productId);
     if (productIndex !== -1) {
       this.newProduct = { ...this.products[productIndex] };
+
+      // Lấy đường dẫn ảnh cũ từ sản phẩm được chọn
+      this.oldImages = this.newProduct.image;
+
       this.form.patchValue({
         name: this.newProduct.name,
         price: this.newProduct.price,
@@ -123,6 +168,7 @@ export class ListComponent implements OnInit {
       this.toastrService.info('Sẵn sàng cập nhật!', 'Thông tin');
     }
   }
+
 
   //* Hàm xóa sản phẩm
   deleteProduct(productId: number): void {
