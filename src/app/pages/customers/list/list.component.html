@@ -1,0 +1,99 @@
+<p>customers works!</p>
+
+<nb-card>
+    <nb-card-body>
+        <div class="container">
+            <!-- Form để thêm khách hàng mới -->
+            <div class="card my-2">
+                <div class="card-body">
+                    <h3 class="card-title">Thêm / Cập nhật khách hàng</h3>
+                    <form>
+                        <div class="form-group my-3">
+                            <label for="customersName">Tên khách hàng:</label>
+                            <input type="text" class="form-control" id="customersName" formControlName="name">
+                            <div class="text-danger">
+                                <small>
+                                    Vui lòng nhập tên khách hàng.
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group my-3">
+                          <label for="customersName">Email:</label>
+                          <input type="text" class="form-control" id="customersEmail" formControlName="email">
+                          <div class="text-danger">
+                              <small>
+                                  Vui lòng nhập Email
+                              </small>
+                          </div>
+                      </div>
+                        <div class="form-group my-3">
+                            <label for="customersName">Số điện thoại:</label>
+                            <input type="text" class="form-control" id="customersTel" formControlName="tel">
+                            <div class="text-danger">
+                                <small>
+                                    Vui lòng nhập số điện thoại
+                                </small>
+                            </div>
+                        </div>
+                        <div class="form-group my-3">
+                            <label for="customersName">Địa chỉ:</label>
+                            <input type="text" class="form-control" id="customersAddress" formControlName="address">
+                            <div class="text-danger">
+                                <small>
+                                    Vui lòng nhập địa chỉ
+                                </small>
+                            </div>
+                          </div>
+
+
+
+
+
+
+                        <button type="submit" class="btn btn-primary float-end">Lưu</button>
+                        <!-- Nút hủy chỉnh sửa -->
+                        <button type="button" class="btn btn-secondary float-end mx-2">Reset</button>
+                    </form>
+
+                </div>
+            </div>
+            <div class="card my-2">
+                <div class="card-body">
+                    <h3 class="card-title">Danh sách khách hàng</h3>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên khách hàng</th>
+                                    <th>Email</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- <tr *ngFor="let product of products">
+                                    <td>{{ product.id }}</td>
+                                    <td>{{ product.name }}</td>
+                                    <td>{{ formatCurrency(product.price) }}</td>
+                                    <td>{{ formatCurrency(product.sale_price) }}</td>
+                                    <td><img src="../../../../assets/images/{{product.image}}" alt="{{ product.name }}"
+                                            style="max-width: 100px;"></td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-warning btn-sm mr-2 mx-1"
+                                                >Sửa</button>
+                                            <button type="button" class="btn btn-danger btn-sm"
+                                               >Xóa</button>
+                                        </div>
+                                    </td>
+                                </tr> -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nb-card-body>
+</nb-card>

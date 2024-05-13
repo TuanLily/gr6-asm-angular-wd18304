@@ -40,6 +40,12 @@ const routes: Routes = [{
       loadChildren: () => import('./bills/bills.module')
         .then(m => m.BillsModule),
       data: { breadcrumb: 'Mã giảm giá' },
+    },
+    {
+      path: 'customers',
+      loadChildren: () => import('./customers/customers.module')
+        .then(m => m.CustomersModule),
+      data: { breadcrumb: 'Tài khoản khách hàng' },
 
     },
     {

@@ -47,7 +47,17 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Danh Sách',
         link: '/pages/bills/list',
-      },
-    ],
+      }
+    ]
+  },
+  {
+  title: 'Tài khoản khách hàng',
+  icon: 'person-outline',
+  children: [
+    {
+      title: 'Danh Sách',
+      link: '/pages/customers/list',
+    },
+  ],
   },
 ];
