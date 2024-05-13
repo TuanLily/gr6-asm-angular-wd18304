@@ -7,6 +7,7 @@ import { PagesComponent } from './pages.component';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { PagesRoutingModule } from './pages-routing.module';
 import { PaginatorModule } from "../@theme/components/paginator/paginator.module";
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -17,6 +18,7 @@ import { PaginatorModule } from "../@theme/components/paginator/paginator.module
     DashboardModule,
     NbMenuModule,
     PaginatorModule,
+    FormsModule
   ],
   declarations: [
     PagesComponent,

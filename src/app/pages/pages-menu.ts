@@ -80,4 +80,14 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
     ],
   },
+  {
+    title: 'Tài Khoản Nhân Viên',
+    icon: 'people-outline',
+    children: [
+      {
+        title: 'Danh Sách',
+        link: '/pages/employees/list',
+      },
+    ],
+  },
 ];

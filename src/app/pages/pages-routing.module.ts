@@ -59,6 +59,12 @@ const routes: Routes = [{
       loadChildren: () => import('./roles/roles.module')
         .then(m => m.rolesModule),
       data: { breadcrumb: 'Vai trò' },
+    },
+    {
+      path: 'employees',
+      loadChildren: () => import('./employees/employees.module')
+        .then(m => m.EmployeesModule),
+      data: { breadcrumb: 'Tài Khoản Nhân Viên' },
 
     },
     {

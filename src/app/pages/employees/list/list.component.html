@@ -1,0 +1,64 @@
+<nb-card>
+    <nb-card-body>
+        <div class="container">
+            <!-- Form để thêm nhân viên mới -->
+            <div class="card my-2">
+                <div class="card-body">
+                    <h3 class="card-title">Thêm / Cập nhật nhân viên</h3>
+                    <form>
+                        <div class="form-group my-3">
+                            <label for="employeeName">Tên nhân viên:</label>
+                            <input type="text" class="form-control" id="employeeName" formControlName="name">
+                        </div>
+                        <div class="form-group my-3">
+                            <label for="employeePhone">Số điện thoại:</label>
+                            <input type="text" class="form-control" id="employeePhone" formControlName="phone">
+                        </div>
+                        <div class="form-group my-3">
+                            <label for="employeeEmail">Email:</label>
+                            <input type="email" class="form-control" id="employeeEmail" formControlName="email">
+                        </div>
+                        <div class="form-group my-3">
+                            <label for="employeeAddress">Địa chỉ:</label>
+                            <input type="text" class="form-control" id="employeeAddress" formControlName="address">
+                        </div>
+                        <div class="form-group my-3">
+                            <label for="employeeSalary">Lương:</label>
+                            <input type="number" class="form-control" id="employeeSalary" formControlName="salary">
+                        </div>
+
+
+
+                        <button type="submit" class="btn btn-primary float-end">Lưu</button>
+                        <!-- Nút hủy chỉnh sửa -->
+                        <button type="button" class="btn btn-secondary float-end mx-2">Reset</button>
+                    </form>
+
+                </div>
+            </div>
+            <div class="card my-2">
+                <div class="card-body">
+                    <h3 class="card-title">Danh sách nhân viên</h3>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên nhân viên</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Email</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Lương</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nb-card-body>
+</nb-card>
