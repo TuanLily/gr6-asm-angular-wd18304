@@ -1,11 +1,13 @@
-import {Component, OnInit} from "@angular/core";
-import {FormGroup, FormControl, Validators} from '@angular/forms';
-import {Router} from '@angular/router';
-import {SpinnerService} from "../../@theme/components/spinner/spinner.service";
-import {AuthService} from "../../@core/services/apis";
-import {LocalStorageService} from "../../@core/services/common";
-import {LOCALSTORAGE_KEY, ROUTER_CONFIG} from "../../@core/config";
-import {IAlertMessage} from "../../@theme/components/alert/ngx-alerts.component";
+import { Component, OnInit } from "@angular/core";
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { SpinnerService } from "../../@theme/components/spinner/spinner.service";
+import { AuthService } from "../../@core/services/apis";
+import { LocalStorageService } from "../../@core/services/common";
+import { LOCALSTORAGE_KEY, ROUTER_CONFIG } from "../../@core/config";
+import { IAlertMessage } from "../../@theme/components/alert/ngx-alerts.component";
+import { finalize } from 'rxjs/operators';
+
 
 @Component({
   selector: 'ngx-login',
@@ -37,19 +39,20 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      this.router.navigate([ROUTER_CONFIG.pages]).then();
-      // this.auth.login(this.loginForm.value)
-      //   .pipe(
-      //     finalize(() => {
-            // this.spinner.hide();
-      //     }),
-      //   )
-      //   .subscribe({
-      //     next: this.handleLoginSuccess.bind(this),
-      //     error: this.handleLoginFailed.bind(this),
-      //   });
+      this.spinner.show(); // Hiển thị spinner khi bắt đầu gọi API
+      this.auth.login(this.loginForm.value)
+        .pipe(
+          finalize(() => {
+            this.spinner.hide(); // Ẩn spinner sau khi API trả về kết quả
+          }),
+        )
+        .subscribe({
+          next: this.handleLoginSuccess.bind(this),
+          error: this.handleLoginFailed.bind(this),
+        });
     }
   }
+
 
   protected handleLoginSuccess(res) {
     this.storageService.setItem(LOCALSTORAGE_KEY.userInfo, res.name);
@@ -60,6 +63,6 @@ export class LoginComponent implements OnInit {
 
   protected handleLoginFailed() {
     this.spinner.hide();
-    this.alertMessages = [{status: 'danger', message: 'Tài khoản hoặc mật khẩu không chính xác'}];
+    this.alertMessages = [{ status: 'danger', message: 'Tài khoản hoặc mật khẩu không chính xác' }];
   }
 }
