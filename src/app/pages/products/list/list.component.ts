@@ -113,10 +113,11 @@ export class ListComponent implements OnInit {
         () => {
           this.toastrService.success('Cập nhật thành công!', 'Success');
           this.isEditing = false;
-          this.spinner.show();
           setTimeout(() => {
+            this.spinner.show();
             window.location.reload();
-          }, 1500);
+          }, 1000);
+
         },
         error => {
           this.toastrService.danger('Đã xảy ra lỗi khi cập nhật sản phẩm!', 'Error');
@@ -128,10 +129,10 @@ export class ListComponent implements OnInit {
       this.productService.addProduct(productData).subscribe(
         () => {
           this.toastrService.success('Thêm mới thành công!', 'Success');
-          this.spinner.show();
           setTimeout(() => {
+            this.spinner.show();
             window.location.reload();
-          }, 1500);
+          }, 1000);
         },
         error => {
           this.toastrService.danger('Đã xảy ra lỗi khi thêm sản phẩm!', 'Error');

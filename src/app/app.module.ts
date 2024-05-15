@@ -8,11 +8,11 @@ import {
   NbSidebarModule,
   NbMenuModule,
   NbDatepickerModule,
-  NbDialogModule, NbWindowModule, NbToastrModule, NbChatModule
+  NbDialogModule, NbWindowModule, NbToastrModule, NbChatModule, NbTooltipModule
 } from '@nebular/theme';
-import {HttpClientModule} from "@angular/common/http";
-import {CoreModule} from "./@core/core.module";
-import {ThemeModule} from "./@theme/theme.module";
+import { HttpClientModule } from "@angular/common/http";
+import { CoreModule } from "./@core/core.module";
+import { ThemeModule } from "./@theme/theme.module";
 
 @NgModule({
   declarations: [
@@ -29,6 +29,7 @@ import {ThemeModule} from "./@theme/theme.module";
     NbDialogModule.forRoot(),
     NbWindowModule.forRoot(),
     NbToastrModule.forRoot(),
+    NbTooltipModule,
     NbChatModule.forRoot({
       messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
     }),
