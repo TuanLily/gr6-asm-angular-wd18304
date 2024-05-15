@@ -51,13 +51,23 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
-  title: 'Tài khoản khách hàng',
-  icon: 'person-outline',
-  children: [
-    {
-      title: 'Danh Sách',
-      link: '/pages/customers/list',
-    },
-  ],
+    title: 'Tài khoản khách hàng',
+    icon: 'person-outline',
+    children: [
+      {
+        title: 'Danh Sách',
+        link: '/pages/customers/list',
+      },
+    ],
+  },
+  {
+    title: 'Đánh giá',
+    icon: 'message-square-outline',
+    children: [
+      {
+        title: 'Danh Sách',
+        link: '/pages/feedback/list',
+      },
+    ],
   },
 ];

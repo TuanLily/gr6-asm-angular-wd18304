@@ -49,6 +49,13 @@ const routes: Routes = [{
 
     },
     {
+      path: 'feedback',
+      loadChildren: () => import('./feedback/feedback.module')
+        .then(m => m.FeedbackModule),
+      data: { breadcrumb: 'Tài khoản khách hàng' },
+
+    },
+    {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',

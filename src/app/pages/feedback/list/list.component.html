@@ -1,0 +1,57 @@
+<nb-card>
+    <nb-card-body>
+        <div class="container">
+            <!-- Form để thêm đánh giá mới -->
+            <div class="card my-2">
+                <div class="card-body">
+                    <h3 class="card-title">Thêm / Cập nhật đánh giá cửa hàng</h3>
+                    <form>
+                      <div class="form-group my-3">
+                        <label for="customersName">Tên khách hàng:</label>
+                        <input type="text" class="form-control" id="customersName" formControlName="name">
+                        <div class="text-danger">
+                            <small>
+                                Vui lòng nhập tên khách hàng.
+                            </small>
+                        </div>
+                    </div>
+                        <div class="form-group my-3">
+                            <label for="feedbackContent">Nội dung:</label>
+                            <textarea class="form-control" id="customersName" formControlName="content"></textarea>
+                            <div class="text-danger">
+                                <small>
+                                    Vui lòng nhập nội dung
+                                </small>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary float-end">Lưu</button>
+                        <!-- Nút hủy chỉnh sửa -->
+                        <button type="button" class="btn btn-secondary float-end mx-2">Reset</button>
+                    </form>
+
+                </div>
+            </div>
+            <div class="card my-2">
+                <div class="card-body">
+                    <h3 class="card-title">Danh sách đánh giá</h3>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên khách hàng</th>
+                                    <th>Thời gian</th>
+                                    <th>Nội dung</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                             
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nb-card-body>
+</nb-card>
