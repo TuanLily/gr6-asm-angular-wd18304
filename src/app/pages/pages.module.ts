@@ -9,6 +9,7 @@ import { PagesRoutingModule } from './pages-routing.module';
 import { PaginatorModule } from "../@theme/components/paginator/paginator.module";
 
 
+
 @NgModule({
   imports: [
     PagesRoutingModule,

@@ -67,6 +67,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Danh Sách',
         link: '/pages/feedback/list',
+      }
+    ]
+  },
+  {
+    title: 'Vai trò',
+    icon: 'people-outline',
+    children: [
+      {
+        title: 'Danh Sách',
+        link: '/pages/roles/list',
       },
     ],
   },

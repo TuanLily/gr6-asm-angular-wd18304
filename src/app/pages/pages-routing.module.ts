@@ -53,6 +53,12 @@ const routes: Routes = [{
       loadChildren: () => import('./feedback/feedback.module')
         .then(m => m.FeedbackModule),
       data: { breadcrumb: 'Tài khoản khách hàng' },
+    },
+    {
+      path: 'roles',
+      loadChildren: () => import('./roles/roles.module')
+        .then(m => m.rolesModule),
+      data: { breadcrumb: 'Vai trò' },
 
     },
     {
