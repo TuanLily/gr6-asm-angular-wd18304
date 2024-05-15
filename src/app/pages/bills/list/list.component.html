@@ -1,0 +1,128 @@
+<nb-card>
+  <nb-card-body>
+      <div class="container">
+          <!-- Form to add/update an invoice -->
+          <div class="card my-2">
+              <div class="card-body">
+                  <h3 class="card-title">Thêm / Cập nhật hóa đơn</h3>
+                  <form>
+                      <div class="form-group my-3">
+                          <label for="product">Sản phẩm:</label>
+                          <input type="text" class="form-control" id="product" formControlName="product">
+                          <div class="text-danger">
+                              <small>
+                                  Vui lòng nhập tên sản phẩm.
+                              </small>
+                          </div>
+                      </div>
+
+                      <div class="form-group my-3">
+                          <label for="quantity">Số lượng:</label>
+                          <input type="number" class="form-control" id="quantity" formControlName="quantity">
+                          <div class="text-danger">
+                              <small>
+                                  Vui lòng nhập số lượng.
+                              </small>
+                          </div>
+                      </div>
+
+                      <!-- <div class="form-group my-3">
+                          <label for="createdDate">Ngày tạo:</label>
+                          <input type="date" class="form-control" id="createdDate" formControlName="createdDate">
+                          <div class="text-danger">
+                              <small>
+                                  Vui lòng nhập ngày tạo.
+                              </small>
+                          </div>
+                      </div> -->
+
+                      <div class="form-group my-3">
+                          <label for="totalAmount">Thành tiền:</label>
+                          <input type="number" class="form-control" id="totalAmount" formControlName="totalAmount">
+                          <div class="text-danger">
+                              <small>
+                                  Vui lòng nhập thành tiền.
+                              </small>
+                          </div>
+                      </div>
+
+                      <div class="form-group my-3">
+                          <label for="customerId">Mã khách hàng:</label>
+                          <input type="text" class="form-control" id="customerId" formControlName="customerId">
+                          <div class="text-danger">
+                              <small>
+                                  Vui lòng nhập mã khách hàng.
+                              </small>
+                          </div>
+                      </div>
+
+                      <div class="form-group my-3">
+                          <label for="voucher">Voucher:</label>
+                          <input type="text" class="form-control" id="voucher" formControlName="voucher">
+                          <div class="text-danger">
+                              <small>
+                                  Vui lòng nhập voucher.
+                              </small>
+                          </div>
+                      </div>
+
+                      <div class="form-group my-3">
+                          <label for="employee">Nhân viên:</label>
+                          <input type="text" class="form-control" id="employee" formControlName="employee">
+                          <div class="text-danger">
+                              <small>
+                                  Vui lòng nhập tên nhân viên.
+                              </small>
+                          </div>
+                      </div>
+
+                      <button type="submit" class="btn btn-primary float-end">Lưu</button>
+                      <button type="button" class="btn btn-secondary float-end mx-2">Reset</button>
+                  </form>
+              </div>
+          </div>
+
+          <!-- Invoice List -->
+          <div class="card my-2">
+              <div class="card-body">
+                  <h3 class="card-title">Danh sách hóa đơn</h3>
+                  <div class="table-responsive">
+                      <table class="table table-bordered">
+                          <thead>
+                              <tr>
+                                  <th>ID</th>
+                                  <th>Sản phẩm</th>
+                                  <th>Số lượng</th>
+                                  <th>Ngày tạo</th>
+                                  <th>Thành tiền</th>
+                                  <th>Mã khách hàng</th>
+                                  <th>Voucher</th>
+                                  <th>Nhân viên</th>
+                                  <th>Thao tác</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <!-- <tr *ngFor="let invoice of invoices">
+                                  <td>{{ invoice.id }}</td>
+                                  <td>{{ invoice.product }}</td>
+                                  <td>{{ invoice.quantity }}</td>
+                                  <td>{{ invoice.createdDate }}</td>
+                                  <td>{{ invoice.totalAmount }}</td>
+                                  <td>{{ invoice.customerId }}</td>
+                                  <td>{{ invoice.voucher }}</td>
+                                  <td>{{ invoice.employee }}</td>
+                                  <td>
+                                      <div class="btn-group">
+                                          <button type="button" class="btn btn-warning btn-sm mr-2 mx-1">Sửa</button>
+                                          <button type="button" class="btn btn-danger btn-sm">Xóa</button>
+                                      </div>
+                                  </td>
+                              </tr> -->
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </nb-card-body>
+</nb-card>

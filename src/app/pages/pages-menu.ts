@@ -40,4 +40,14 @@ export const MENU_ITEMS: NbMenuItem[] = [
       },
     ],
   },
+  {
+    title: 'Đơn Hàng',
+    icon: 'shopping-cart-outline',
+    children: [
+      {
+        title: 'Danh Sách',
+        link: '/pages/bills/list',
+      },
+    ],
+  },
 ];

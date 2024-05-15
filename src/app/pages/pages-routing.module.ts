@@ -36,6 +36,13 @@ const routes: Routes = [{
 
     },
     {
+      path: 'bills',
+      loadChildren: () => import('./bills/bills.module')
+        .then(m => m.BillsModule),
+      data: { breadcrumb: 'Mã giảm giá' },
+
+    },
+    {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',
