@@ -1,100 +1,92 @@
 <nb-card>
   <nb-card-body>
       <div class="container">
-          <!-- Form to add/update an invoice -->
           <div class="card my-2">
               <div class="card-body">
-                  <h3 class="card-title">Thêm / Cập nhật hóa đơn</h3>
+                  <h5 class="card-title">Thêm / Cập nhật hóa đơn</h5>
                   <form>
-                      <div class="form-group my-3">
-                          <label for="product">Sản phẩm:</label>
-                          <input type="text" class="form-control" id="product" formControlName="product">
-                          <div class="text-danger">
-                              <small>
-                                  Vui lòng nhập tên sản phẩm.
-                              </small>
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group my-3">
+                                  <label for="product">Sản phẩm:</label>
+                                  <input type="text" class="form-control my-1" id="product" placeholder="Nhập tên sản phẩm">
+                                  <div class="text-danger">
+                                      <small>Vui lòng nhập tên sản phẩm.</small>
+                                  </div>
+                              </div>
+
+                              <div class="form-group my-3">
+                                  <label for="quantity">Số lượng:</label>
+                                  <input type="number" class="form-control my-1" id="quantity" placeholder="Nhập số lượng">
+                                  <div class="text-danger">
+                                      <small>Vui lòng nhập số lượng.</small>
+                                  </div>
+                              </div>
+
+                              <div class="form-group my-3">
+                                  <label for="totalAmount">Thành tiền:</label>
+                                  <input type="number" class="form-control my-1" id="totalAmount" placeholder="Nhập thành tiền">
+                                  <div class="text-danger">
+                                      <small>Vui lòng nhập thành tiền.</small>
+                                  </div>
+                              </div>
+
+                              <div class="form-group my-3">
+                                  <label for="customerId">Mã khách hàng:</label>
+                                  <input type="text" class="form-control my-1" id="customerId" placeholder="Nhập mã khách hàng">
+                                  <div class="text-danger">
+                                      <small>Vui lòng nhập mã khách hàng.</small>
+                                  </div>
+                              </div>
+                          </div>
+
+                          <div class="col-md-6">
+                              <div class="form-group my-3">
+                                  <label for="voucher">Voucher:</label>
+                                  <input type="text" class="form-control my-1" id="voucher" placeholder="Nhập voucher">
+                                  <div class="text-danger">
+                                      <small>Vui lòng nhập voucher.</small>
+                                  </div>
+                              </div>
+
+                              <div class="form-group my-3">
+                                  <label for="employee">Nhân viên:</label>
+                                  <select class="form-control my-1" id="employee">
+                                      <option>Nhân viên A</option>
+                                      <option>Nhân viên B</option>
+                                      <option>Nhân viên C</option>
+                                  </select>
+                                  <div class="text-danger">
+                                      <small>Vui lòng chọn nhân viên.</small>
+                                  </div>
+                              </div>
                           </div>
                       </div>
 
-                      <div class="form-group my-3">
-                          <label for="quantity">Số lượng:</label>
-                          <input type="number" class="form-control" id="quantity" formControlName="quantity">
-                          <div class="text-danger">
-                              <small>
-                                  Vui lòng nhập số lượng.
-                              </small>
-                          </div>
-                      </div>
-
-                      <!-- <div class="form-group my-3">
-                          <label for="createdDate">Ngày tạo:</label>
-                          <input type="date" class="form-control" id="createdDate" formControlName="createdDate">
-                          <div class="text-danger">
-                              <small>
-                                  Vui lòng nhập ngày tạo.
-                              </small>
-                          </div>
-                      </div> -->
-
-                      <div class="form-group my-3">
-                          <label for="totalAmount">Thành tiền:</label>
-                          <input type="number" class="form-control" id="totalAmount" formControlName="totalAmount">
-                          <div class="text-danger">
-                              <small>
-                                  Vui lòng nhập thành tiền.
-                              </small>
-                          </div>
-                      </div>
-
-                      <div class="form-group my-3">
-                          <label for="customerId">Mã khách hàng:</label>
-                          <input type="text" class="form-control" id="customerId" formControlName="customerId">
-                          <div class="text-danger">
-                              <small>
-                                  Vui lòng nhập mã khách hàng.
-                              </small>
-                          </div>
-                      </div>
-
-                      <div class="form-group my-3">
-                          <label for="voucher">Voucher:</label>
-                          <input type="text" class="form-control" id="voucher" formControlName="voucher">
-                          <div class="text-danger">
-                              <small>
-                                  Vui lòng nhập voucher.
-                              </small>
-                          </div>
-                      </div>
-
-                      <div class="form-group my-3">
-                          <label for="employee">Nhân viên:</label>
-                          <input type="text" class="form-control" id="employee" formControlName="employee">
-                          <div class="text-danger">
-                              <small>
-                                  Vui lòng nhập tên nhân viên.
-                              </small>
-                          </div>
-                      </div>
-
-                      <button type="submit" class="btn btn-primary float-end">Lưu</button>
-                      <button type="button" class="btn btn-secondary float-end mx-2">Reset</button>
+                      <div class="d-flex justify-content-end mt-4">
+                        <button nbButton status="warning" type="button" class="float-end mx-2" nbTooltip="Reset dữ liệu">
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </button>
+                        <button nbButton type="submit" class="float-end" status="success" nbTooltip="Lưu dữ liệu">
+                            <i class="fa-solid fa-check"></i>
+                        </button>
+                    </div>
                   </form>
               </div>
           </div>
 
-          <!-- Invoice List -->
-          <div class="card my-2">
+          <div class="card my-lg-5">
               <div class="card-body">
                   <h3 class="card-title">Danh sách hóa đơn</h3>
                   <div class="table-responsive">
                       <table class="table table-bordered">
-                          <thead>
+                          <thead class="table-secondary">
                               <tr>
                                   <th>ID</th>
                                   <th>Sản phẩm</th>
                                   <th>Số lượng</th>
-                                  <th>Ngày tạo</th>
                                   <th>Thành tiền</th>
+                                  <th>Ngày tạo</th>
                                   <th>Mã khách hàng</th>
                                   <th>Voucher</th>
                                   <th>Nhân viên</th>
@@ -102,22 +94,46 @@
                               </tr>
                           </thead>
                           <tbody>
-                              <!-- <tr *ngFor="let invoice of invoices">
-                                  <td>{{ invoice.id }}</td>
-                                  <td>{{ invoice.product }}</td>
-                                  <td>{{ invoice.quantity }}</td>
-                                  <td>{{ invoice.createdDate }}</td>
-                                  <td>{{ invoice.totalAmount }}</td>
-                                  <td>{{ invoice.customerId }}</td>
-                                  <td>{{ invoice.voucher }}</td>
-                                  <td>{{ invoice.employee }}</td>
+                              <tr>
+                                  <td>1</td>
+                                  <td>Sản phẩm A</td>
+                                  <td>10</td>
+                                  <td>1,000,000</td>
+                                  <td>2023-05-15</td>
+                                  <td>KH001</td>
+                                  <td>VOUCHER123</td>
+                                  <td>Nhân viên A</td>
                                   <td>
-                                      <div class="btn-group">
-                                          <button type="button" class="btn btn-warning btn-sm mr-2 mx-1">Sửa</button>
-                                          <button type="button" class="btn btn-danger btn-sm">Xóa</button>
-                                      </div>
+                                    <div class="btn-group">
+                                      <button nbButton status="primary" type="button" class="btn-sm mr-2 mx-1" nbTooltip="Sửa dữ liệu">
+                                          <i class="fa-solid fa-pen-to-square"></i>
+                                      </button>
+                                      <button nbButton status="danger" type="button" class="btn-sm" nbTooltip="Xóa dữ liệu">
+                                          <i class="fa-solid fa-trash"></i>
+                                      </button>
+                                  </div>
                                   </td>
-                              </tr> -->
+                              </tr>
+                              <tr>
+                                  <td>2</td>
+                                  <td>Sản phẩm B</td>
+                                  <td>5</td>
+                                  <td>500,000</td>
+                                  <td>2023-05-16</td>
+                                  <td>KH002</td>
+                                  <td>VOUCHER456</td>
+                                  <td>Nhân viên B</td>
+                                  <td>
+                                    <div class="btn-group">
+                                      <button nbButton status="primary" type="button" class="btn-sm mr-2 mx-1" nbTooltip="Sửa dữ liệu">
+                                          <i class="fa-solid fa-pen-to-square"></i>
+                                      </button>
+                                      <button nbButton status="danger" type="button" class="btn-sm" nbTooltip="Xóa dữ liệu">
+                                          <i class="fa-solid fa-trash"></i>
+                                      </button>
+                                  </div>
+                                  </td>
+                              </tr>
                           </tbody>
                       </table>
                   </div>
