@@ -5,7 +5,7 @@
             <!-- Form để thêm vai trò mới -->
             <div class="card my-2">
                 <div class="card-body">
-                    <h3 class="card-title">Thêm / Cập nhật vai trò</h3>
+                    <h5 class="card-title">Thêm / Cập nhật vai trò</h5>
                     <form>
                         <div class="form-group my-3">
                             <label for="categoriesName">Tên vai trò:</label>
@@ -21,19 +21,26 @@
 
 
 
-                        <button type="submit" class="btn btn-primary float-end">Lưu</button>
+                        <button nbButton type="submit" class="float-end"  status="success"
+                            nbTooltip="Lưu dữ liệu">
+                            <i class="fa-solid fa-check"></i>
+                        </button>
+
+
                         <!-- Nút hủy chỉnh sửa -->
-                        <button type="button" class="btn btn-secondary float-end mx-2">Reset</button>
+                        <button nbButton status="warning" type="button" class=" float-end mx-2" 
+                            nbTooltip="Reset dữ liệu">
+                            <i class="fa-solid fa-rotate-left"></i></button>
                     </form>
 
                 </div>
             </div>
-            <div class="card my-2">
+            <div class="card my-lg-5">
                 <div class="card-body">
-                    <h3 class="card-title">Danh sách vai trò</h3>
+                    <h5 class="card-title">Danh sách vai trò</h5>
                     <div class="table-responsive">
                         <table class="table table-bordered">
-                            <thead>
+                            <thead class="table-secondary">
                                 <tr>
                                     <th>ID</th>
                                     <th>Tên vai trò</th>
@@ -51,10 +58,12 @@
                                             style="max-width: 100px;"></td>
                                     <td>
                                         <div class="btn-group">
-                                            <button type="button" class="btn btn-warning btn-sm mr-2 mx-1"
-                                                >Sửa</button>
-                                            <button type="button" class="btn btn-danger btn-sm"
-                                               >Xóa</button>
+                                            <button nbButton status="primary" type="button" class="btn-sm mr-2 mx-1"
+                                                (click)="editProduct(product.id)" nbTooltip="Sửa dữ liệu"><i
+                                                    class="fa-solid fa-pen-to-square"></i></button>
+                                            <button nbButton status="danger" type="button" class="btn-sm"
+                                                (click)="deleteProduct(product.id)" nbTooltip="Xóa dữ liệu"><i
+                                                    class="fa-solid fa-trash"></i></button>
                                         </div>
                                     </td>
                                 </tr> -->
