@@ -1,63 +1,91 @@
-<p>Vouchers works!</p>
-
 <nb-card>
-    <nb-card-body>
-        <div class="container">
-            <div class="card my-2">
-                <div class="card-body">
-                    <h3 class="card-title">Thêm / Cập nhật voucher</h3>
-                    <form>
-                        <div class="form-group my-3">
-                            <label for="voucherCode">Mã voucher:</label>
-                            <input type="text" class="form-control" id="voucherCode" formControlName="code">
-                            <div class="text-danger">
-                                <small>Vui lòng nhập mã voucher.</small>
-                            </div>
-                        </div>
-                        <div class="form-group my-3">
-                            <label for="voucherValue">Giá trị:</label>
-                            <input type="number" class="form-control" id="voucherValue" formControlName="value">
-                            <div class="text-danger">
-                                <small>Vui lòng nhập giá trị cho voucher.</small>
-                            </div>
-                        </div>
-                        <div class="form-group my-3">
-                            <label for="voucherStartDate">Thời gian có hiệu lực:</label>
-                            <input type="datetime-local" class="form-control" id="voucherStartDate" formControlName="startDate">
-                        </div>
-                        <div class="form-group my-3">
-                            <label for="voucherEndDate">Thời gian hết hiệu lực:</label>
-                            <input type="datetime-local" class="form-control" id="voucherEndDate" formControlName="endDate">
-                        </div>
-                        <button type="submit" class="btn btn-primary float-end">Lưu</button>
-                        <button type="button" class="btn btn-secondary float-end mx-2">Reset</button>
-                    </form>
-
-                </div>
-            </div>
-            <div class="card my-2">
-                <div class="card-body">
-                    <h3 class="card-title">Danh sách voucher</h3>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Mã voucher</th>
-                                    <th>Giá trị</th>
-                                    <th>Thời gian tạo</th>
-                                    <th>Thời gian hết hiệu lực</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nb-card-body>
+  <nb-card-body>
+      <div class="container">
+          <!-- Form để thêm voucher mới -->
+          <div class="card my-2">
+              <div class="card-body">
+                  <h5 class="card-title">Thêm / Cập nhật voucher</h5>
+                  <form>
+                      <div class="form-group my-3">
+                          <label for="voucherCode" class="my-1">Mã voucher:</label>
+                          <input type="text" class="form-control" id="voucherCode" placeholder="Nhập mã voucher">
+                          <div class="text-danger">
+                              <small>Vui lòng nhập mã voucher.</small>
+                          </div>
+                      </div>
+                      <div class="form-group my-3">
+                          <label for="voucherValue" class="my-1">Giá trị:</label>
+                          <input type="number" class="form-control" id="voucherValue" placeholder="Nhập giá trị voucher">
+                          <div class="text-danger">
+                              <small>Vui lòng nhập giá trị cho voucher.</small>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="col-md-6">
+                              <div class="form-group my-3">
+                                  <label for="voucherStartDate" class="my-1">Thời gian có hiệu lực:</label>
+                                  <input type="datetime-local" class="form-control" id="voucherStartDate">
+                              </div>
+                          </div>
+                          <div class="col-md-6">
+                              <div class="form-group my-3">
+                                  <label for="voucherEndDate" class="my-1">Thời gian hết hiệu lực:</label>
+                                  <input type="datetime-local" class="form-control" id="voucherEndDate">
+                              </div>
+                          </div>
+                      </div>
+                      <div class="d-flex justify-content-end mt-4">
+                          <button nbButton status="warning" type="button" class="float-end mx-2" style="border-radius: 20px;" nbTooltip="Reset dữ liệu">
+                              <i class="fa-solid fa-rotate-left"></i> Reset
+                          </button>
+                          <button nbButton type="submit" class="float-end" status="success" style="border-radius: 20px;" nbTooltip="Lưu dữ liệu">
+                              <i class="fa-solid fa-check"></i> Lưu
+                          </button>
+                      </div>
+                  </form>
+              </div>
+          </div>
+          <!-- Danh sách voucher -->
+          <div class="card my-2">
+              <div class="card-body">
+                  <h5 class="card-title">Danh sách voucher</h5>
+                  <div class="table-responsive">
+                      <table class="table table-bordered">
+                          <thead class="table-secondary">
+                              <tr>
+                                  <th>ID</th>
+                                  <th>Mã voucher</th>
+                                  <th>Giá trị</th>
+                                  <th>Thời gian</th>
+                                  <th>Thao tác</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              <tr>
+                                  <td>1</td>
+                                  <td>SUMMER20</td>
+                                  <td>20%</td>
+                                  <td>
+                                      <div>Tạo: 15/06/2023</div>
+                                      <div>Hết hạn: 31/08/2023</div>
+                                  </td>
+                                  <td>
+                                      <div class="btn-group">
+                                          <button nbButton status="primary" type="button" class="btn-sm mr-2 mx-1" nbTooltip="Sửa dữ liệu">
+                                              <i class="fa-solid fa-pen-to-square"></i>
+                                          </button>
+                                          <button nbButton status="danger" type="button" class="btn-sm" nbTooltip="Xóa dữ liệu">
+                                              <i class="fa-solid fa-trash"></i>
+                                          </button>
+                                      </div>
+                                  </td>
+                              </tr>
+                              <!-- Thêm các dòng mẫu nếu cần -->
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </nb-card-body>
 </nb-card>
