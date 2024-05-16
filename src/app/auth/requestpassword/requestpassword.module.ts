@@ -5,7 +5,7 @@ import {
   NbCheckboxModule,
   NbInputModule,
   NbLayoutModule,
-  NbThemeModule
+  NbThemeModule,
 } from "@nebular/theme";
 import {NbAuthModule} from "@nebular/auth";
 import {NgForOf, NgIf} from "@angular/common";
@@ -30,7 +30,6 @@ import { RequestpasswordComponent } from "./requestpassword.component";
     NbButtonModule,
     ReactiveFormsModule,
     ThemeModule,
-
   ],
   declarations: [
     RequestpasswordComponent

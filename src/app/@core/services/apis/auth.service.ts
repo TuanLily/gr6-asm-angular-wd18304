@@ -24,7 +24,9 @@ export class AuthService extends ApiService {
   private readonly API_ENDPOINT = {
     auth: {
       login: '/api/auth/login',
-      logout: '/api/auth/logout'
+      logout: '/api/auth/logout',
+      forgotPassword: '/api/auth/forgot-password/',
+      resetPassword: '/api/auth/reset-password/',
     }
   };
 
@@ -65,11 +67,19 @@ export class AuthService extends ApiService {
     });
   }
 
+  // forgotPassword(form: ILogin): Observable<any> {
+  //   return this.post(API_BASE_URL + API_ENDPOINT.auth.forgotPassword, {
+  //     idLogin: form.idLogin,
+  //   });
+  // }
+
   forgotPassword(form: ILogin): Observable<any> {
-    return this.post(API_BASE_URL + API_ENDPOINT.auth.forgotPassword, {
-      idLogin: form.idLogin,
+    // Gửi yêu cầu đến backend với dữ liệu email
+    return this._http.post<any>(`${this.API_BASE_URL}${this.API_ENDPOINT.auth.forgotPassword}`, {
+      email: form.email.trim(),
     });
   }
+
 
   confirmPassword(form: ILogin): Observable<any> {
     return this.post(API_BASE_URL + API_ENDPOINT.auth.confirmPassword, {
