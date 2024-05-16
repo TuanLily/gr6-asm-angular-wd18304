@@ -30,6 +30,9 @@
                 <small *ngIf="loginForm.get('password').hasError('required')">
                   <i class="text-danger">Vui lòng nhập mật khẩu.</i>
                 </small>
+                <small *ngIf="loginForm.get('password').hasError('minlength')">
+                  <i class="text-danger">Mật khẩu phải có ít nhất 8 ký tự.</i>
+                </small>
               </div>
             </div>
 
