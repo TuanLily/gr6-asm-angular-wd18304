@@ -12,11 +12,11 @@ import {
   NbAlertModule,
   NbCheckboxModule,
   NbInputModule,
-  NbThemeModule
+  NbThemeModule,
+  NbTooltipModule
 } from '@nebular/theme';
 
 import { ThemeModule } from '../../@theme/theme.module';
-
 import { NewsService } from './news.service';
 import { EmployeesRoutingModule } from './employees-routing.module';
 import { EmployeesComponent } from './employees.component';
@@ -40,6 +40,7 @@ import { ListComponent } from './list/list.component';
     NbThemeModule,
     NbAccordionModule,
     NbUserModule,
+    NbTooltipModule,
     EmployeesRoutingModule,
   ],
   declarations: [
