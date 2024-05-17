@@ -4,10 +4,11 @@
             <!-- Form để thêm đánh giá mới -->
             <div class="card my-2">
                 <div class="card-body">
-                    <h3 class="card-title">Thêm / Cập nhật đánh giá cửa hàng</h3>
+                    <h5 class="card-title">Thêm / Cập nhật đánh giá cửa hàng</h5>
                     <form>
+                    <div class="row">
                       <div class="form-group my-3">
-                        <label for="customersName">Tên khách hàng:</label>
+                        <label for="customersName">Tên khách hàng<span class="spot">*</span>:</label>
                         <input type="text" class="form-control" id="customersName" formControlName="name">
                         <div class="text-danger">
                             <small>
@@ -16,7 +17,7 @@
                         </div>
                     </div>
                         <div class="form-group my-3">
-                            <label for="feedbackContent">Nội dung:</label>
+                            <label for="feedbackContent">Nội dung<span class="spot">*</span>:</label>
                             <textarea class="form-control" id="customersName" formControlName="content"></textarea>
                             <div class="text-danger">
                                 <small>
@@ -24,19 +25,24 @@
                                 </small>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary float-end">Lưu</button>
+                    </div>
+                        <button nbButton type="submit" class="float-end" status="success" nbTooltip="Lưu dữ liệu">
+                            <i class="fa-solid fa-check"></i>
+                        </button>
                         <!-- Nút hủy chỉnh sửa -->
-                        <button type="button" class="btn btn-secondary float-end mx-2">Reset</button>
+                        <button nbButton status="warning" type="button" class=" float-end mx-2"
+                            nbTooltip="Reset dữ liệu">
+                            <i class="fa-solid fa-rotate-left"></i></button>
                     </form>
 
                 </div>
             </div>
-            <div class="card my-2">
+            <div class="card my-lg-5">
                 <div class="card-body">
-                    <h3 class="card-title">Danh sách đánh giá</h3>
+                    <h5 class="card-title">Danh sách đánh giá</h5>
                     <div class="table-responsive">
                         <table class="table table-bordered">
-                            <thead>
+                            <thead class="table-secondary">
                                 <tr>
                                     <th>ID</th>
                                     <th>Tên khách hàng</th>
@@ -46,7 +52,22 @@
                                 </tr>
                             </thead>
                             <tbody>
-                             
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <button nbButton status="primary" type="button" class="btn-sm mr-2 mx-1"
+                                                 nbTooltip="Sửa dữ liệu"><i
+                                                    class="fa-solid fa-pen-to-square"></i></button>
+                                            <button nbButton status="danger" type="button" class="btn-sm"
+                                                 nbTooltip="Xóa dữ liệu"><i
+                                                    class="fa-solid fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
