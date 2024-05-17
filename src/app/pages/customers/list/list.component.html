@@ -1,15 +1,13 @@
-<p>customers works!</p>
-
 <nb-card>
     <nb-card-body>
         <div class="container">
             <!-- Form để thêm khách hàng mới -->
             <div class="card my-2">
                 <div class="card-body">
-                    <h3 class="card-title">Thêm / Cập nhật khách hàng</h3>
+                    <h5 class="card-title">Thêm / Cập nhật khách hàng</h5>
                     <form>
                         <div class="form-group my-3">
-                            <label for="customersName">Tên khách hàng:</label>
+                            <label for="customersName" class="my-1">Tên khách hàng:</label>
                             <input type="text" class="form-control" id="customersName" formControlName="name">
                             <div class="text-danger">
                                 <small>
@@ -18,7 +16,7 @@
                             </div>
                         </div>
                         <div class="form-group my-3">
-                          <label for="customersName">Email:</label>
+                          <label for="customersName" class="my-1">Email:</label>
                           <input type="text" class="form-control" id="customersEmail" formControlName="email">
                           <div class="text-danger">
                               <small>
@@ -27,7 +25,7 @@
                           </div>
                       </div>
                         <div class="form-group my-3">
-                            <label for="customersName">Số điện thoại:</label>
+                            <label for="number" class="my-1">Số điện thoại:</label>
                             <input type="text" class="form-control" id="customersTel" formControlName="tel">
                             <div class="text-danger">
                                 <small>
@@ -36,7 +34,7 @@
                             </div>
                         </div>
                         <div class="form-group my-3">
-                            <label for="customersName">Địa chỉ:</label>
+                            <label for="customersName" class="my-1">Địa chỉ:</label>
                             <input type="text" class="form-control" id="customersAddress" formControlName="address">
                             <div class="text-danger">
                                 <small>
@@ -44,25 +42,24 @@
                                 </small>
                             </div>
                           </div>
+                          <button nbButton type="submit" class="float-end" status="success"
+                          nbTooltip="Lưu dữ liệu">
+                          <i class="fa-solid fa-check"></i>
+                      </button>
 
-
-
-
-
-
-                        <button type="submit" class="btn btn-primary float-end">Lưu</button>
                         <!-- Nút hủy chỉnh sửa -->
-                        <button type="button" class="btn btn-secondary float-end mx-2">Reset</button>
-                    </form>
+                        <button nbButton status="warning" type="button" class=" float-end mx-2"
+                        nbTooltip="Reset dữ liệu">
+                        <i class="fa-solid fa-rotate-left"></i></button>                    </form>
 
                 </div>
             </div>
-            <div class="card my-2">
+            <div class="card my-lg-5">
                 <div class="card-body">
-                    <h3 class="card-title">Danh sách khách hàng</h3>
+                    <h5 class="card-title">Danh sách khách hàng</h5>
                     <div class="table-responsive">
                         <table class="table table-bordered">
-                            <thead>
+                            <thead class="table-secondary">
                                 <tr>
                                     <th>ID</th>
                                     <th>Tên khách hàng</th>
@@ -73,22 +70,21 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- <tr *ngFor="let product of products">
-                                    <td>{{ product.id }}</td>
-                                    <td>{{ product.name }}</td>
-                                    <td>{{ formatCurrency(product.price) }}</td>
-                                    <td>{{ formatCurrency(product.sale_price) }}</td>
-                                    <td><img src="../../../../assets/images/{{product.image}}" alt="{{ product.name }}"
-                                            style="max-width: 100px;"></td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button type="button" class="btn btn-warning btn-sm mr-2 mx-1"
-                                                >Sửa</button>
-                                            <button type="button" class="btn btn-danger btn-sm"
-                                               >Xóa</button>
-                                        </div>
-                                    </td>
-                                </tr> -->
+                              <td>1</td>
+                              <td>Nguyễn Văn A</td>
+                              <td>nva@gmail.com</td>
+                              <td>0998999222</td>
+                              <td>Hà Nội</td>
+                              <td>
+                                  <div class="btn-group">
+                                      <button nbButton status="primary" type="button" class="btn-sm mr-2 mx-1"
+                                         nbTooltip="Sửa dữ liệu"><i
+                                              class="fa-solid fa-pen-to-square"></i></button>
+                                      <button nbButton status="danger" type="button" class="btn-sm"
+                                          nbTooltip="Xóa dữ liệu"><i
+                                              class="fa-solid fa-trash"></i></button>
+                                  </div>
+                              </td>
                             </tbody>
                         </table>
                     </div>
