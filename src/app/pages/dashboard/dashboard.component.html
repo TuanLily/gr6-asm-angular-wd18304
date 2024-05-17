@@ -1,3 +1,14 @@
-<div class="row">
-  <h1>Hi, Chào mừng bạn đến với quán Dom Tea</h1>
-</div>
+<nb-card>
+  <nb-card-body>
+    <div class="row">
+      <h1 class="text-center">Hi, Chào mừng bạn đến với quán Dom Tea</h1>
+      <div class="row">
+        <div class="col-md-6"> <app-echarts [chartOptions]="columnChartOptions"></app-echarts>
+        </div>
+        <div class="col-md-6"> <app-echarts [chartOptions]="pieChartOptions"></app-echarts>
+        </div>
+      </div>
+      <app-echarts [chartOptions]="lineChartOptions"></app-echarts>
+    </div>
+  </nb-card-body>
+</nb-card>

@@ -37,19 +37,25 @@ export class LoginComponent implements OnInit {
 
   }
 
+  // onSubmit() {
+  //   if (this.loginForm.valid) {
+  //     this.spinner.show(); // Hiển thị spinner khi bắt đầu gọi API
+  //     this.auth.login(this.loginForm.value)
+  //       .pipe(
+  //         finalize(() => {
+  //           this.spinner.hide(); // Ẩn spinner sau khi API trả về kết quả
+  //         }),
+  //       )
+  //       .subscribe({
+  //         next: this.handleLoginSuccess.bind(this),
+  //         error: this.handleLoginFailed.bind(this),
+  //       });
+  //   }
+  // }
+
   onSubmit() {
     if (this.loginForm.valid) {
-      this.spinner.show(); // Hiển thị spinner khi bắt đầu gọi API
-      this.auth.login(this.loginForm.value)
-        .pipe(
-          finalize(() => {
-            this.spinner.hide(); // Ẩn spinner sau khi API trả về kết quả
-          }),
-        )
-        .subscribe({
-          next: this.handleLoginSuccess.bind(this),
-          error: this.handleLoginFailed.bind(this),
-        });
+      this.router.navigate([ROUTER_CONFIG.pages]).then();
     }
   }
 
