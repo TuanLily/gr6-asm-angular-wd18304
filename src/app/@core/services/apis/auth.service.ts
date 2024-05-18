@@ -80,6 +80,10 @@ export class AuthService extends ApiService {
     });
   }
 
+  resetPassword(token: string, newPassword: string): Observable<any> {
+    return this._http.post<any>(`${this.API_BASE_URL}${this.API_ENDPOINT.auth.resetPassword}`, { token, newPassword });
+  }
+
 
   confirmPassword(form: ILogin): Observable<any> {
     return this.post(API_BASE_URL + API_ENDPOINT.auth.confirmPassword, {

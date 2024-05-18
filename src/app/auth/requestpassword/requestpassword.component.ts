@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
 
@@ -33,8 +33,8 @@ export class RequestpasswordComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.forgotPasswordForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]]
+    this.forgotPasswordForm = new FormGroup({
+      email: new FormControl('', Validators.required),
     });
 
     this.route.params.subscribe(params => {
@@ -53,25 +53,32 @@ export class RequestpasswordComponent implements OnInit {
           }),
         )
         .subscribe({
-          next: this.handleLoginSuccess.bind(this),
-          error: this.handleLoginFailed.bind(this),
+          next: (res: any) => {
+            if (res.status === 200) {
+              this.handleSubmitSuccess(res);
+            } else {
+              this.handleSubmitFailed(res);
+            }
+          },
+          error: (error: any) => {
+            this.handleSubmitFailed(error);
+          }
         });
     }
   }
 
-  protected handleLoginSuccess(res: any) {
+  protected handleSubmitSuccess(res: any) {
     this.spinner.hide();
-    this.toast.success('Xác nhận thành công, vui lòng kiểm tra email của bạn.', 'Thành công');
-
+    this.alertMessages = [{ status: 'success', message: 'Xác nhận thành công, vui lòng kiểm tra email của bạn.' }];
   }
-  protected handleLoginFailed(error: any) {
+
+  protected handleSubmitFailed(error: any) {
     this.spinner.hide();
     if (error.status === 404) {
       this.alertMessages = [{ status: 'danger', message: 'Email không tồn tại trong hệ thống' }];
-    } 
-    // else {
-    //   this.alertMessages = [{ status: 'danger', message: 'Đã có lỗi xảy ra, vui lòng thử lại sau' }];
-    // }
+    } else {
+      this.alertMessages = [{ status: 'danger', message: 'Đã có lỗi xảy ra, vui lòng thử lại sau' }];
+    }
   }
 
 }
