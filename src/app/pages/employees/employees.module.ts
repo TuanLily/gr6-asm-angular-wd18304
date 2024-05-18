@@ -42,6 +42,7 @@ import { ListComponent } from './list/list.component';
     NbUserModule,
     NbTooltipModule,
     EmployeesRoutingModule,
+    NbTooltipModule
   ],
   declarations: [
     EmployeesComponent,

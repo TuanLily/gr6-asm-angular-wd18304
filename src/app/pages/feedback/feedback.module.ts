@@ -43,6 +43,7 @@ import { ListComponent } from './list/list.component';
     NbUserModule,
     NbTooltipModule,
     FeedbackRoutingModule,
+    NbTooltipModule
   ],
   declarations: [
     FeedbackComponent,
