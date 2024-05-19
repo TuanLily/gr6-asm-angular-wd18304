@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ROUTER_CONFIG } from 'app/@core/config';
 import { AuthService } from 'app/@core/services/apis';
 import { IAlertMessage } from 'app/@theme/components/alert/ngx-alerts.component';
 import { SpinnerService } from 'app/@theme/components/spinner/spinner.service';
@@ -33,7 +34,7 @@ export class ResetpasswordComponent implements OnInit {
     this.resetPasswordForm = new FormGroup({
       newPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),
       confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8)])
-    }, this.passwordsMatchValidator);
+    }, { validators: this.passwordsMatchValidator });
   }
 
   passwordsMatchValidator(form: FormGroup) {
@@ -55,20 +56,16 @@ export class ResetpasswordComponent implements OnInit {
         .subscribe({
           next: (res: any) => {
             console.log('Response from resetPassword API:', res); // Log response
-            if (res.status === 200) {
+            if (res.status === 'success') {
               this.alertMessages = [{ status: 'success', message: 'Đổi mật khẩu thành công' }];
-              this.router.navigate(['/login']);
-            }
-            if (res.status === 400) {
-              this.alertMessages = [{ status: 'danger', message: 'Chỉ được đổi mật khẩu 1 lần!' }];
-            }
-            else {
-              this.alertMessages = [{ status: 'danger', message: 'Đổi mật khẩu thất bại' }];
+              this.router.navigate([ROUTER_CONFIG.auth.login]).then();
+            } else {
+              this.alertMessages = [{ status: 'danger', message: res.message || 'Đổi mật khẩu thất bại' }];
             }
           },
           error: (error: any) => {
             console.error('Error from resetPassword API:', error); // Log error
-            this.alertMessages = [{ status: 'danger', message: 'Đổi mật khẩu thất bại' }];
+            this.alertMessages = [{ status: 'danger', message: error.error.message || 'Đổi mật khẩu thất bại' }];
           }
         });
     }

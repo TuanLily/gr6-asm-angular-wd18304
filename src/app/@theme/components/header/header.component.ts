@@ -4,6 +4,8 @@ import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeServ
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import {LayoutService} from "../../../@core/services/common/layout.service";
+import { LocalStorageService } from 'app/@core/services/common';
+import { LOCALSTORAGE_KEY } from 'app/@core/config';
 
 @Component({
   selector: 'ngx-header',
@@ -36,12 +38,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private menuService: NbMenuService,
     private themeService: NbThemeService,
     private layoutService: LayoutService,
-    private breakpointService: NbMediaBreakpointsService
+    private breakpointService: NbMediaBreakpointsService,
+    private storageService: LocalStorageService // Inject StorageService
+
   ) { }
 
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
-    this.user = {name: 'Admin Dom', picture: 'assets/images/user.png'}
+    const userName = this.storageService.getItem(LOCALSTORAGE_KEY.userInfo);
+    this.user = { name: userName || 'Admin Dom', picture: 'assets/images/user.png' };
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
         .pipe(
