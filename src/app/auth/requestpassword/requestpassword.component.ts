@@ -39,7 +39,6 @@ export class RequestpasswordComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       this.resetToken = params['token'];
-      // Bạn có thể thực hiện các xử lý khác ở đây sau khi nhận được mã thông báo
     });
   }
 

@@ -55,7 +55,7 @@ export class ResetpasswordComponent implements OnInit {
         )
         .subscribe({
           next: (res: any) => {
-            console.log('Response from resetPassword API:', res); // Log response
+            console.log('Response from resetPassword API:', res); // Log kiểm tra giá trì trả về
             if (res.status === 'success') {
               this.alertMessages = [{ status: 'success', message: 'Đổi mật khẩu thành công' }];
               this.router.navigate([ROUTER_CONFIG.auth.login]).then();
@@ -64,7 +64,7 @@ export class ResetpasswordComponent implements OnInit {
             }
           },
           error: (error: any) => {
-            console.error('Error from resetPassword API:', error); // Log error
+            console.error('Error from resetPassword API:', error); // Log kiểm tra lỗi phát sinh
             this.alertMessages = [{ status: 'danger', message: error.error.message || 'Đổi mật khẩu thất bại' }];
           }
         });

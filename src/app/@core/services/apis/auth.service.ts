@@ -41,7 +41,8 @@ export class AuthService extends ApiService {
   login(form: ILogin): Observable<any> {
     return this._http.post<any>(`${this.API_BASE_URL}${this.API_ENDPOINT.auth.login}`, {
       email: form.email.trim(),
-      password: form.password
+      password: form.password,
+      rememberMe: form.rememberMe
     });
   }
 

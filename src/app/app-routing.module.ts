@@ -10,7 +10,7 @@ export const routes: Routes = [
   },
   {
     path: 'pages',
-    // canActivateChild: [AuthGuard],
+    canActivateChild: [AuthGuard], // !Chỗ này khi được bật lên thì sẽ kiểm tra xem có token không, nếu có thì sẽ kiểm tra xem là có đăng nhập không và lưu thời hạn đăng nhập có hiệu lục
     loadChildren: () => import('./pages/pages.module')
       .then(m => m.PagesModule),
     data: {breadcrumb: 'Trang chủ'},
@@ -20,7 +20,7 @@ export const routes: Routes = [
     loadChildren: () => import('./error/error.module')
       .then(m => m.ErrorModule),
   },
-  {path: '', redirectTo: 'auth/login', pathMatch: 'full'},
+  {path: '', redirectTo: 'pages/dashboard', pathMatch: 'full'},
   {path: '**', redirectTo: 'error/404'},
 ];
 

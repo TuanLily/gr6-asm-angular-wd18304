@@ -10,15 +10,15 @@ const routes: Routes = [
     component: LoginComponent,
   },
   {
-    path: 'requestpassword',
+    path: 'request-password',
     component: RequestpasswordComponent,
   },
   {
-    path: 'resetPassword/:token',
+    path: 'reset-password/:token',
     component: ResetpasswordComponent
   },
   {
-    path: 'resetpassword',
+    path: 'reset-password',
     component: ResetpasswordComponent,
   },
   { path: '', redirectTo: 'login', pathMatch: 'full' },

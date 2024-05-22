@@ -5,4 +5,5 @@ export class ILogin {
   newPassword: string;
   confirmPassword: string;
   verificationCode: string;
+  rememberMe?: boolean;
 }

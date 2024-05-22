@@ -36,15 +36,15 @@
               </div>
             </div>
 
-            <div class="form-control-group remember accept-group  mb-3">
-              <nb-checkbox name="rememberMe" status="success">Ghi nhớ tôi?</nb-checkbox>
+            <div class="form-control-group remember accept-group mb-3">
+              <nb-checkbox formControlName="rememberMe" name="rememberMe" status="success">Ghi nhớ tôi?</nb-checkbox>
             </div>
             <button nbButton type="submit" class="mb-3" [disabled]="!loginForm.valid" status="success">Đăng nhập
             </button>
           </form>
 
           <div class="form-control-group accept-group ">
-            <a class="forgot-password" routerLink="../requestpassword">Quên mật khẩu?</a>
+            <a class="forgot-password" routerLink="../request-password">Quên mật khẩu?</a>
           </div>
         </div>
       </nb-card-body>
