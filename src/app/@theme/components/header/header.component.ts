@@ -49,7 +49,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.currentTheme = this.themeService.currentTheme;
     const userName = this.storageService.getItem(LOCALSTORAGE_KEY.userInfo);
     this.user = { name: userName || 'Admin Dom', picture: 'assets/images/user.png' };
-    
+
     //* Lắng nghe sự kiến click trên menu (ở đây là đang làm với chức năng Log out)
     this.menuService.onItemClick()
       .pipe(takeUntil(this.destroy$))
@@ -101,6 +101,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     // Xóa các thông tin tài khoản trên LocalStorage
     this.storageService.removeItem(LOCALSTORAGE_KEY.userInfo);
     this.storageService.removeItem(LOCALSTORAGE_KEY.token);
+    this.storageService.removeItem(LOCALSTORAGE_KEY.refreshToken);
     this.router.navigate(['/auth/login']);
   }
 }

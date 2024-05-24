@@ -79,13 +79,13 @@ export class ApiService {
      * @param parameter Ex: [param1, param2, param3] => result: apiUrl/param1/param2/param3
      * @param customHeaders OPTIONAL: another header value you want to customize
      */
-    delete(apiUrl: string, parameter: any[] = [], customHeaders?: HttpHeaders) {
+    delete<T>(apiUrl: string, parameter: any[] = [], customHeaders?: HttpHeaders): Observable<T> {
         if (parameter && parameter.length > 0) {
             parameter.forEach((p: string) => {
                 apiUrl += ('/' + p);
             });
         }
-        return this.http.delete(
+        return this.http.delete<T>(
             apiUrl,
             { headers: customHeaders ?? this.getHeaders() },
         );
@@ -126,15 +126,14 @@ export class ApiService {
      * Common header for each API
      */
     private getHeaders(): HttpHeaders {
-        return new HttpHeaders(
-            {
-                'Content-Type': 'application/json',
-                'Authorization': this.getToken() ?? '',
-                'Module': APP_CONFIG.module,
-                'X-Requested-With': 'XMLHttpRequest',
-                'Access-Control-Allow-Origin': '*',
-            },
-        );
+        const token = this.getToken();
+        return new HttpHeaders({
+            'Content-Type': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : '',
+            'Module': APP_CONFIG.module,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Access-Control-Allow-Origin': '*',
+        });
     }
 
     public getToken() {

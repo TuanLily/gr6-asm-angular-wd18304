@@ -23,20 +23,20 @@ export class ProductService extends ApiService {
     }
 
     getAllProducts(): Observable<IProduct[]> {
-        return this._http.get<IProduct[]>(this.apiUrl);
+        return this.get<IProduct[]>(this.apiUrl);
     }
 
     addProduct(product: IProduct): Observable<IProduct> {
-        return this._http.post<IProduct>(this.apiUrl, product);
+        return this.post<IProduct>(this.apiUrl, product);
     }
 
     updateProduct(productId: number, product: IProduct): Observable<IProduct> {
         const url = `${this.apiUrl}/${productId}`;
-        return this._http.patch<IProduct>(url, product);
+        return this.patch<IProduct>(url, product);
     }
 
     deleteProduct(productId: number): Observable<void> {
         const url = `${this.apiUrl}/${productId}`;
-        return this._http.delete<void>(url);
+        return this.delete<void>(url);
     }
 }

@@ -63,6 +63,12 @@ export class LoginComponent implements OnInit {
   protected handleLoginSuccess(res) {
     this.storageService.setItem(LOCALSTORAGE_KEY.userInfo, res.name);
     this.storageService.setItem(LOCALSTORAGE_KEY.token, res.token);
+    
+    // Lưu refreshToken nếu có trong phản hồi
+    if (res.refreshToken) {
+        this.storageService.setItem(LOCALSTORAGE_KEY.refreshToken, res.refreshToken);
+    }
+    
     this.router.navigate([ROUTER_CONFIG.pages]).then();
     this.spinner.hide();
   }

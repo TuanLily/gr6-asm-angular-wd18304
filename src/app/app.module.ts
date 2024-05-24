@@ -10,9 +10,13 @@ import {
   NbDatepickerModule,
   NbDialogModule, NbWindowModule, NbToastrModule, NbChatModule, NbTooltipModule
 } from '@nebular/theme';
-import { HttpClientModule } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { CoreModule } from "./@core/core.module";
 import { ThemeModule } from "./@theme/theme.module";
+import { filterInterceptorRequest, JWTInterceptor } from './@core/interceptors';
+import { AuthService } from './@core/services/apis';
+import { TokenService } from './@core/services/apis/token.service';
+import { AUTH_TOKEN_INTERCEPTOR_FILTER } from './@core/config';
 
 @NgModule({
   declarations: [
@@ -36,7 +40,13 @@ import { ThemeModule } from "./@theme/theme.module";
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
   ],
-  providers: [],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JWTInterceptor, multi: true },
+    { provide: AUTH_TOKEN_INTERCEPTOR_FILTER, useValue: filterInterceptorRequest },
+    AuthService,
+    TokenService
+
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
