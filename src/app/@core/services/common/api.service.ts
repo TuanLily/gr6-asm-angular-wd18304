@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpEvent, HttpEventType, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpEventType, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -21,14 +21,28 @@ export class ApiService {
      * @param parameter Ex: [param1, param2, param3] => result: apiUrl/param1/param2/param3
      * @param customHeaders OPTIONAL: another header value you want to customize
      */
-    get<T>(apiUrl: string, parameter: any[] = [], customHeaders?: HttpHeaders): Observable<T> {
-        parameter.forEach(p => {
-            apiUrl += ('/' + p);
-        });
+    // get<T>(apiUrl: string, parameter: any[] = [], customHeaders?: HttpHeaders): Observable<T> {
+    //     parameter.forEach(p => {
+    //         apiUrl += ('/' + p);
+    //     });
 
-        return this.http.get<T>(
-            apiUrl, { headers: customHeaders ?? this.getHeaders() },
-        );
+    //     return this.http.get<T>(
+    //         apiUrl, { headers: customHeaders ?? this.getHeaders() },
+    //     );
+    // }
+
+    get<T>(apiUrl: string, parameters: any = {}, customHeaders?: HttpHeaders): Observable<T> {
+        let params = new HttpParams();
+        for (const key in parameters) {
+            if (parameters.hasOwnProperty(key)) {
+                params = params.append(key, parameters[key]);
+            }
+        }
+
+        return this.http.get<T>(apiUrl, {
+            headers: customHeaders ?? this.getHeaders(),
+            params: params
+        });
     }
 
     /**

@@ -1,13 +1,13 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
-import { environment } from '@environments/environment';
 import { IProduct } from 'app/@core/interfaces/products.interface';
 import { ApiService } from '../common';
+import { API_BASE_URL, API_ENDPOINT } from "../../config/api-endpoint.config";
 
 
 
@@ -16,27 +16,26 @@ import { ApiService } from '../common';
 })
 export class ProductService extends ApiService {
 
-    private apiUrl = `${environment.apiBaseUrl}/api/products`;
-
     constructor(private _http: HttpClient) {
         super(_http);
     }
 
-    getAllProducts(): Observable<IProduct[]> {
-        return this.get<IProduct[]>(this.apiUrl);
+    getAllProducts(page: number, search: string = ''): Observable<any> {
+        const params = { page: page.toString(), search: search };
+        return this.get<any>(API_BASE_URL + API_ENDPOINT.product, params);
     }
 
-    addProduct(product: IProduct): Observable<IProduct> {
-        return this.post<IProduct>(this.apiUrl, product);
+    addProduct(product: IProduct): Observable<any> {
+        return this.post<any>(API_BASE_URL + API_ENDPOINT.product, product);
     }
 
-    updateProduct(productId: number, product: IProduct): Observable<IProduct> {
-        const url = `${this.apiUrl}/${productId}`;
-        return this.patch<IProduct>(url, product);
+    updateProduct(productId: number, product: IProduct): Observable<any> {
+        const url = `${API_BASE_URL + API_ENDPOINT.product}/${productId}`;
+        return this.patch<any>(url, product);
     }
 
-    deleteProduct(productId: number): Observable<void> {
-        const url = `${this.apiUrl}/${productId}`;
+    deleteProduct(productId: number): Observable<any> {
+        const url = `${API_BASE_URL + API_ENDPOINT.product}/${productId}`;
         return this.delete<void>(url);
     }
 }

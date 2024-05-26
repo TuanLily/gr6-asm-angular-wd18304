@@ -13,76 +13,57 @@ export class PaginatorComponent implements OnInit {
   @Input() apiUrl: string;
   @Input() current_page: number;
   @Input() last_page: number;
-  @Output() dataList: EventEmitter<any> = new EventEmitter();
+  @Output() dataList: EventEmitter<number> = new EventEmitter();  // Emit the page number
   indexPage: number = 1;
   hasPreviousPage: boolean = true;
   hasNextPage: boolean = false;
+
   constructor(
-      private apiService: ApiService,
-      private spinner: SpinnerService,
-  ) {
+    private apiService: ApiService,
+    private spinner: SpinnerService,
+  ) { }
+
+  ngOnInit() {
+    this.indexPage = this.current_page;
   }
-  ngOnInit() {}
 
   goFirstPage() {
-    this.hasPreviousPage = true;
-    this.hasNextPage = false;
     this.indexPage = 1;
-    this.getData();
+    this.updatePage();
   }
 
   goLastPage() {
-    this.hasPreviousPage = false;
-    this.hasNextPage = true;
     this.indexPage = this.last_page;
-    this.getData();
+    this.updatePage();
   }
 
   goPreviousPage() {
-    if (this.indexPage <= this.last_page && this.indexPage > 1) {
-      this.hasNextPage = false;
+    if (this.indexPage > 1) {
       this.indexPage--;
-      if (this.indexPage === 1) {
-        this.hasPreviousPage = true;
-      }
-      this.getData();
+      this.updatePage();
     }
   }
 
   goNextPage() {
     if (this.indexPage < this.last_page) {
-      this.hasPreviousPage = false;
       this.indexPage++;
-      if (this.indexPage === this.last_page) {
-        this.hasNextPage = true;
-      }
-      this.getData();
+      this.updatePage();
     }
   }
 
-  getPaginator(): Observable<any> {
-    return this.apiService.get(this.apiUrl + '?page=' + Number(this.indexPage));
-  }
-
-  getData() {
+  updatePage() {
     this.spinner.show();
-    this.getPaginator()
-        .pipe(
-            finalize(() => {
-              this.spinner.hide();
-            }),
-        )
-        .subscribe({
-          next: this.handleSuccess.bind(this),
-          error: this.handleErrors.bind(this),
-        });
-  }
-
-  protected handleSuccess(res) {
-    this.dataList.emit(res);
-  }
-
-  protected handleErrors(res) {
-    this.dataList.emit(res);
+    this.apiService.get(`${this.apiUrl}?page=${this.indexPage}`).pipe(
+      finalize(() => {
+        this.spinner.hide();
+      })
+    ).subscribe({
+      next: data => {
+        this.dataList.emit(this.indexPage);  // Emit the page number
+      },
+      error: error => {
+        console.error(error);
+      }
+    });
   }
 }

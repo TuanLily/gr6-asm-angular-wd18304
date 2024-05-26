@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+
+import { API_BASE_URL, API_ENDPOINT } from "../../config/api-endpoint.config";
 import { Observable } from 'rxjs';
-import { environment } from '@environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class TokenService {
-    private API_URL = `${environment.apiBaseUrl}`;
-    private API_ENDPOINT = '/api/auth/refresh-token'
 
-    constructor(private http: HttpClient) { }
+    constructor(private _http: HttpClient) { }
 
     refreshToken(refreshToken: string): Observable<any> {
-        return this.http.post(`${this.API_URL}${this.API_ENDPOINT}`, { refreshToken });
+        return this._http.post(API_BASE_URL + API_ENDPOINT.auth.refreshToken, { refreshToken });
     }
 }
 

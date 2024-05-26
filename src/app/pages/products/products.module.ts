@@ -13,7 +13,8 @@ import {
   NbCheckboxModule,
   NbInputModule,
   NbThemeModule,
-  NbTooltipModule
+  NbTooltipModule,
+  NbIconModule
 } from '@nebular/theme';
 
 import { ThemeModule } from '../../@theme/theme.module';
@@ -39,6 +40,7 @@ import { PaginatorModule } from 'app/@theme/components/paginator/paginator.modul
     NbCheckboxModule,
     NbInputModule,
     NbThemeModule,
+    NbIconModule,
     NbAccordionModule,
     NbUserModule,
     NbTooltipModule,

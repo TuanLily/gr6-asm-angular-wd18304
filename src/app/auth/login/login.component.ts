@@ -53,12 +53,6 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  // onSubmit() {
-  //   if (this.loginForm.valid) {
-  //     this.router.navigate([ROUTER_CONFIG.pages]).then();
-  //   }
-  // }
-
 
   protected handleLoginSuccess(res) {
     this.storageService.setItem(LOCALSTORAGE_KEY.userInfo, res.name);
