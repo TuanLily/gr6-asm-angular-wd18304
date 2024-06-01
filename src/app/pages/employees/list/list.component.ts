@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -13,8 +13,9 @@ import Swal from 'sweetalert2';
   styleUrls: ['./list.component.scss']
 })
 export class ListComponent implements OnInit {
+  @ViewChild('formElement') formElement: ElementRef;
   form: FormGroup;
-  newEmployee: any = { name: '', phone: '', email: '', address: '', password: '',  salary: '' };
+  newEmployee: any = { name: '', username: '', phone: '', email: '', address: '', password: '',  salary: '' };
 
   // Biến để xác định trạng thái hiện tại: true = đang thêm mới, false = đang sửa
   isAddingNewEmployee: boolean = true;
@@ -26,24 +27,21 @@ export class ListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadEmployees();
-    if (!this.isAddingNewEmployee && this.isEditing) {
+
       this.form = new FormGroup({
         name: new FormControl('', Validators.required),
+        username: new FormControl('', Validators.required),
         phone: new FormControl('', [Validators.required]),
         email: new FormControl('', [Validators.required, Validators.email]),
         address: new FormControl('', [Validators.required]),
         password: new FormControl('', [Validators.required, Validators.minLength(8)]),
         salary: new FormControl('', [Validators.required])
       });
-    } else {
-      this.form = new FormGroup({
-        name: new FormControl('', Validators.required),
-        phone: new FormControl('', [Validators.required]),
-        email: new FormControl('', [Validators.required, Validators.email]),
-        address: new FormControl('', [Validators.required]),
-        password: new FormControl('' ,[Validators.required, Validators.minLength(8)]), 
-        salary: new FormControl('', [Validators.required])
-      });
+  }
+  
+  scrollFormIntoView(){
+    if(this.formElement){
+      this.formElement.nativeElement.scrollIntoView({ behavior: 'smooth' , block: 'start'});
     }
   }
 
@@ -52,7 +50,7 @@ export class ListComponent implements OnInit {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(value);
   }
 
-  //* Hàm load toàn bộ dự liệu ra giao diện
+  //* Hàm load toàn bộ dữ liệu ra giao diện
   loadEmployees(): void {
     this.employeeService.getAllEmployees().subscribe(employees => {
       this.employees = employees;
@@ -66,16 +64,18 @@ export class ListComponent implements OnInit {
       return;
     }
     let employeeData: IEmployee;
+    const usernameValue = this.form.get('username').value;
     const phoneValue = this.form.get('phone').value;
     const emailValue = this.form.get('email').value;
     const addressValue = this.form.get('address').value;
     const passwordValue = this.form.get('password').value;
     const salaryValue = this.form.get('salary').value;
   
-    if (this.isEditing && !this.isAddingNewEmployee && !phoneValue && !emailValue && !addressValue && !passwordValue && !salaryValue) {
+    if (this.isEditing && !this.isAddingNewEmployee && !usernameValue && !phoneValue && !emailValue && !addressValue && !passwordValue && !salaryValue) {
       // Nếu là chế độ sửa và không có giá trị mới được nhập, sử dụng lại giá trị cũ
       employeeData = {
         name: this.form.get('name').value,
+        username: this.form.get('username').value,
         phone: this.form.get('phone').value,
         email: this.form.get('email').value,
         address: this.form.get('address').value,
@@ -86,6 +86,7 @@ export class ListComponent implements OnInit {
       // Sử dụng giá trị mới nếu có hoặc nếu không ở chế độ thêm mới
       employeeData = {
         name: this.form.get('name').value,
+        username: usernameValue,
         phone: phoneValue,
         email: emailValue,
         address: addressValue,
@@ -101,11 +102,8 @@ export class ListComponent implements OnInit {
         () => {
           this.toastrService.success('Cập nhật thành công!', 'Success');
           this.isEditing = false;
-          setTimeout(() => {
-            this.spinner.show();
-            window.location.reload();
-          }, 1000);
-  
+          this.spinner.hide();
+          this.loadEmployees();
         },
         error => {
           this.toastrService.danger('Đã xảy ra lỗi khi cập nhật nhân viên!', 'Error');
@@ -117,10 +115,8 @@ export class ListComponent implements OnInit {
       this.employeeService.addEmployee(employeeData).subscribe(
         () => {
           this.toastrService.success('Thêm mới thành công!', 'Success');
-          setTimeout(() => {
-            this.spinner.show();
-            window.location.reload();
-          }, 1000);
+          this.spinner.hide();
+          this.loadEmployees();
         },
         error => {
           this.toastrService.danger('Đã xảy ra lỗi khi thêm nhân viên!', 'Error');
@@ -153,12 +149,13 @@ export class ListComponent implements OnInit {
       this.isEditing = true;
       this.toastrService.info('Sẵn sàng cập nhật!', 'Thông tin');
     }
+    this.scrollFormIntoView();
   }
 
   deleteEmployee(employeeId: number): void {
     Swal.fire({
       title: 'Xác nhận xóa',
-      text: 'Bạn có chắc chắn muốn xóa sản phẩm này?',
+      text: 'Bạn có chắc chắn muốn xóa nhân viên này?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Đồng ý',
@@ -174,8 +171,8 @@ export class ListComponent implements OnInit {
             }
           },
           error => {
-            this.toastrService.danger('Đã xảy ra lỗi khi xóa sản phẩm!', 'Error');
-            console.error('Error deleting product:', error);
+            this.toastrService.danger('Đã xảy ra lỗi khi xóa nhân viên!', 'Error');
+            console.error('Error deleting employee:', error);
           }
         );
       }

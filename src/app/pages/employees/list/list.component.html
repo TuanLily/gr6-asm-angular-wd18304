@@ -1,154 +1,156 @@
 <nb-card>
+    <nb-card-header class="d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-8">Danh sách nhân viên</h5>
+    </nb-card-header>
     <nb-card-body>
-        <div class="container">
-            <!-- Form để thêm nhân viên mới -->
-            <div class="card my-2">
-                <div class="card-body">
-                    <h5 class="card-title">Thêm / Cập nhật nhân viên</h5>
-                    <form [formGroup]="form" (ngSubmit)="addEmployee()" #employeeForm="ngForm">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group my-3">
-                                    <label for="employeeName">Tên nhân viên<span class="spot">*</span>:</label>
-                                    <input type="text" class="form-control" id="employeeName"
-                                        [(ngModel)]="newEmployee.name" formControlName="name">
-                                    <div *ngIf="form.get('name').invalid && form.get('name').touched"
-                                        class="text-danger">
-                                        <small *ngIf="form.get('name').hasError('required')">
-                                            Vui lòng nhập tên nhân viên
-                                        </small>
-                                    </div>
-                                </div>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Tên nhân viên</th>
+                        <th>Số điện thoại</th>
+                        <th>Email</th>
+                        <th>Địa chỉ</th>
+                        <th>Lương</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let e of employees, let index = index">
+                        <td class="align-middle">{{index + 1}}</td>
+                        <td class="align-middle">{{e.name}}</td>
+                        <td class="align-middle">{{e.phone}}</td>
+                        <td class="align-middle">{{e.email}}</td>
+                        <td class="align-middle">{{e.address}}</td>
+                        <td class="align-middle">{{ formatCurrency(e.salary) }}</td>
+                        <td class="align-middle text-center">
+                            <div class="btn-group d-flex justify-content-center">
+                                <button nbButton status="primary" type="button" class="btn-sm mx-1 btn-equal"
+                                    (click)="editEmployee(e.id)" nbTooltip="Sửa dữ liệu"><i
+                                        class="fa-solid fa-pen-to-square"></i></button>
+                                <button nbButton status="danger" type="button" class="btn-sm mx-1 btn-equal"
+                                    (click)="deleteEmployee(e.id)" nbTooltip="Xóa dữ liệu"><i
+                                        class="fa-solid fa-trash"></i></button>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group my-3">
-                                    <label for="employeePhone">Số điện thoại<span class="spot">*</span>:</label>
-                                    <input type="text" class="form-control" id="employeePhone"
-                                        [(ngModel)]="newEmployee.phone" formControlName="phone">
-                                    <div *ngIf="form.get('phone').invalid && form.get('phone').touched"
-                                        class="text-danger">
-                                        <small *ngIf="form.get('phone').hasError('required')">
-                                            Vui lòng nhập số điện thoại
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group my-3">
-                                    <label for="employeeEmail">Email<span class="spot">*</span>:</label>
-                                    <input type="email" class="form-control" id="employeeEmail" formControlName="email">
-                                    <div *ngIf="form.get('email')!.invalid && (form.get('email')!.dirty || form.get('email')!.touched)"
-                                        class="text-danger">
-                                        <small *ngIf="form.get('email')!.hasError('required')">
-                                            Vui lòng nhập email
-                                        </small>
-                                        <small *ngIf="form.get('email')!.hasError('email')">
-                                            Email không hợp lệ
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group my-3">
-                                    <label for="employeeAddress">Địa chỉ<span class="spot">*</span>:</label>
-                                    <input type="text" class="form-control" id="employeeAddress"
-                                        [(ngModel)]="newEmployee.address" formControlName="address">
-                                    <div *ngIf="form.get('address').invalid && form.get('address').touched"
-                                        class="text-danger">
-                                        <small *ngIf="form.get('address').hasError('required')">
-                                            Vui lòng nhập địa chỉ
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group my-3">
-                                    <label for="employeePass">Mật khẩu<span class="spot">*</span>:</label>
-                                    <input type="password" class="form-control" id="employeePass"
-                                        [(ngModel)]="newEmployee.password" formControlName="password">
-                                    <div *ngIf="form.get('password').invalid && form.get('password').touched"
-                                        class="text-danger">
-                                        <small *ngIf="form.get('password').hasError('required')">
-                                            Vui lòng nhập mật khẩu
-                                        </small>
-                                        <small *ngIf="form.get('password').hasError('minlength')">
-                                            Mật khẩu phải trên 8 ký tự
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group my-3">
-                                    <label for="employeeSalary">Lương<span class="spot">*</span>:</label>
-                                    <input type="number" class="form-control" id="employeeSalary"
-                                        [(ngModel)]="newEmployee.salary" formControlName="salary">
-                                    <div *ngIf="form.get('salary').invalid && form.get('salary').touched"
-                                        class="text-danger">
-                                        <small *ngIf="form.get('salary').hasError('required')">
-                                            Vui lòng nhập lương
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </nb-card-body>
+</nb-card>
 
-                        <button nbButton type="submit" class="float-end" [disabled]="!form.valid" status="success"
-                            nbTooltip="Lưu dữ liệu">
-                            <i class="fa-solid fa-check"></i>
-                        </button>
-
-                        <!-- Nút hủy chỉnh sửa -->
-                        <button nbButton status="warning" type="button" class=" float-end mx-2"
-                            nbTooltip="Reset dữ liệu" (click)="Reset()">
-                            <i class="fa-solid fa-rotate-left"></i></button>
-                    </form>
-
+<nb-card class="mt-5">
+    <nb-card-header>
+        <h5 class="card-title">Thêm / Cập nhật nhân viên</h5>
+    </nb-card-header>
+    <nb-card-body>
+        <form [formGroup]="form" (ngSubmit)="addEmployee()" #formElement>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group my-3">
+                        <label for="employeeName">Tên nhân viên<span class="spot">*</span>:</label>
+                        <input type="text" class="form-control" id="employeeName" [(ngModel)]="newEmployee.name"
+                            formControlName="name">
+                        <div *ngIf="form.get('name').invalid && form.get('name').touched" class="text-danger">
+                            <small *ngIf="form.get('name').hasError('required')">
+                                Vui lòng nhập tên nhân viên
+                            </small>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="card my-lg-5">
-                <div class="card-body">
-                    <h5 class="card-title">Danh sách nhân viên</h5>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead class="table-secondary">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Tên nhân viên</th>
-                                    <th>Số điện thoại</th>
-                                    <th>Email</th>
-                                    <th>Địa chỉ</th>
-                                    <th>Lương</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let e of employees">
-                                    <td>{{e.id}}</td>
-                                    <td>{{e.name}}</td>
-                                    <td>{{e.phone}}</td>
-                                    <td>{{e.email}}</td>
-                                    <td>{{e.address}}</td>
-                                    <td>{{ formatCurrency(e.salary) }}</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button nbButton status="primary" type="button" class="btn-sm mr-2 mx-1"
-                                                (click)="editEmployee(e.id)" nbTooltip="Sửa dữ liệu"><i
-                                                    class="fa-solid fa-pen-to-square"></i></button>
-                                            <button nbButton status="danger" type="button" class="btn-sm"
-                                                (click)="deleteEmployee(e.id)" nbTooltip="Xóa dữ liệu"><i
-                                                    class="fa-solid fa-trash"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="col-md-6">
+                    <div class="form-group my-3">
+                        <label for="employeeUsername">Tên người dùng<span class="spot">*</span>:</label>
+                        <input type="text" class="form-control" id="employeeUsername" [(ngModel)]="newEmployee.username"
+                            formControlName="username">
+                        <div *ngIf="form.get('username').invalid && form.get('username').touched" class="text-danger">
+                            <small *ngIf="form.get('username').hasError('required')">
+                                Vui lòng nhập tên người dùng
+                            </small>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group my-3">
+                        <label for="employeePhone">Số điện thoại<span class="spot">*</span>:</label>
+                        <input type="text" class="form-control" id="employeePhone" [(ngModel)]="newEmployee.phone"
+                            formControlName="phone">
+                        <div *ngIf="form.get('phone').invalid && form.get('phone').touched" class="text-danger">
+                            <small *ngIf="form.get('phone').hasError('required')">
+                                Vui lòng nhập số điện thoại
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group my-3">
+                        <label for="employeeAddress">Địa chỉ<span class="spot">*</span>:</label>
+                        <input type="text" class="form-control" id="employeeAddress" [(ngModel)]="newEmployee.address"
+                            formControlName="address">
+                        <div *ngIf="form.get('address').invalid && form.get('address').touched" class="text-danger">
+                            <small *ngIf="form.get('address').hasError('required')">
+                                Vui lòng nhập địa chỉ
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group my-3">
+                        <label for="employeeEmail">Email<span class="spot">*</span>:</label>
+                        <input type="email" class="form-control" id="employeeEmail" formControlName="email">
+                        <div *ngIf="form.get('email')!.invalid && (form.get('email')!.dirty || form.get('email')!.touched)"
+                            class="text-danger">
+                            <small *ngIf="form.get('email')!.hasError('required')">
+                                Vui lòng nhập email
+                            </small>
+                            <small *ngIf="form.get('email')!.hasError('email')">
+                                Email không hợp lệ
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group my-3">
+                        <label for="employeePass">Mật khẩu<span class="spot">*</span>:</label>
+                        <input type="password" class="form-control" id="employeePass" [(ngModel)]="newEmployee.password"
+                            formControlName="password">
+                        <div *ngIf="form.get('password').invalid && form.get('password').touched" class="text-danger">
+                            <small *ngIf="form.get('password').hasError('required')">
+                                Vui lòng nhập mật khẩu
+                            </small>
+                            <small *ngIf="form.get('password').hasError('minlength')">
+                                Mật khẩu phải trên 8 ký tự
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                    <div class="form-group my-3">
+                        <label for="employeeSalary">Lương<span class="spot">*</span>:</label>
+                        <input type="number" class="form-control" id="employeeSalary" [(ngModel)]="newEmployee.salary"
+                            formControlName="salary">
+                        <div *ngIf="form.get('salary').invalid && form.get('salary').touched" class="text-danger">
+                            <small *ngIf="form.get('salary').hasError('required')">
+                                Vui lòng nhập lương
+                            </small>
+                        </div>
+                    </div>
+
+            <button nbButton type="submit" class="float-end" [disabled]="!form.valid" status="success"
+                nbTooltip="Lưu dữ liệu">
+                <i class="fa-solid fa-check"></i>
+            </button>
+
+            <!-- Nút hủy chỉnh sửa -->
+            <button nbButton status="warning" type="button" class=" float-end mx-2" nbTooltip="Reset dữ liệu"
+                (click)="Reset()">
+                <i class="fa-solid fa-rotate-left"></i></button>
+        </form>
     </nb-card-body>
 </nb-card>
