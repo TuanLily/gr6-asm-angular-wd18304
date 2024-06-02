@@ -2,39 +2,8 @@
 <nb-card>
     <nb-card-body>
         <div class="container">
-            <!-- Form để thêm vai trò mới -->
-            <div class="card my-2">
-                <div class="card-body">
-                    <h5 class="card-title">Thêm / Cập nhật vai trò</h5>
-                    <form>
-                        <div class="form-group my-3">
-                            <label for="categoriesName">Tên vai trò:</label>
-                            <input type="text" class="form-control" id="categoriesName" formControlName="name">
-                            <div class="text-danger">
-                                <small>
-                                    Vui lòng nhập tên vai trò.
-                                </small>
-                            </div>
-                        </div>
-
-
-
-
-
-                        <button nbButton type="submit" class="float-end"  status="success"
-                            nbTooltip="Lưu dữ liệu">
-                            <i class="fa-solid fa-check"></i>
-                        </button>
-
-
-                        <!-- Nút hủy chỉnh sửa -->
-                        <button nbButton status="warning" type="button" class=" float-end mx-2" 
-                            nbTooltip="Reset dữ liệu">
-                            <i class="fa-solid fa-rotate-left"></i></button>
-                    </form>
-
-                </div>
-            </div>
+            
+            
             <div class="card my-lg-5">
                 <div class="card-body">
                     <h5 class="card-title">Danh sách vai trò</h5>
@@ -70,6 +39,41 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+
+
+            <!-- Form để thêm vai trò mới -->
+            <div class="card my-lg-2">
+                <div class="card-body">
+                    <h5 class="card-title">Thêm / Cập nhật vai trò</h5>
+                    <form>
+                        <div class="form-group my-3">
+                            <label for="categoriesName">Tên vai trò:</label>
+                            <input type="text" class="form-control" id="categoriesName" formControlName="name">
+                            <div class="text-danger">
+                                <small>
+                                    Vui lòng nhập tên vai trò.
+                                </small>
+                            </div>
+                        </div>
+
+
+
+
+
+                        <button nbButton type="submit" class="float-end"  status="success"
+                            nbTooltip="Lưu dữ liệu">
+                            <i class="fa-solid fa-check"></i>
+                        </button>
+
+
+                        <!-- Nút hủy chỉnh sửa -->
+                        <button nbButton status="warning" type="button" class=" float-end mx-2" 
+                            nbTooltip="Reset dữ liệu">
+                            <i class="fa-solid fa-rotate-left"></i></button>
+                    </form>
+
                 </div>
             </div>
         </div>
