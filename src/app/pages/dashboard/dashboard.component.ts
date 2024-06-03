@@ -1,32 +1,39 @@
+import { formatCurrency } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-
+import { IProductPrices } from 'app/@core/interfaces/statistic.interface';
+import { statisticsService } from 'app/@core/services/apis/statistic.service';
 @Component({
   selector: 'ngx-dashboard',
   styleUrls: ['./dashboard.component.scss'],
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {
-
   columnChartOptions: any;
   pieChartOptions: any;
   lineChartOptions: any;
 
-  constructor() {
+  productPriceStats: IProductPrices;
+
+
+  constructor(
+    private statisticsService: statisticsService
+
+  ) {
     this.columnChartOptions = {
       xAxis: {
         type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       },
       yAxis: {
-        type: 'value'
+        type: 'value',
       },
       series: [
         {
           name: 'Biểu đồ cột 1',
           type: 'bar',
-          data: [150, 230, 224, 218, 135, 147, 260]
-        }
-      ]
+          data: [150, 230, 224, 218, 135, 147, 260],
+        },
+      ],
     };
 
     this.pieChartOptions = {
@@ -39,31 +46,41 @@ export class DashboardComponent implements OnInit {
             { value: 335, name: 'Mùa Xuân' },
             { value: 310, name: 'Mùa Hè' },
             { value: 234, name: 'Mùa Thu' },
-            { value: 135, name: 'Mùa Đông' }
-          ]
-        }
-      ]
+            { value: 135, name: 'Mùa Đông' },
+          ],
+        },
+      ],
     };
 
     this.lineChartOptions = {
       xAxis: {
         type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
       },
       yAxis: {
-        type: 'value'
+        type: 'value',
       },
       series: [
         {
           name: 'Biểu đồ đường',
           type: 'line',
-          data: [150, 230, 224, 218, 135, 147, 260]
-        }
-      ]
+          data: [150, 230, 224, 218, 135, 147, 260],
+        },
+      ],
     };
   }
 
+  ngOnInit(): void {
+    this.statisticsService.getProductPrices().subscribe(data => {
+      this.productPriceStats = data;
+    });
+  }
 
-  ngOnInit(): void { }
-
+  // *Định dạng tiền tệ
+  formatCurrency(value: number): string {
+    return new Intl.NumberFormat('vi-VN', {
+      style: 'currency',
+      currency: 'VND',
+    }).format(value);
+  }
 }

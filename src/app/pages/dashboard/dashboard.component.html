@@ -1,14 +1,41 @@
 <nb-card>
   <nb-card-body>
+    <h1 class="text-center">Hi, Chào mừng bạn đến với quán Dom Tea</h1>
     <div class="row">
-      <h1 class="text-center">Hi, Chào mừng bạn đến với quán Dom Tea</h1>
-      <div class="row">
-        <div class="col-md-6"> <app-echarts [chartOptions]="columnChartOptions"></app-echarts>
-        </div>
-        <div class="col-md-6"> <app-echarts [chartOptions]="pieChartOptions"></app-echarts>
+      <div class="col-md-6">
+        <app-echarts [chartOptions]="columnChartOptions"></app-echarts>
+      </div>
+      <div class="col-md-6">
+        <app-echarts [chartOptions]="pieChartOptions"></app-echarts>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <app-echarts [chartOptions]="lineChartOptions"></app-echarts>
+      </div>
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-md-12">
+            <h5 class="text-center">Thống kê giá sản phẩm</h5>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Giá cao nhất</th>
+                  <th>Giá thấp nhất</th>
+                  <th>Giá trung bình</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ formatCurrency(productPriceStats?.maxPrice) }}</td>
+                  <td>{{ formatCurrency(productPriceStats?.minPrice) }}</td>
+                  <td>{{ formatCurrency(productPriceStats?.avgPrice) }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-      <app-echarts [chartOptions]="lineChartOptions"></app-echarts>
     </div>
   </nb-card-body>
 </nb-card>
