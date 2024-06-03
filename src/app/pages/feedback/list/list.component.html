@@ -1,78 +1,91 @@
 <nb-card>
-    <nb-card-body>
-        <div class="container">
-            <!-- Form để thêm đánh giá mới -->
-            <div class="card my-2">
-                <div class="card-body">
-                    <h5 class="card-title">Thêm / Cập nhật đánh giá cửa hàng</h5>
-                    <form>
-                    <div class="row">
-                      <div class="form-group my-3">
-                        <label for="customersName">Tên khách hàng<span class="spot">*</span>:</label>
-                        <input type="text" class="form-control" id="customersName" formControlName="name">
-                        <div class="text-danger">
-                            <small>
-                                Vui lòng nhập tên khách hàng.
-                            </small>
-                        </div>
-                    </div>
-                        <div class="form-group my-3">
-                            <label for="feedbackContent">Nội dung<span class="spot">*</span>:</label>
-                            <textarea class="form-control" id="customersName" formControlName="content"></textarea>
-                            <div class="text-danger">
-                                <small>
-                                    Vui lòng nhập nội dung
-                                </small>
-                            </div>
-                        </div>
-                    </div>
-                        <button nbButton type="submit" class="float-end" status="success" nbTooltip="Lưu dữ liệu">
-                            <i class="fa-solid fa-check"></i>
-                        </button>
-                        <!-- Nút hủy chỉnh sửa -->
-                        <button nbButton status="warning" type="button" class=" float-end mx-2"
-                            nbTooltip="Reset dữ liệu">
-                            <i class="fa-solid fa-rotate-left"></i></button>
-                    </form>
+  <nb-card-header class="d-flex justify-content-between align-items-center">
+    <h5 class="card-title mb-0">Danh sách đánh giá</h5>
+    <form class="d-flex">
+      <input class="form-control me-2" type="search" placeholder="Tìm kiếm"
+      name="searchQuery" aria-label="Search">
+      <button type="submit" nbButton status="primary">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </form>
+  </nb-card-header>
+<nb-card-body>
+<div class="table-responsive">
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Tên khách hàng</th>
+        <th>Nội dung</th>
+        <th>Ngày tạo</th>
+        <th>Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let feedback of feedbacks, let i = index">
+        <td class="align-middle">{{i+1}}</td>
+        <td class="align-middle">{{ getCustomerNameById(feedback.customer_id) }}</td>
+        <td class="align-middle">{{feedback.content}}</td>
+        <td class="align-middle">{{feedback.create_date}}</td>
+        <td class="align-middle text-center"><div class="btn-group">
+          <button nbButton status="primary" type="button" class="btn-sm mr-2 mx-1"
+          (click)="editFeedback(feedback.id)" nbTooltip="Sửa dữ liệu">
+          <i class="fa-solid fa-pen-to-square"></i></button>
+          <button nbButton status="danger" type="button" class="btn-sm"
+          (click)="deleteFeedback(feedback.id)" nbTooltip="Xóa dữ liệu">
+          <i class="fa-solid fa-trash"></i></button>
+        </div></td>
+      </tr>
+    </tbody>
+  </table>
 
-                </div>
-            </div>
-            <div class="card my-lg-5">
-                <div class="card-body">
-                    <h5 class="card-title">Danh sách đánh giá</h5>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead class="table-secondary">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Tên khách hàng</th>
-                                    <th>Thời gian</th>
-                                    <th>Nội dung</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button nbButton status="primary" type="button" class="btn-sm mr-2 mx-1"
-                                                 nbTooltip="Sửa dữ liệu"><i
-                                                    class="fa-solid fa-pen-to-square"></i></button>
-                                            <button nbButton status="danger" type="button" class="btn-sm"
-                                                 nbTooltip="Xóa dữ liệu"><i
-                                                    class="fa-solid fa-trash"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+</div>
+</nb-card-body>
+</nb-card>
+
+<nb-card class="mt-3">
+  <nb-card-header>
+    <h5 class="card-title">Thêm / Cập nhật đánh giá</h5>
+  </nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="form" (ngSubmit)="addFeedback()" #feedbackForm="ngForm" #formElement>
+      <div class="row">
+        <div class="col-md-6">
+            <div class="form-group my-3">
+                <label for="customerOption" class="my-1">Danh sách tài khoản<span class="spot">*</span>:</label>
+                <select class="form-control" id="customerOption" formControlName="customer_id">
+                  <option value="" disabled selected>Vui lòng chọn tài khoản</option>
+                  <option *ngFor="let customer of customerData" [value]="customer.id">{{ customer.name }}</option>
+                </select>
+                <div *ngIf="form.get('customer_id').invalid && form.get('customer_id').touched" class="text-danger">
+                    <small>Vui lòng chọn một tài khoản.</small>
                 </div>
             </div>
         </div>
-    </nb-card-body>
+    </div>
+      <div class="row">
+          <div class="col-md-12">
+              <div class="form-group my-3">
+                  <label for="feedbackContent" class="my-1">Đánh giá<span class="spot">*</span>:</label>
+                  <textarea class="form-control" id="feedbackContent" name="feedbackContent" rows="3" [(ngModel)]="newFeedback.content" formControlName="content"></textarea>
+                  <div *ngIf="form.get('content').invalid && form.get('content').touched" class="text-danger">
+                      <small *ngIf="form.get('content').hasError('required')">Vui lòng nhập đánh giá.</small>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="row">
+          <div class="col-md-12">
+              <button nbButton type="submit" class="float-end" [disabled]="!form.valid" status="success" nbTooltip="Lưu dữ liệu">
+                  <i class="fa-solid fa-check"></i>
+              </button>
+              <!-- Nút hủy chỉnh sửa -->
+              <button nbButton status="warning" type="button" class="float-end mx-2" (click)="Reset()" nbTooltip="Reset dữ liệu">
+                  <i class="fas fa-rotate-left"></i>
+              </button>
+          </div>
+      </div>
+  </form>
+
+  </nb-card-body>
 </nb-card>
