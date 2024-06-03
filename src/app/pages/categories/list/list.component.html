@@ -1,85 +1,91 @@
-
 <nb-card>
+    <nb-card-header>
+        <h5 class="card-title">Danh sách danh mục</h5>
+    </nb-card-header>
     <nb-card-body>
-        <div class="container">      
-            <div class="card my-lg-5">
-                <div class="card-body">
-                    <h5 class="card-title">Danh sách danh mục</h5>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead class="table-secondary">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Tên danh mục</th>
-                                    <th>Trạng thái</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let cate of Categories; let i = index">
-                                    <th class="align-middle" scope="row">{{ i + 1 }}</th>
-                                    <td class="align-middle">{{ cate.name }}</td>
-                                    <td class="align-middle">
-                                        <span *ngIf="cate.status === 0" class="text-success">Đang hoạt động</span>
-                                        <span *ngIf="cate.status === 1" class="text-danger">Đã ngừng hoạt động</span>
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <div class="btn-group d-flex justify-content-center">
- 
-                                            <button nbButton status="primary" type="button" class="btn-sm mx-1 btn-equal" (click)="editCate(cate.id)"
-                                                 nbTooltip="Sửa dữ liệu"><i
-                                                    class="fa-solid fa-pen-to-square"></i></button>
-                                            <button nbButton status="danger" type="button" class="btn-sm mx-1 btn-equal" (click)="deleteCategories(cate.id)"
-                                                 nbTooltip="Xóa dữ liệu"><i
-                                                    class="fa-solid fa-trash"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+        <div class="container">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Tên danh mục</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let cate of Categories; let i = index">
+                            <th class="align-middle" scope="row">{{ i + 1 }}</th>
+                            <td class="align-middle">{{ cate.name }}</td>
+                            <td class="align-middle">
+                                <span *ngIf="cate.status === 0" class="text-success">Đang hoạt động</span>
+                                <span *ngIf="cate.status === 1" class="text-danger">Đã ngừng hoạt động</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <div class="btn-group d-flex justify-content-center">
+                                    <button nbButton status="primary" type="button" class="btn-sm mx-1 btn-equal"
+                                        (click)="editCate(cate.id)" nbTooltip="Sửa dữ liệu"><i
+                                            class="fa-solid fa-pen-to-square"></i></button>
+                                    <button nbButton status="danger" type="button" class="btn-sm mx-1 btn-equal"
+                                        (click)="deleteCategories(cate.id)" nbTooltip="Xóa dữ liệu"><i
+                                            class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </nb-card-body>
+</nb-card>
+
+<!-- Form để thêm danh mục mới -->
+<nb-card class="my-lg-2">
+    <nb-card-header>
+        <h5 class="card-title">Thêm / Cập nhật danh mục</h5>
+    </nb-card-header>
+    <nb-card-body>
+        <form [formGroup]="form" (ngSubmit)="addCategories()" #cateForm="ngForm" #formElement>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group my-3">
+                        <label for="categoriesName" class=" my-1">Tên danh mục:</label>
+                        <input type="text" class="form-control" id="categoriesName" formControlName="name"
+                            [(ngModel)]="newCate.name">
+                        <div *ngIf="form.get('name').invalid && form.get('name').touched" class="text-danger">
+                            <small *ngIf="form.get('name').hasError('required')">
+                                Vui lòng nhập tên danh mục.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group my-3">
+                        <label for="categoriesName" class="my-1">Trạng thái</label>
+                        <select class="form-control" id="status" formControlName="status" [(ngModel)]="newCate.status">
+                            <option value="">-- Chọn trạng thái --</option>
+                            <option value="0">Đang hoạt động</option>
+                            <option value="1">Ngừng hoạt động</option>
+                        </select>
+                        <div class="text-danger">
+                            <!-- Error message for status if needed -->
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Form để thêm danh mục mới -->
-            <div class="card my-lg-2">
-                <div class="card-body">
-                    <h5 class="card-title">Thêm / Cập nhật danh mục</h5>
-                    <form [formGroup]="form" (ngSubmit)="addCategories()" #cateForm="ngForm" #formElement>
-                        <div class="form-group my-3">
-                            <label for="categoriesName">Tên danh mục:</label>
-                            <input type="text" class="form-control" id="categoriesName" formControlName="name" [(ngModel)]="newCate.name">
-                            <div *ngIf="form.get('name').invalid && form.get('name').touched" class="text-danger">
-                                <small *ngIf="form.get('name').hasError('required')">
-                                    Vui lòng nhập tên danh mục.
-                                </small>
-                            </div>
-                        </div>
-                        <div class="form-group my-3">
-                            <label for="categoriesName">status</label>
-                           
-                            <select class="form-control" id="status" formControlName="status" [(ngModel)]="newCate.status">
-                                <option value="">-- Chọn trạng thái --</option>
-                                <option value="0">đang hoạt động</option>
-                                <option value="1">ngừng hoạt động</option>
-                            </select>
-                            <div class="text-danger">
-                                
-                            </div>
-                        </div>
 
-                        <button nbButton type="submit" class="float-end" [disabled]="!form.valid"  status="success"
-                        nbTooltip="Lưu dữ liệu">
-                        <i class="fa-solid fa-check"></i>
-                    </button>
 
-                    <button nbButton status="warning" type="button" class=" float-end mx-2" (click)="Reset()"
-                        nbTooltip="Reset dữ liệu">
-                        <i class="fa-solid fa-rotate-left"></i></button>
-                    </form>
+            <button nbButton type="submit" class="float-end" [disabled]="!form.valid" status="success"
+                nbTooltip="Lưu dữ liệu">
+                <i class="fa-solid fa-check"></i>
+            </button>
 
-                </div>
-            </div>
-        </div>
+            <button nbButton status="warning" type="button" class="float-end mx-2" (click)="Reset()"
+                nbTooltip="Reset dữ liệu">
+                <i class="fa-solid fa-rotate-left"></i>
+            </button>
+        </form>
     </nb-card-body>
 </nb-card>
