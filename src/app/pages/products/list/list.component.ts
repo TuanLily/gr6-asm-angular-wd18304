@@ -1,7 +1,7 @@
 // list.component.ts
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
-import { FormGroup, FormControl, Validators, ValidatorFn } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import Swal from 'sweetalert2';
@@ -10,6 +10,8 @@ import { IProduct } from 'app/@core/interfaces/products.interface';
 import { ProductService } from 'app/@core/services/apis/product.service';
 import { SpinnerService } from "../../../@theme/components/spinner/spinner.service";
 import { API_BASE_URL, API_ENDPOINT } from 'app/@core/config/api-endpoint.config';
+import { ICategory } from 'app/@core/interfaces/categories.interface';
+import { CategoryService } from 'app/@core/services/apis/categories.service';
 
 
 @Component({
@@ -28,6 +30,8 @@ export class ListComponent implements OnInit {
   isEditing: boolean = false;
 
   products: IProduct[] = [];
+  categoryData: ICategory[] = [];
+
 
   apiUrl = API_BASE_URL + API_ENDPOINT.product;
   currentPage: number = 1;
@@ -39,6 +43,7 @@ export class ListComponent implements OnInit {
   constructor(
     private toastrService: NbToastrService,
     private productService: ProductService,
+    private categoryService: CategoryService,
     private spinner: SpinnerService,
     private router: Router,
     private route: ActivatedRoute
@@ -57,7 +62,11 @@ export class ListComponent implements OnInit {
       image: new FormControl(''),
       category_id: new FormControl('', [Validators.required])
     });
+
+    this.loadCategory();
+
   }
+
 
 
   //* Hàm xử lý upload file
@@ -78,6 +87,7 @@ export class ListComponent implements OnInit {
     this.spinner.show();
 
     this.productService.getAllProducts(page, this.searchQuery).subscribe(data => {
+
       this.spinner.hide();
       this.products = data.products;
       this.currentPage = data.currentPage;
@@ -98,11 +108,18 @@ export class ListComponent implements OnInit {
     });
   }
 
+  //* Hàm load dữ liệu từ danh mục sang
+  loadCategory(): void {
+    this.categoryService.getAllCategories().subscribe(cateData => {
+      // Lọc các danh mục có status = 0
+      this.categoryData = cateData.filter(category => category.status === 0);
+    });
+  }
 
-  //* Hàm xử lý yimf kiếm sản phẩm
+  //* Hàm xử lý tìm kiếm sản phẩm
   onSearch(): void {
-    // Gọi hàm loadProducts với trang hiện tại và từ khóa tìm kiếm
-    this.loadProducts(this.currentPage);
+    // Đặt lại trang hiện tại về 1 khi tìm kiếm
+    this.loadProducts(1);
   }
 
 

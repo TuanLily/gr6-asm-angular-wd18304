@@ -88,7 +88,7 @@
                         <label for="productSalePrice" class="my-1">Giá khuyến mãi<span class="spot">*</span>:</label>
                         <input type="number" class="form-control" id="productSalePrice"
                             [(ngModel)]="newProduct.sale_price" formControlName="sale_price" placeholder="đ">
-                        <div *ngIf="form.get('sale_price').invalid && form.get('sale_price').touched"
+                        <div *ngIf="form.get('sale_price').invalid && form.get('sale_price').touched && form.get('sale_price').dirty"
                             class="text-danger">
                             <small *ngIf="form.get('sale_price').hasError('required')">Vui lòng nhập giá khuyến
                                 mãi.</small>
@@ -96,6 +96,7 @@
                                 0.</small>
                         </div>
                     </div>
+
                 </div>
             </div>
             <div class="row">
@@ -119,7 +120,8 @@
                         <label for="cateOption" class="my-1">Danh mục sản phẩm<span class="spot">*</span>:</label>
                         <select class="form-control" id="cateOption" formControlName="category_id">
                             <option value="" disabled selected>Vui lòng chọn danh mục</option>
-                            <option value="1">Trà sữa</option>
+                            <option *ngFor="let category of categoryData" [value]="category.id">{{ category.name }}
+                            </option>
                         </select>
                         <div *ngIf="form.get('category_id').invalid && form.get('category_id').touched"
                             class="text-danger">

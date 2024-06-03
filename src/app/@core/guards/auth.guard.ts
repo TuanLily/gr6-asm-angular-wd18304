@@ -29,21 +29,21 @@ export class AuthGuard implements CanActivate {
         return this.authService.refreshToken().pipe(
           switchMap((response: any) => {
             // Nếu làm mới token thành công, lưu token mới vào localStorage
-            localStorage.setItem('token', JSON.stringify(response.token));
-            return of(true); // Trả về true để cho phép truy cập tuyến đường
+            localStorage.setItem('token', response.token);
+            return of(true); // Trả về true để cho phép truy cập
           }),
           catchError((error: any) => {
             // Nếu làm mới token thất bại, xóa localStorage và điều hướng người dùng đến trang đăng nhập
             localStorage.clear();
-            this.router.navigate([ROUTER_CONFIG.auth.login]);
-            return of(false); // Trả về false để chặn truy cập tuyến đường
+            this.router.navigate([ROUTER_CONFIG.auth.login]).then();
+            return of(false); // Trả về false để chặn truy cập
           })
         );
       }
-      return true; // Nếu token chưa hết hạn, cho phép truy cập tuyến đường
+      return true; // Nếu token chưa hết hạn, cho phép truy cập
     } else {
-      // Nếu không có token, điều hướng người dùng đến trang đăng nhập và chặn truy cập tuyến đường
-      this.router.navigate([ROUTER_CONFIG.auth.login]);
+      // Nếu không có token, điều hướng người dùng đến trang đăng nhập và chặn truy cập
+      this.router.navigate([ROUTER_CONFIG.auth.login]).then();
       return false;
     }
   }

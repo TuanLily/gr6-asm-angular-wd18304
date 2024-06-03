@@ -64,6 +64,7 @@ export class ListComponent implements OnInit {
     const customer = this.customerData.find(c => c.id === customerId);
     return customer ? customer.name : 'Unknown Customer';
   }
+
   //* Hàm xử lý thêm mới hoặc cập nhật đánh giá
   addFeedback(): void {
     if (!this.form.valid) {
@@ -166,7 +167,7 @@ export class ListComponent implements OnInit {
     this.form.get('customer_id')?.enable(); // Mở lại chỗ chọn tên khách hàng (customer_id) khi reset form
     this.toastrService.success('Dữ liệu trên form đã được reset!', 'Thành công');
   }
-  
+
   scrollFormIntoView(): void {
     if (this.formElement) {
       this.formElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });

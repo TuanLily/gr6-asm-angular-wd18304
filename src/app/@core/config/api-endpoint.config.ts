@@ -12,7 +12,7 @@ export const API_ENDPOINT: IAPIEndpoint = {
     logout: '/api/auth/logout',
     forgotPassword: '/api/auth/forgot-password/',
     resetPassword: '/api/auth/reset-password/',
-    refreshToken: '/api/auth/refresh-token',
+    refreshToken: '/api/auth/refresh-token/',
   },
   statistic: {
     getProductPrices: '/api/statistics/product-prices',

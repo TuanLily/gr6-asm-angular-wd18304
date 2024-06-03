@@ -73,14 +73,14 @@ export class JWTInterceptor implements HttpInterceptor {
             this.isRefreshing = false;
             if (error.status === 403) {
               this.authService.logout();
-              this.router.navigate([ROUTER_CONFIG.auth.login]);
+              this.router.navigate([ROUTER_CONFIG.auth.login]).then();
             }
             return throwError(error);
           })
         );
       } else {
         this.authService.logout();
-        this.router.navigate([ROUTER_CONFIG.auth.login]);
+        this.router.navigate([ROUTER_CONFIG.auth.login]).then();
         return throwError('Refresh token không tồn tại');
       }
     } else {
