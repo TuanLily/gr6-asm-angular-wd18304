@@ -73,12 +73,14 @@ export class ListComponent implements OnInit {
 
     let feedbackData: IFeedback = {
       content: this.form.get('content').value,
+      customer_id: this.form.get('customer_id').value,
     };
 
     if (this.isEditing && !this.isAddingNewFeedback) {
       // Nếu đang trong chế độ sửa, cập nhật thông tin cho đánh giá được chọn
       const feedbackId = this.newFeedback.id;
-      this.feedbackService.updateFeedback(feedbackId, feedbackData).subscribe(
+      const content = this.newFeedback.content; // Lấy nội dung feedback mới từ `newFeedback`
+      this.feedbackService.updateFeedback(feedbackId, content).subscribe(
         () => {
           this.toastrService.success('Cập nhật thành công!', 'Success');
           this.isEditing = false;
@@ -89,7 +91,8 @@ export class ListComponent implements OnInit {
           console.error('Error updating feedback:', error);
         }
       );
-    } else {
+    }
+    else {
       // Nếu không đang trong chế độ sửa, thêm đánh giá mới vào danh sách
       this.feedbackService.addFeedback(feedbackData).subscribe(
         () => {
@@ -117,15 +120,16 @@ export class ListComponent implements OnInit {
 
       this.form.patchValue({
         content: this.newFeedback.content,
-        create_date: this.newFeedback.create_date,
         customer_id: this.newFeedback.customer_id,
       });
+      this.form.get('customer_id')?.disable(); // Disable customer_id khi ở chế độ chỉnh sửa
       this.isAddingNewFeedback = false;
       this.isEditing = true;
       this.toastrService.info('Sẵn sàng cập nhật!', 'Thông tin');
     }
     this.scrollFormIntoView();
   }
+
 
   //* Hàm xóa đánh giá
   deleteFeedback(feedbackId: number): void {
@@ -155,14 +159,14 @@ export class ListComponent implements OnInit {
     });
   }
 
-  //* Hàm reset lại form
   Reset(): void {
     this.isEditing = false;
     this.isAddingNewFeedback = true; // Chuyển về trạng thái thêm mới
     this.form.reset();
+    this.form.get('customer_id')?.enable(); // Mở lại chỗ chọn tên khách hàng (customer_id) khi reset form
     this.toastrService.success('Dữ liệu trên form đã được reset!', 'Thành công');
   }
-
+  
   scrollFormIntoView(): void {
     if (this.formElement) {
       this.formElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });

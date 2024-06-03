@@ -31,9 +31,9 @@ export class FeedbackService extends ApiService {
         );
     }
 
-    updateFeedback(feedbackId: number, feedbacks: IFeedback): Observable<IFeedback> {
+    updateFeedback(feedbackId: number, content: string): Observable<IFeedback> {
         const url = `${this.apiUrl}/${feedbackId}`;
-        return this._http.patch<IFeedback>(url, feedbacks).pipe(
+        return this._http.patch<IFeedback>(url, { content }).pipe(
             catchError(this.handleError)
         );
     }
