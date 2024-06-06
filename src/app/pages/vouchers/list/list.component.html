@@ -1,107 +1,119 @@
+<!-- Danh sách voucher -->
 <nb-card>
+  <nb-card-header class="d-flex justify-content-between align-items-center">
+      <h5 class="card-title mb-0">Danh sách voucher</h5>
+      <form class="d-flex" (ngSubmit)="onSearch()">
+          <input class="form-control me-2" type="search" placeholder="Tìm kiếm"  [(ngModel)]="searchQuery"
+              name="searchQuery" aria-label="Search">
+          <button type="submit" nbButton status="primary">
+              <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+      </form>
+  </nb-card-header>
   <nb-card-body>
-    <div class="container">
-      <!-- Danh sách voucher -->
-      <div class="card my-lg-2">
-        <div class="card-body">
-          <h5 class="card-title">Danh sách voucher</h5>
-          <div class="table-responsive">
-            <table class="table table-bordered">
-              <thead class="table-secondary">
-                <tr>
-                  <th>STT</th>
-                  <th>Mã voucher</th>
-                  <th>Giá trị</th>
-                  <th>Thời gian</th>
-                  <th>Mô tả</th>
-                  <th>Thao tác</th>
-                </tr>
+      <div class="table-responsive">
+          <table class="table table-bordered table-hover">
+              <thead>
+                  <tr>
+                      <th>#</th>
+                      <th>Mã voucher</th>
+                      <th>Giá trị</th>
+                      <th>Thời gian</th>
+                      <th>Mô tả</th>
+                      <th>Thao tác</th>
+                  </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let voucher of vouchers, let index = index">
-                  <td class="align-middle">{{ index + 1 }}</td>
-                  <td class="align-middle">{{ voucher.voucher_code }}</td>
-                  <td class="align-middle">{{ voucher.discount_rate }}đ</td>
-                  <td class="align-middle">
-                    <div>Bắt đầu: {{ voucher.valid_from | date:'dd/MM/yyyy' }}</div>
-                    <div>Kết thúc: {{ voucher.valid_to | date:'dd/MM/yyyy' }}</div>
-                  </td>
-                  <td class="align-middle">{{ voucher.description }}</td>
-                  <td class="align-middle text-center">
-                    <div class="btn-group d-flex justify-content-center">
-                      <button nbButton status="primary" type="button" class="btn-sm mr-2 mx-1" (click)="editVoucher(voucher.id)" nbTooltip="Sửa dữ liệu">
-                        <i class="fa-solid fa-pen-to-square"></i>
-                      </button>
-                      <button nbButton status="danger" type="button" class="btn-sm" (click)="deleteVoucher(voucher.id)" nbTooltip="Xóa dữ liệu">
-                        <i class="fa-solid fa-trash"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+                  <tr *ngFor="let voucher of vouchers, let index = index">
+                      <td class="align-middle">{{ index + 1 }}</td>
+                      <td class="align-middle">{{ voucher.voucher_code }}</td>
+                      <td class="align-middle">{{ voucher.discount_rate }}đ</td>
+                      <td class="align-middle">
+                          <div>Bắt đầu: {{ voucher.valid_from | date:'dd/MM/yyyy' }}</div>
+                          <div>Kết thúc: {{ voucher.valid_to | date:'dd/MM/yyyy' }}</div>
+                      </td>
+                      <td class="align-middle">{{ voucher.description }}</td>
+                      <td class="align-middle text-center">
+                          <div class="btn-group d-flex justify-content-center">
+                              <button nbButton status="primary" type="button" class="btn-sm mx-1 btn-equal"
+                                  (click)="editVoucher(voucher.id)" nbTooltip="Sửa dữ liệu">
+                                  <i class="fa-solid fa-pen-to-square"></i>
+                              </button>
+                              <button nbButton status="danger" type="button" class="btn-sm mx-1 btn-equal"
+                                  (click)="deleteVoucher(voucher.id)" nbTooltip="Xóa dữ liệu">
+                                  <i class="fa-solid fa-trash"></i>
+                              </button>
+                          </div>
+                      </td>
+                  </tr>
               </tbody>
-            </table>
-          </div>
-        </div>
+          </table>
+          <ngx-paginator [apiUrl]="apiUrl" [current_page]="currentPage" [last_page]="totalPages"
+                (dataList)="loadVouchers($event)">
+            </ngx-paginator>
       </div>
+  </nb-card-body>
+</nb-card>
 
-      <!-- Form để thêm voucher mới -->
-      <div class="card mt-lg-5">
-        <div class="card-body">
-          <h5 class="card-title">Thêm / Cập nhật voucher</h5>
-          <form [formGroup]="form" (ngSubmit)="addVoucher()" #formElement>
-            <div class="form-group my-3">
+<!-- Thêm / Cập nhật voucher -->
+<nb-card class="mt-3">
+  <nb-card-header>
+      <h5 class="card-title">Thêm / Cập nhật voucher</h5>
+  </nb-card-header>
+  <nb-card-body>
+      <form [formGroup]="form" (ngSubmit)="addVoucher()" #formElement>
+          <div class="form-group my-3">
               <label for="voucherCode" class="my-1">Mã voucher<span class="spot">*</span>:</label>
               <input type="text" class="form-control" id="voucherCode" formControlName="voucher_code">
               <div *ngIf="form.get('voucher_code').invalid && form.get('voucher_code').touched" class="text-danger">
-                <small *ngIf="form.get('voucher_code').hasError('required')">Vui lòng nhập mã voucher.</small>
+                  <small *ngIf="form.get('voucher_code').hasError('required')">Vui lòng nhập mã voucher.</small>
               </div>
-            </div>
-            <div class="form-group my-3">
+          </div>
+          <div class="form-group my-3">
               <label for="discountRate" class="my-1">Giá trị<span class="spot">*</span>:</label>
               <input type="number" class="form-control" id="discountRate" formControlName="discount_rate">
               <div *ngIf="form.get('discount_rate').invalid && form.get('discount_rate').touched" class="text-danger">
-                <small *ngIf="form.get('discount_rate').hasError('required')">Vui lòng nhập giá trị cho voucher.</small>
-                <small *ngIf="form.get('discount_rate').hasError('min')">Giá trị voucher không được nhỏ hơn 0.</small>
+                  <small *ngIf="form.get('discount_rate').hasError('required')">Vui lòng nhập giá trị cho voucher.</small>
+                  <small *ngIf="form.get('discount_rate').hasError('min')">Giá trị voucher không được nhỏ hơn 0.</small>
               </div>
-            </div>
-            <div class="row">
+          </div>
+          <div class="row">
               <div class="col-md-6">
-                <div class="form-group my-3">
-                  <label for="validFrom" class="my-1">Thời gian có hiệu lực<span class="spot">*</span>:</label>
-                  <input type="date" class="form-control" id="validFrom" formControlName="valid_from">
-                  <div *ngIf="form.get('valid_from').invalid && form.get('valid_from').touched" class="text-danger">
-                    <small *ngIf="form.get('valid_from').hasError('required')">Vui lòng chọn thời gian có hiệu lực.</small>
+                  <div class="form-group my-3">
+                      <label for="validFrom" class="my-1">Thời gian có hiệu lực<span class="spot">*</span>:</label>
+                      <input type="date" class="form-control" id="validFrom" formControlName="valid_from">
+                      <div *ngIf="form.get('valid_from').invalid && form.get('valid_from').touched" class="text-danger">
+                          <small *ngIf="form.get('valid_from').hasError('required')">Vui lòng chọn thời gian có hiệu lực.</small>
+                      </div>
                   </div>
-                </div>
               </div>
               <div class="col-md-6">
-                <div class="form-group my-3">
-                  <label for="validTo" class="my-1">Thời gian hết hiệu lực<span class="spot">*</span>:</label>
-                  <input type="date" class="form-control" id="validTo" formControlName="valid_to">
-                  <div *ngIf="form.get('valid_to').invalid && form.get('valid_to').touched" class="text-danger">
-                    <small *ngIf="form.get('valid_to').hasError('required')">Vui lòng chọn thời gian hết hiệu lực.</small>
+                  <div class="form-group my-3">
+                      <label for="validTo" class="my-1">Thời gian hết hiệu lực<span class="spot">*</span>:</label>
+                      <input type="date" class="form-control" id="validTo" formControlName="valid_to">
+                      <div *ngIf="form.get('valid_to').invalid && form.get('valid_to').touched" class="text-danger">
+                          <small *ngIf="form.get('valid_to').hasError('required')">Vui lòng chọn thời gian hết hiệu lực.</small>
+                      </div>
                   </div>
-                </div>
               </div>
-            </div>
-            <div class="form-group my-3">
+          </div>
+          <div class="form-group my-3">
               <label for="description" class="my-1">Mô tả:</label>
               <textarea class="form-control" id="description" rows="3" formControlName="description" placeholder="Nhập ghi chú"></textarea>
               <div *ngIf="form.get('description').invalid && form.get('description').touched" class="text-danger">
-                <small *ngIf="form.get('description').hasError('required')">Vui lòng nhập mô tả.</small>
+                  <small *ngIf="form.get('description').hasError('required')">Vui lòng nhập mô tả.</small>
               </div>
-            </div>
-            <div class="d-flex justify-content-end mt-4">
-              <button nbButton status="warning" type="button" class="float-end mx-2" (click)="resetForm()" nbTooltip="Reset dữ liệu">
-                <i class="fa-solid fa-rotate-left"></i>
+          </div>
+          <div class="d-flex justify-content-end mt-4">
+              <button nbButton status="warning" type="button" class="float-end mx-2" (click)="resetForm()"
+                  nbTooltip="Reset dữ liệu">
+                  <i class="fa-solid fa-rotate-left"></i>
               </button>
-              <button nbButton type="submit" class="float-end" [disabled]="!form.valid" status="success" nbTooltip="Lưu dữ liệu">
-                <i class="fa-solid fa-check"></i>
+              <button nbButton type="submit" class="float-end" [disabled]="!form.valid" status="success"
+                  nbTooltip="Lưu dữ liệu">
+                  <i class="fa-solid fa-check"></i>
               </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
+          </div>
+      </form>
   </nb-card-body>
 </nb-card>

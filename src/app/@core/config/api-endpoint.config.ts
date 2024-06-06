@@ -6,6 +6,7 @@ export const API_BASE_URL = APP_CONFIG.apiBaseUrl;
 export const API_ENDPOINT: IAPIEndpoint = {
   product: '/api/products',
   categories: '/api/categories',
+  vouchers: '/api/vouchers',
   auth: {
     base: API_BASE_URL + '/' + 'auth',
     login: '/api/auth/login',

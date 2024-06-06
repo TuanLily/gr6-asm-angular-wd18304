@@ -3,4 +3,5 @@ export interface IAPIEndpoint {
   auth: any;
   categories: any;
   statistic: any;
+  vouchers: any;
 }

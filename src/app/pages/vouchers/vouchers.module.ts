@@ -14,6 +14,7 @@ import {
   NbInputModule,
   NbThemeModule,
   NbTooltipModule
+
 } from '@nebular/theme';
 
 import { ThemeModule } from '../../@theme/theme.module';
@@ -22,6 +23,7 @@ import { NewsService } from './news.service';
 import { VouchersRoutingModule } from './vouchers-routing.module';
 import { VouchersComponent } from './vouchers.component';
 import { ListComponent } from './list/list.component';
+import { PaginatorModule } from 'app/@theme/components/paginator/paginator.module';
 
 @NgModule({
   imports: [
@@ -42,7 +44,8 @@ import { ListComponent } from './list/list.component';
     NbAccordionModule,
     NbUserModule,
     VouchersRoutingModule,
-    NbTooltipModule
+    NbTooltipModule,
+    PaginatorModule
   ],
   declarations: [
     VouchersComponent,
