@@ -68,6 +68,13 @@ const routes: Routes = [{
 
     },
     {
+      path: 'reviews',
+      loadChildren: () => import('./reviews/reviews.module')
+        .then(m => m.ReviewsModule),
+      data: { breadcrumb: 'Đánh Giá Sản Phẩm' },
+
+    },
+    {
       path: '',
       redirectTo: 'dashboard',
       pathMatch: 'full',

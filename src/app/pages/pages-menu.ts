@@ -71,6 +71,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
+    title: 'Đánh giá sản phẩm',
+    icon: 'message-square-outline',
+    children: [
+      {
+        title: 'Danh Sách',
+        link: '/pages/reviews/list',
+      }
+    ]
+  },
+  {
     title: 'Vai trò',
     icon: 'people-outline',
     children: [
