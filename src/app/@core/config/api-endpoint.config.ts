@@ -9,6 +9,7 @@ export const API_ENDPOINT: IAPIEndpoint = {
   vouchers: '/api/vouchers',
   employees: '/api/employees',
   reviews: '/api/reviews',
+  roles: '/api/roles',
   auth: {
     base: API_BASE_URL + '/' + 'auth',
     login: '/api/auth/login',

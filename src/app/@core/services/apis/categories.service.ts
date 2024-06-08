@@ -27,6 +27,7 @@ export class CategoryService extends ApiService {
   }
 
   getAllCategories(): Observable<any> {
+    
       return this.get(API_BASE_URL + API_ENDPOINT.categories);
   }
 

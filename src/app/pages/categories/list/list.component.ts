@@ -31,17 +31,10 @@ export class ListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCategories();
-    if (!this.isAddingNewCate && this.isEditing) {
-      this.form = new FormGroup({
-        name: new FormControl('', Validators.required),
-        status: new FormControl('', [Validators.required])
-      });
-    } else {
-      this.form = new FormGroup({
-        name: new FormControl('', Validators.required),
-        status: new FormControl('', [Validators.required])
-      });
-    }
+    this.form = new FormGroup({
+      name: new FormControl('', Validators.required),
+      status: new FormControl('')
+    });
 
   }
 
@@ -109,10 +102,6 @@ export class ListComponent implements OnInit {
     const CateIndex = this.Categories.findIndex(Cate => Cate.id === CateId);
     if (CateIndex !== -1) {
       this.newCate = { ...this.Categories[CateIndex] };
-
-      // Lấy đường dẫn ảnh cũ từ sản phẩm được chọn
-      
-
       this.form.patchValue({
         name: this.newCate.name,
         status: this.newCate.status
@@ -128,7 +117,7 @@ export class ListComponent implements OnInit {
   deleteCategories(CategoriesId: number): void {
     Swal.fire({
       title: 'Xác nhận xóa',
-      text: 'Bạn có chắc chắn muốn xóa sản phẩm này?',
+      text: 'Bạn có chắc chắn muốn xóa danh mục này?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Đồng ý',

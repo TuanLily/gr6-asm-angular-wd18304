@@ -19,9 +19,10 @@ import {
 import { ThemeModule } from '../../@theme/theme.module';
 
 import { NewsService } from './news.service';
-import { CategorieRoutingModule } from './roles-routing.module';
+import { rolesRoutingModule } from './roles-routing.module';
 import { rolesComponent } from './roles.component';
 import { listComponent } from './list/list.component';
+import { PaginatorModule } from 'app/@theme/components/paginator/paginator.module';
 
 @NgModule({
   imports: [
@@ -41,8 +42,9 @@ import { listComponent } from './list/list.component';
     NbThemeModule,
     NbAccordionModule,
     NbUserModule,
-    CategorieRoutingModule,
-    NbTooltipModule
+    rolesRoutingModule,
+    NbTooltipModule,
+    PaginatorModule
   ],
   declarations: [
     rolesComponent,

@@ -1,6 +1,13 @@
 <nb-card>
-    <nb-card-header>
-        <h5 class="card-title">Danh sách vai trò</h5>
+    <nb-card-header class="d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">Danh sách vai trò</h5>
+        <form class="d-flex" (ngSubmit)="onSearch()">
+            <input class="form-control me-2" type="search" placeholder="Tìm kiếm" [(ngModel)]="searchQuery"
+                name="searchQuery" aria-label="Search">
+            <button type="submit" nbButton status="primary">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </form>
     </nb-card-header>
     <nb-card-body>
         <div class="container">
@@ -16,26 +23,29 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- <tr *ngFor="let product of products">
-                                        <td>{{ product.id }}</td>
-                                        <td>{{ product.name }}</td>
-                                        <td>{{ formatCurrency(product.price) }}</td>
-                                        <td>{{ formatCurrency(product.sale_price) }}</td>
-                                        <td><img src="../../../../assets/images/{{product.image}}" alt="{{ product.name }}"
-                                                style="max-width: 100px;"></td>
-                                        <td>
-                                            <div class="btn-group">
-                                                <button nbButton status="primary" type="button" class="btn-sm mr-2 mx-1"
-                                                    (click)="editProduct(product.id)" nbTooltip="Sửa dữ liệu"><i
-                                                        class="fa-solid fa-pen-to-square"></i></button>
-                                                <button nbButton status="danger" type="button" class="btn-sm"
-                                                    (click)="deleteProduct(product.id)" nbTooltip="Xóa dữ liệu"><i
-                                                        class="fa-solid fa-trash"></i></button>
-                                            </div>
-                                        </td>
-                                    </tr> -->
+                        <tr *ngFor="let role of Roles; let i = index">
+                            <th class="align-middle" scope="row">{{ i + 1 }}</th>
+                            <td class="align-middle">{{ role.name }}</td>
+                            <td class="align-middle">
+                                <span *ngIf="role.status === 0" class="text-success">Đang hoạt động</span>
+                                <span *ngIf="role.status === 1" class="text-danger">Đã ngừng hoạt động</span>
+                            </td>
+                            <td class="align-middle text-center">
+                                <div class="btn-group d-flex justify-content-center">
+                                    <button nbButton status="primary" type="button" class="btn-sm mx-1 btn-equal"
+                                        (click)="editRole(role.id)" nbTooltip="Sửa dữ liệu"><i
+                                            class="fa-solid fa-pen-to-square"></i></button>
+                                    <button nbButton status="danger" type="button" class="btn-sm mx-1 btn-equal"
+                                        (click)="deleteRole(role.id)" nbTooltip="Xóa dữ liệu"><i
+                                            class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
+                <ngx-paginator [apiUrl]="apiUrl" [current_page]="currentPage" [last_page]="totalPages"
+                    (dataList)="loadRoles($event)">
+                </ngx-paginator>
             </div>
         </div>
     </nb-card-body>
@@ -47,23 +57,43 @@
         <h5 class="card-title">Thêm / Cập nhật vai trò</h5>
     </nb-card-header>
     <nb-card-body>
-        <form>
-            <div class="form-group my-3">
-                <label for="categoriesName">Tên vai trò:</label>
-                <input type="text" class="form-control" id="categoriesName" formControlName="name">
-                <div class="text-danger">
-                    <small>
-                        Vui lòng nhập tên vai trò.
-                    </small>
+        <form [formGroup]="form" (ngSubmit)="addRoles()" #rolesForm="ngForm" #formElement>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group my-3">
+                        <label for="RoleName" class=" my-1">Tên vai trò:</label>
+                        <input type="text" class="form-control" id="RoleName" formControlName="name"
+                            [(ngModel)]="newRole.name">
+                        <div *ngIf="form.get('name').invalid && form.get('name').touched" class="text-danger">
+                            <small *ngIf="form.get('name').hasError('required')">
+                                Vui lòng nhập tên vai trò.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group my-3">
+                        <label for="categoriesName" class="my-1">Trạng thái</label>
+                        <select class="form-control" id="status" formControlName="status">
+                            <option value="">-- Chọn trạng thái --</option>
+                            <option value="0">Đang hoạt động</option>
+                            <option value="1">Ngừng hoạt động</option>
+                        </select>
+                        <div class="text-danger">
+                            <!-- Error message for status if needed -->
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <button nbButton type="submit" class="float-end" status="success" nbTooltip="Lưu dữ liệu">
+            <button nbButton type="submit" class="float-end" status="success" nbTooltip="Lưu dữ liệu"
+                [disabled]="!form.valid">
                 <i class="fa-solid fa-check"></i>
             </button>
 
             <!-- Nút hủy chỉnh sửa -->
-            <button nbButton status="warning" type="button" class="float-end mx-2" nbTooltip="Reset dữ liệu">
+            <button nbButton status="warning" type="button" class="float-end mx-2" nbTooltip="Reset dữ liệu"
+                (click)="Reset()">
                 <i class="fa-solid fa-rotate-left"></i></button>
         </form>
     </nb-card-body>
