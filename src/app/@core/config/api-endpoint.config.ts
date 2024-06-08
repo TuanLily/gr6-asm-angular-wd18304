@@ -7,6 +7,8 @@ export const API_ENDPOINT: IAPIEndpoint = {
   product: '/api/products',
   categories: '/api/categories',
   vouchers: '/api/vouchers',
+  employees: '/api/employees',
+  reviews: '/api/reviews',
   auth: {
     base: API_BASE_URL + '/' + 'auth',
     login: '/api/auth/login',

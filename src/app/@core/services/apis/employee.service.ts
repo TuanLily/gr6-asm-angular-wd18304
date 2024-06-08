@@ -1,13 +1,14 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { throwError } from 'rxjs';
 
-import { environment } from '@environments/environment';
+
 import { IEmployee } from 'app/@core/interfaces/employees.interface';
 import { ApiService } from '../common';
+import { API_BASE_URL, API_ENDPOINT } from "../../config/api-endpoint.config";
 
 
 
@@ -16,27 +17,26 @@ import { ApiService } from '../common';
 })
 export class EmployeeService extends ApiService {
 
-    private apiUrl = `${environment.apiBaseUrl}/api/employees`;
-
     constructor(private _http: HttpClient) {
         super(_http);
     }
 
-    getAllEmployees(): Observable<IEmployee[]> {
-        return this._http.get<IEmployee[]>(this.apiUrl);
+    getAllEmployees(page: number, search: string = ''): Observable<any> {
+        const params = { page: page.toString(), search: search };
+        return this.get<any>(API_BASE_URL + API_ENDPOINT.employees, params);
     }
 
-    addEmployee(employee: IEmployee): Observable<IEmployee> {
-        return this._http.post<IEmployee>(this.apiUrl, employee);
+    addEmployee(employee: IEmployee): Observable<any> {
+        return this.post<any>(API_BASE_URL + API_ENDPOINT.employees, employee);
     }
 
-    updateEmployee(employeeId: number, employee: IEmployee): Observable<IEmployee> {
-        const url = `${this.apiUrl}/${employeeId}`;
-        return this._http.patch<IEmployee>(url, employee);
+    updateEmployee(employeeId: number, employee: IEmployee): Observable<any> {
+        const url = `${API_BASE_URL + API_ENDPOINT.employees}/${employeeId}`;
+        return this.patch<any>(url, employee);
     }
 
-    deleteEmployee(employeeId: number): Observable<void> {
-        const url = `${this.apiUrl}/${employeeId}`;
-        return this._http.delete<void>(url);
+    deleteEmployee(employeeId: number): Observable<any> {
+        const url = `${API_BASE_URL + API_ENDPOINT.employees}/${employeeId}`;
+        return this.delete<void>(url);
     }
 }

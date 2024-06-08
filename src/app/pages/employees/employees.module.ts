@@ -21,6 +21,7 @@ import { NewsService } from './news.service';
 import { EmployeesRoutingModule } from './employees-routing.module';
 import { EmployeesComponent } from './employees.component';
 import { ListComponent } from './list/list.component';
+import { PaginatorModule } from 'app/@theme/components/paginator/paginator.module';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { ListComponent } from './list/list.component';
     NbUserModule,
     NbTooltipModule,
     EmployeesRoutingModule,
-    NbTooltipModule
+    NbTooltipModule,
+    PaginatorModule
   ],
   declarations: [
     EmployeesComponent,

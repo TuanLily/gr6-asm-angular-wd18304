@@ -1,6 +1,13 @@
 <nb-card>
     <nb-card-header class="d-flex justify-content-between align-items-center">
         <h5 class="card-title mb-8">Danh sách nhân viên</h5>
+        <form class="d-flex" (ngSubmit)="onSearch()">
+            <input class="form-control me-2" type="search" placeholder="Tìm kiếm" 
+            [(ngModel)]="searchQuery"   name="searchQuery" aria-label="Search">
+            <button type="submit" nbButton status="primary">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </form>
     </nb-card-header>
     <nb-card-body>
         <div class="table-responsive">
@@ -37,6 +44,9 @@
                     </tr>
                 </tbody>
             </table>
+            <ngx-paginator [apiUrl]="apiUrl" [current_page]="currentPage" [last_page]="totalPages"
+                (dataList)="loadEmployees($event)">
+            </ngx-paginator>
         </div>
     </nb-card-body>
 </nb-card>
@@ -79,10 +89,8 @@
                         <label for="employeePhone">Số điện thoại<span class="spot">*</span>:</label>
                         <input type="text" class="form-control" id="employeePhone" [(ngModel)]="newEmployee.phone"
                             formControlName="phone">
-                        <div *ngIf="form.get('phone').invalid && form.get('phone').touched" class="text-danger">
-                            <small *ngIf="form.get('phone').hasError('required')">
-                                Vui lòng nhập số điện thoại
-                            </small>
+                        <div *ngIf="form.get('phone')?.invalid && form.get('phone')?.touched" class="text-danger">
+                            <small>{{ getPhoneErrorMessage() }}</small>
                         </div>
                     </div>
                 </div>
