@@ -1,13 +1,13 @@
 <nb-card>
   <nb-card-header class="d-flex justify-content-between align-items-center">
     <h5 class="card-title mb-0">Danh sách khách hàng</h5>
-    <form class="d-flex" >
-      <input class="form-control me-2" type="search" placeholder="Tìm kiếm"
-      name="searchQuery" aria-label="Search">
+    <form class="d-flex" (ngSubmit)="onSearch()">
+      <input class="form-control me-2" type="search" placeholder="Tìm kiếm" [(ngModel)]="searchQuery"
+          name="searchQuery" aria-label="Search">
       <button type="submit" nbButton status="primary">
-        <i class="fa-solid fa-magnifying-glass"></i>
+          <i class="fa-solid fa-magnifying-glass"></i>
       </button>
-    </form>
+  </form>
   </nb-card-header>
 <nb-card-body>
 <div class="table-responsive">
@@ -17,8 +17,8 @@
         <th>#</th>
         <th>Tên Khách hàng</th>
         <th>Tên đăng nhập</th>
-        <th>SĐT</th>
         <th>Email</th>
+        <th>SĐT</th>
         <th>Địa chỉ</th>
         <th>Thao tác</th>
       </tr>
@@ -42,7 +42,9 @@
       </tr>
     </tbody>
   </table>
-
+  <ngx-paginator [apiUrl]="apiUrl" [current_page]="currentPage" [last_page]="totalPages"
+  (dataList)="loadCustomers($event)">
+</ngx-paginator>
 </div>
 </nb-card-body>
 </nb-card>
@@ -73,6 +75,7 @@
                      formControlName="username">
               <div *ngIf="form.get('username').invalid && form.get('username').touched" class="text-danger">
                   <small *ngIf="form.get('username').hasError('required')">Vui lòng nhập tên tài khoản khách hàng.</small>
+                  <small *ngIf="form.get('username').hasError('minLength')">Tên tài khoản không được dưới 6 kí tự.</small>
               </div>
           </div>
           </div>
@@ -85,6 +88,7 @@
                      formControlName="email">
               <div *ngIf="form.get('email').invalid && form.get('email').touched" class="text-danger">
                   <small *ngIf="form.get('email').hasError('required')">Vui lòng nhập email khách hàng.</small>
+                  <small *ngIf="form.get('email').hasError('email')">Email không hợp lệ.</small>
               </div>
           </div>
           </div>
@@ -94,8 +98,11 @@
               <input type="text" class="form-control" id="customerTel" [(ngModel)]="newCustomer.tel"
                      formControlName="tel">
               <div *ngIf="form.get('tel').invalid && form.get('tel').touched" class="text-danger">
-                  <small *ngIf="form.get('tel').hasError('required')">Vui lòng nhập số điện thoại khách hàng.</small>
-              </div>
+                  <small *ngIf="form.get('tel').hasError('required')">Vui lòng nhập số điện thoại khách hàng. </small>
+                  <small *ngIf="form.get('tel').hasError('numeric') && form.get('tel').touched">Số điện thoại chỉ được chứa số. </small>
+                  <small *ngIf="form.get('tel').hasError('minlength') && form.get('tel').touched">Số điện thoại phải có ít nhất 10 ký tự. </small>
+                  <small *ngIf="form.get('tel').hasError('maxlength') && form.get('tel').touched">Số điện thoại không được quá 11 ký tự. </small>
+                </div>
           </div>
           </div>
         </div>

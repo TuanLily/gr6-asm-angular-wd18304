@@ -8,4 +8,6 @@ export interface IAPIEndpoint {
   reviews: any;
   roles: any;
   bills: any;
+  customers: any;
+  feedback: any;
 }

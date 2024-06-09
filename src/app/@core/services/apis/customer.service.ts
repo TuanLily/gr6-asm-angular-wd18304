@@ -8,6 +8,7 @@ import { throwError } from 'rxjs';
 import { environment } from '@environments/environment';
 import { ICustomer } from 'app/@core/interfaces/customers.interface';
 import { ApiService } from '../common';
+import { API_BASE_URL, API_ENDPOINT } from "../../config/api-endpoint.config";
 
 
 
@@ -16,27 +17,26 @@ import { ApiService } from '../common';
 })
 export class CustomerService extends ApiService {
 
-    private apiUrl = `${environment.apiBaseUrl}/api/customers`;
+  constructor(private _http: HttpClient) {
+    super(_http);
+}
 
-    constructor(private _http: HttpClient) {
-        super(_http);
-    }
+getAllCustomers(page: number, search: string = ''): Observable<any> {
+    const params = { page: page.toString(), search: search };
+    return this.get<any>(API_BASE_URL + API_ENDPOINT.customers, params);
+}
 
-    getAllCustomers(): Observable<ICustomer[]> {
-        return this._http.get<ICustomer[]>(this.apiUrl);
-    }
+addCustomer(customer: ICustomer): Observable<any> {
+    return this.post<any>(API_BASE_URL + API_ENDPOINT.customers, customer);
+}
 
-    addCustomer(customer: ICustomer): Observable<ICustomer> {
-        return this._http.post<ICustomer>(this.apiUrl, customer);
-    }
+updateCustomer(customerId: number, customer: ICustomer): Observable<any> {
+    const url = `${API_BASE_URL + API_ENDPOINT.customers}/${customerId}`;
+    return this.patch<any>(url, customer);
+}
 
-    updateCustomer(customerId: number, customers: ICustomer): Observable<ICustomer> {
-        const url = `${this.apiUrl}/${customerId}`;
-        return this._http.patch<ICustomer>(url, customers);
-    }
-
-    deleteCustomer(customerId: number): Observable<void> {
-        const url = `${this.apiUrl}/${customerId}`;
-        return this._http.delete<void>(url);
-    }
+deleteCustomer(customerId: number): Observable<any> {
+    const url = `${API_BASE_URL + API_ENDPOINT.customers}/${customerId}`;
+    return this.delete<void>(url);
+}
 }

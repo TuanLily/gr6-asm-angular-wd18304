@@ -1,12 +1,13 @@
 <nb-card>
   <nb-card-header class="d-flex justify-content-between align-items-center">
     <h5 class="card-title mb-0">Danh sách đánh giá</h5>
-    <form class="d-flex">
-      <input class="form-control me-2" type="search" placeholder="Tìm kiếm" name="searchQuery" aria-label="Search">
+    <form class="d-flex" (ngSubmit)="onSearch()">
+      <input class="form-control me-2" type="search" placeholder="Tìm kiếm" [(ngModel)]="searchQuery"
+          name="searchQuery" aria-label="Search">
       <button type="submit" nbButton status="primary">
-        <i class="fa-solid fa-magnifying-glass"></i>
+          <i class="fa-solid fa-magnifying-glass"></i>
       </button>
-    </form>
+  </form>
   </nb-card-header>
   <nb-card-body>
     <div class="table-responsive">
@@ -23,7 +24,7 @@
         <tbody>
           <tr *ngFor="let feedback of feedbacks, let i = index">
             <td class="align-middle">{{i+1}}</td>
-            <td class="align-middle">{{ getCustomerNameById(feedback.customer_id) }}</td>
+            <td class="align-middle">{{ feedback.customer_name }}</td>
             <td class="align-middle">{{feedback.content}}</td>
             <td class="align-middle">{{ feedback.create_date | date:'dd/MM/yyyy HH:mm:ss' }}</td>
             <td class="align-middle text-center">
@@ -39,7 +40,9 @@
           </tr>
         </tbody>
       </table>
-
+      <ngx-paginator [apiUrl]="apiUrl" [current_page]="currentPage" [last_page]="totalPages"
+      (dataList)="loadFeedbacks($event)">
+  </ngx-paginator>
     </div>
   </nb-card-body>
 </nb-card>

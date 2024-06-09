@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PaginatorModule } from 'app/@theme/components/paginator/paginator.module'
 import {
   NbAccordionModule,
   NbButtonModule,
@@ -13,7 +14,8 @@ import {
   NbCheckboxModule,
   NbInputModule,
   NbThemeModule,
-  NbTooltipModule
+  NbTooltipModule,
+
 } from '@nebular/theme';
 
 import { ThemeModule } from '../../@theme/theme.module';
@@ -43,7 +45,8 @@ import { ListComponent } from './list/list.component';
     NbUserModule,
     NbTooltipModule,
     FeedbackRoutingModule,
-    NbTooltipModule
+    NbTooltipModule,
+    PaginatorModule
   ],
   declarations: [
     FeedbackComponent,

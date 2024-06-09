@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import Swal from 'sweetalert2';
 import { IFeedback } from 'app/@core/interfaces/feedback.interface';
@@ -8,6 +9,10 @@ import { FeedbackService } from 'app/@core/services/apis/feedback.service';
 import { SpinnerService } from "../../../@theme/components/spinner/spinner.service";
 import { CustomerService } from 'app/@core/services/apis/customer.service';
 import { ICustomer } from 'app/@core/interfaces/customers.interface';
+import {
+  API_BASE_URL,
+  API_ENDPOINT,
+} from 'app/@core/config/api-endpoint.config';
 
 @Component({
   selector: 'app-list',
@@ -25,22 +30,28 @@ export class ListComponent implements OnInit {
   isEditing: boolean = false;
 
   feedbacks: IFeedback[] = [];
-  customerData: ICustomer[] = [];
 
+  customerData: any[] = [];
+
+  apiUrl = API_BASE_URL + API_ENDPOINT.feedback;
+  currentPage: number = 1;
+  totalPages: number;
+  searchQuery: string = '';
   constructor(
     private toastrService: NbToastrService,
     private feedbackService: FeedbackService,
     private customerService: CustomerService,
-    private spinner: SpinnerService) { }
+    private spinner: SpinnerService,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.loadFeedbacks();
-    this.initForm();
-    this.loadCustomer();
+    this.loadCustomers();
+    this.route.queryParams.subscribe(params => {
+      const currentPage = params['page'] || 1;
+      this.loadFeedbacks(currentPage);
 
-  }
-
-  initForm(): void {
+    });
     this.form = new FormGroup({
       content: new FormControl('', Validators.required),
       customer_id: new FormControl('', Validators.required),
@@ -48,23 +59,75 @@ export class ListComponent implements OnInit {
   }
 
   //* Hàm load toàn bộ dữ liệu ra giao diện
-  loadFeedbacks(): void {
-    this.feedbackService.getAllFeedbacks().subscribe(feedbacks => {
-      this.feedbacks = feedbacks;
+  loadFeedbacks(page: number): void {
+    this.spinner.show();
+
+    this.feedbackService.getAllFeedbacks(page,this.searchQuery).subscribe(data => {
+      // console.log(data);
+
+      this.spinner.hide();
+      this.feedbacks = data.feedback;
+      this.currentPage = data.currentPage;
+      this.totalPages = data.totalPages;
+
+      const queryParams: any = { page: page };
+
+      if (this.searchQuery && this.searchQuery.trim() !== '') {
+        queryParams.search = this.searchQuery;
+      }
+
+      this.router.navigate([], {
+        queryParams: queryParams,
+        replaceUrl: true
+      });
     });
+
+
   }
-  loadCustomer(): void {
-    this.customerService.getAllCustomers().subscribe(customer => {
-      this.customerData = customer;
-    });
+  // loadCustomers(): void {
+  //   const page = this.currentPage || 1;
+  //   const searchQuery = this.searchQuery || '';
+  //   this.customerService.getAllCustomers(page, searchQuery).subscribe(customer => {
+  //     this.customerData = customer;
+  //   });
+  // }
+
+  loadCustomers(): void {
+    this.feedbackService.getAllCustomers().subscribe(
+      (data: any) => {
+        console.log(data);
+        this.customerData = data.customers;
+        // if (Array.isArray(data)) {
+        //   console.log(data);
+
+        //   this.customerData = data;
+        //   console.log(this.customerData);
+
+        // } else if (data && data.customerData) {
+        //   this.customerData = data.customerData;
+        // } else {
+        //   this.customerData = [];
+        // }
+      },
+      error => {
+        console.error('Error loading products:', error);
+        this.toastrService.danger('Đã xảy ra lỗi khi tải sản phẩm!', 'Error');
+      }
+    );
   }
 
 
-  getCustomerNameById(customerId: number): string {
-    const customer = this.customerData.find(c => c.id === customerId);
-    return customer ? customer.name : 'Unknown Customer';
-  }
 
+  // getCustomerNameById(customerId: number): string {
+  //   console.log(customerId);
+  //   const customer = this.customerData.find(c => c.id === customerId);
+  //   return customer ? customer.name : 'Unknown Customer';
+  // }
+
+  onSearch(): void {
+    // Gọi hàm loadfeedbacks với trang hiện tại và từ khóa tìm kiếm
+    this.loadFeedbacks(this.currentPage);
+  }
   //* Hàm xử lý thêm mới hoặc cập nhật đánh giá
   addFeedback(): void {
     if (!this.form.valid) {
@@ -80,16 +143,22 @@ export class ListComponent implements OnInit {
     if (this.isEditing && !this.isAddingNewFeedback) {
       // Nếu đang trong chế độ sửa, cập nhật thông tin cho đánh giá được chọn
       const feedbackId = this.newFeedback.id;
+      console.log(feedbackId);
+
       const content = this.newFeedback.content; // Lấy nội dung feedback mới từ `newFeedback`
+      console.log(content);
+
       this.feedbackService.updateFeedback(feedbackId, content).subscribe(
         () => {
           this.toastrService.success('Cập nhật thành công!', 'Success');
           this.isEditing = false;
-          this.loadFeedbacks();
+          this.spinner.hide();
+          this.loadFeedbacks(this.currentPage);
         },
         error => {
           this.toastrService.danger('Đã xảy ra lỗi khi cập nhật đánh giá!', 'Error');
           console.error('Error updating feedback:', error);
+          this.spinner.hide();
         }
       );
     }
@@ -98,11 +167,13 @@ export class ListComponent implements OnInit {
       this.feedbackService.addFeedback(feedbackData).subscribe(
         () => {
           this.toastrService.success('Thêm mới thành công!', 'Success');
-          this.loadFeedbacks();
+          this.spinner.hide();
+          this.loadFeedbacks(1);
         },
         error => {
           this.toastrService.danger('Đã xảy ra lỗi khi thêm đánh giá!', 'Error');
           console.error('Error adding feedback:', error);
+          this.spinner.hide();
         }
       );
     }

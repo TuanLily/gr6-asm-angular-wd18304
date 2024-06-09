@@ -22,6 +22,7 @@ import { NewsService } from './news.service';
 import { CustomersComponent } from './customers.component';
 import { ListComponent } from './list/list.component';
 import { CustomersRoutingModule } from './customers-routing.module';
+import { PaginatorModule } from 'app/@theme/components/paginator/paginator.module';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { CustomersRoutingModule } from './customers-routing.module';
     NbAccordionModule,
     NbUserModule,
     CustomersRoutingModule,
-    NbTooltipModule
+    NbTooltipModule,
+    PaginatorModule
   ],
   declarations: [
     CustomersComponent,

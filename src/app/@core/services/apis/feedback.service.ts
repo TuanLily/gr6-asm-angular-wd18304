@@ -7,47 +7,48 @@ import { catchError } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { IFeedback } from 'app/@core/interfaces/feedback.interface';
 import { ApiService } from '../common';
+import { API_BASE_URL, API_ENDPOINT } from "../../config/api-endpoint.config";
 
 @Injectable({
     providedIn: 'root'
 })
 export class FeedbackService extends ApiService {
 
-    private apiUrl = `${environment.apiBaseUrl}/api/feedback`;
+
 
     constructor(private _http: HttpClient) {
         super(_http);
     }
 
-    getAllFeedbacks(): Observable<IFeedback[]> {
-        return this._http.get<IFeedback[]>(this.apiUrl).pipe(
-            catchError(this.handleError)
-        );
+    getAllFeedbacks(page: number, search: string = ''): Observable<any> {
+      const params = {page: page.toString(), search: search};
+      return this.get<any>(API_BASE_URL + API_ENDPOINT.feedback, params)
+        ;
     }
 
-    addFeedback(feedback: IFeedback): Observable<IFeedback> {
-        return this._http.post<IFeedback>(this.apiUrl, feedback).pipe(
-            catchError(this.handleError)
-        );
+    getAllCustomers(): Observable<any> {
+
+      return this.get<any>(API_BASE_URL + API_ENDPOINT.customers);
+  }
+
+
+    addFeedback(feedback: IFeedback): Observable<any> {
+      return this.post<any>(API_BASE_URL + API_ENDPOINT.feedback, feedback);
     }
 
-    updateFeedback(feedbackId: number, content: string): Observable<IFeedback> {
-        const url = `${this.apiUrl}/${feedbackId}`;
-        return this._http.patch<IFeedback>(url, { content }).pipe(
-            catchError(this.handleError)
-        );
+    updateFeedback(feedbackId: number, feedback: IFeedback): Observable<any> {
+        const url = `${API_BASE_URL + API_ENDPOINT.feedback}/${feedbackId}`
+        return this.patch<any>(url, feedback);
     }
 
-    deleteFeedback(feedbackId: number): Observable<void> {
-        const url = `${this.apiUrl}/${feedbackId}`;
-        return this._http.delete<void>(url).pipe(
-            catchError(this.handleError)
-        );
+    deleteFeedback(feedbackId: number): Observable<any> {
+        const url = `${API_BASE_URL + API_ENDPOINT.feedback}/${feedbackId}`
+        return this._http.delete<void>(url)
     }
 
-    private handleError(error: any): Observable<never> {
-        console.error('An error occurred:', error);
-        return throwError(error);
-    }
+    // private handleError(error: any): Observable<never> {
+    //     console.error('An error occurred:', error);
+    //     return throwError(error);
+    // }
 }
 

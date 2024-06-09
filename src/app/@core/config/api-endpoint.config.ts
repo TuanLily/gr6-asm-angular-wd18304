@@ -11,6 +11,8 @@ export const API_ENDPOINT: IAPIEndpoint = {
   reviews: '/api/reviews',
   roles: '/api/roles',
   bills: '/api/bills',
+  customers: '/api/customers',
+  feedback: '/api/feedback',
   auth: {
     base: API_BASE_URL + '/' + 'auth',
     login: '/api/auth/login',
