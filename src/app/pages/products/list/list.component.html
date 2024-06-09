@@ -94,6 +94,9 @@
                                 mãi.</small>
                             <small *ngIf="form.get('sale_price').hasError('min')">Giá khuyến mãi không được nhỏ hơn
                                 0.</small>
+                            <small *ngIf="form.get('sale_price').hasError('salePriceInvalid')">Giá khuyến mãi không được
+                                lớn hơn giá niêm yết.</small>
+
                         </div>
                     </div>
 

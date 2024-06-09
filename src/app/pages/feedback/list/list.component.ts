@@ -62,7 +62,7 @@ export class ListComponent implements OnInit {
   loadFeedbacks(page: number): void {
     this.spinner.show();
 
-    this.feedbackService.getAllFeedbacks(page,this.searchQuery).subscribe(data => {
+    this.feedbackService.getAllFeedbacks(page, this.searchQuery).subscribe(data => {
       // console.log(data);
 
       this.spinner.hide();
@@ -92,31 +92,18 @@ export class ListComponent implements OnInit {
   //   });
   // }
 
-  loadCustomers(): void {
-    this.feedbackService.getAllCustomers().subscribe(
+  loadCustomers(page: number = 1, search: string = ''): void {
+    this.customerService.getAllCustomers(page, search).subscribe(
       (data: any) => {
         console.log(data);
         this.customerData = data.customers;
-        // if (Array.isArray(data)) {
-        //   console.log(data);
-
-        //   this.customerData = data;
-        //   console.log(this.customerData);
-
-        // } else if (data && data.customerData) {
-        //   this.customerData = data.customerData;
-        // } else {
-        //   this.customerData = [];
-        // }
       },
       error => {
-        console.error('Error loading products:', error);
-        this.toastrService.danger('Đã xảy ra lỗi khi tải sản phẩm!', 'Error');
+        console.error('Error loading customers:', error);
+        this.toastrService.danger('Đã xảy ra lỗi khi tải khách hàng!', 'Error');
       }
     );
   }
-
-
 
   // getCustomerNameById(customerId: number): string {
   //   console.log(customerId);
@@ -141,27 +128,24 @@ export class ListComponent implements OnInit {
     };
 
     if (this.isEditing && !this.isAddingNewFeedback) {
-      // Nếu đang trong chế độ sửa, cập nhật thông tin cho đánh giá được chọn
-      const feedbackId = this.newFeedback.id;
-      console.log(feedbackId);
+    // Nếu đang trong chế độ sửa, cập nhật thông tin cho đánh giá được chọn
+    const feedbackId = this.newFeedback.id;
+    console.log(feedbackId);
 
-      const content = this.newFeedback.content; // Lấy nội dung feedback mới từ `newFeedback`
-      console.log(content);
-
-      this.feedbackService.updateFeedback(feedbackId, content).subscribe(
-        () => {
-          this.toastrService.success('Cập nhật thành công!', 'Success');
-          this.isEditing = false;
-          this.spinner.hide();
-          this.loadFeedbacks(this.currentPage);
-        },
-        error => {
-          this.toastrService.danger('Đã xảy ra lỗi khi cập nhật đánh giá!', 'Error');
-          console.error('Error updating feedback:', error);
-          this.spinner.hide();
-        }
-      );
-    }
+    this.feedbackService.updateFeedback(feedbackId, feedbackData).subscribe(
+      () => {
+        this.toastrService.success('Cập nhật thành công!', 'Success');
+        this.isEditing = false;
+        this.spinner.hide();
+        this.loadFeedbacks(this.currentPage);
+      },
+      error => {
+        this.toastrService.danger('Đã xảy ra lỗi khi cập nhật đánh giá!', 'Error');
+        console.error('Error updating feedback:', error);
+        this.spinner.hide();
+      }
+    );
+  }
     else {
       // Nếu không đang trong chế độ sửa, thêm đánh giá mới vào danh sách
       this.feedbackService.addFeedback(feedbackData).subscribe(
@@ -235,7 +219,7 @@ export class ListComponent implements OnInit {
     this.isEditing = false;
     this.isAddingNewFeedback = true; // Chuyển về trạng thái thêm mới
     this.form.reset();
-    this.form.get('customer_id')?.enable(); // Mở lại chỗ chọn tên khách hàng (customer_id) khi reset form
+    this.form.get('customer_id')?.enable();
     this.toastrService.success('Dữ liệu trên form đã được reset!', 'Thành công');
   }
 

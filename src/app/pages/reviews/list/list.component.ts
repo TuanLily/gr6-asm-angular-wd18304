@@ -91,11 +91,12 @@ export class ListComponent implements OnInit {
     });
   }
 
-  loadCustomer(): void {
-    this.customerService.getAllCustomers().subscribe(customer => {
-      this.customerData = customer;
+  loadCustomer(page: number = 1, search: string = ''): void {
+    this.customerService.getAllCustomers(page, search).subscribe(customer => {
+      console.log(customer);
+        this.customerData = customer.customers;
     });
-  }
+}
 
   loadProducts(page: number): void {
     this.spinner.show();

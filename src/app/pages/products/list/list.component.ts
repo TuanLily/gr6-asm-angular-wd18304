@@ -1,7 +1,7 @@
 // list.component.ts
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import Swal from 'sweetalert2';
@@ -58,7 +58,7 @@ export class ListComponent implements OnInit {
     this.form = new FormGroup({
       name: new FormControl('', Validators.required),
       price: new FormControl('', [Validators.required, Validators.min(0)]),
-      sale_price: new FormControl('', [Validators.required, Validators.min(0)]),
+      sale_price: new FormControl('', [Validators.required, Validators.min(0), this.salePriceValidator]),
       image: new FormControl(''),
       category_id: new FormControl('', [Validators.required])
     });
@@ -67,6 +67,15 @@ export class ListComponent implements OnInit {
 
   }
 
+  salePriceValidator(control: FormControl): ValidationErrors | null {
+    const formGroup = control.parent;
+    if (!formGroup) return null;
+  
+    const price = formGroup.get('price').value;
+    const salePrice = control.value;
+  
+    return salePrice <= price ? null : { salePriceInvalid: true };
+  }
 
 
   //* Hàm xử lý upload file
@@ -126,14 +135,7 @@ export class ListComponent implements OnInit {
   //* Hàm xử lý thêm mới hoặc cập nhật sản phẩm
   addProduct(): void {
     if (!this.form.valid) {
-      this.toastrService.danger('Vui lòng nhập đủ dữ liệu và kiểm tra lại các trường!', 'Error');
-      return;
-    }
-
-    const price = this.form.get('price').value;
-    const salePrice = this.form.get('sale_price').value;
-    if (salePrice >= price) {
-      this.toastrService.danger('Giá khuyến mãi phải nhỏ hơn giá niêm yết!', 'Error');
+      this.toastrService.danger('Vui lòng nhập đủ dữ liệu và kiểm tra lại các trường!', 'Lỗi');
       return;
     }
 
@@ -163,13 +165,13 @@ export class ListComponent implements OnInit {
       const productId = this.newProduct.id;
       this.productService.updateProduct(productId, productData).subscribe(
         () => {
-          this.toastrService.success('Cập nhật thành công!', 'Success');
+          this.toastrService.success('Cập nhật thành công!', 'Thành công');
           this.isEditing = false;
           this.spinner.hide();
           this.loadProducts(this.currentPage); // Cập nhật danh sách sản phẩm sau khi chỉnh sửa
         },
         error => {
-          this.toastrService.danger('Đã xảy ra lỗi khi cập nhật sản phẩm!', 'Error');
+          this.toastrService.danger('Đã xảy ra lỗi khi cập nhật sản phẩm!', 'Lỗi');
           console.error('Error updating product:', error);
           this.spinner.hide();
         }
@@ -177,12 +179,12 @@ export class ListComponent implements OnInit {
     } else {
       this.productService.addProduct(productData).subscribe(
         () => {
-          this.toastrService.success('Thêm mới thành công!', 'Success');
+          this.toastrService.success('Thêm mới thành công!', 'Thành công');
           this.spinner.hide();
           this.loadProducts(1); // Cập nhật danh sách sản phẩm sau khi thêm mới
         },
         error => {
-          this.toastrService.danger('Đã xảy ra lỗi khi thêm sản phẩm!', 'Error');
+          this.toastrService.danger('Đã xảy ra lỗi khi thêm sản phẩm!', 'Lỗi');
           console.error('Error adding product:', error);
           this.spinner.hide();
         }
@@ -236,11 +238,11 @@ export class ListComponent implements OnInit {
             if (productIndex !== -1) {
               this.products.splice(productIndex, 1);
               this.loadProducts(this.currentPage);
-              this.toastrService.success('Xóa thành công!', 'Success');
+              this.toastrService.success('Xóa thành công!', 'Thành công');
             }
           },
           error => {
-            this.toastrService.danger('Đã xảy ra lỗi khi xóa sản phẩm!', 'Error');
+            this.toastrService.danger('Đã xảy ra lỗi khi xóa sản phẩm!', 'Lỗi');
             console.error('Error deleting product:', error);
           }
         );

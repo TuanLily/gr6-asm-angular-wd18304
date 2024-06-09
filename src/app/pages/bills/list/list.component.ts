@@ -64,14 +64,15 @@ export class ListComponent implements OnInit {
     this.billService.getAllProducts().subscribe(
       (data: any) => {
         console.log(data);
+        this.products = data.products;
 
-        if (Array.isArray(data)) {
-          this.products = data;
-        } else if (data && data.products) {
-          this.products = data.products;
-        } else {
-          this.products = [];
-        }
+        // if (Array.isArray(data)) {
+        //   this.products = data;
+        // } else if (data && data.products) {
+        //   this.products = data.products;
+        // } else {
+        //   this.products = [];
+        // }
       },
       error => {
         console.error('Error loading products:', error);
@@ -87,7 +88,7 @@ export class ListComponent implements OnInit {
       (data: any) => {
         console.log(data);
 
-        this.employees = data;
+        this.employees = data.employees;
       },
       error => {
         console.error('Error loading employees:', error);

@@ -10,45 +10,40 @@ import { ApiService } from '../common';
 import { API_BASE_URL, API_ENDPOINT } from "../../config/api-endpoint.config";
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root'
 })
 export class FeedbackService extends ApiService {
 
 
 
-    constructor(private _http: HttpClient) {
-        super(_http);
-    }
+  constructor(private _http: HttpClient) {
+    super(_http);
+  }
 
-    getAllFeedbacks(page: number, search: string = ''): Observable<any> {
-      const params = {page: page.toString(), search: search};
-      return this.get<any>(API_BASE_URL + API_ENDPOINT.feedback, params)
-        ;
-    }
-
-    getAllCustomers(): Observable<any> {
-
-      return this.get<any>(API_BASE_URL + API_ENDPOINT.customers);
+  getAllFeedbacks(page: number, search: string = ''): Observable<any> {
+    const params = { page: page.toString(), search: search };
+    return this.get<any>(API_BASE_URL + API_ENDPOINT.feedback, params)
+      ;
   }
 
 
-    addFeedback(feedback: IFeedback): Observable<any> {
-      return this.post<any>(API_BASE_URL + API_ENDPOINT.feedback, feedback);
-    }
+  addFeedback(feedback: IFeedback): Observable<any> {
+    return this.post<any>(API_BASE_URL + API_ENDPOINT.feedback, feedback);
+  }
 
-    updateFeedback(feedbackId: number, feedback: IFeedback): Observable<any> {
-        const url = `${API_BASE_URL + API_ENDPOINT.feedback}/${feedbackId}`
-        return this.patch<any>(url, feedback);
-    }
+  updateFeedback(feedbackId: number, feedback: IFeedback): Observable<any> {
+    const url = `${API_BASE_URL + API_ENDPOINT.feedback}/${feedbackId}`
+    return this.patch<any>(url, feedback);
+  }
 
-    deleteFeedback(feedbackId: number): Observable<any> {
-        const url = `${API_BASE_URL + API_ENDPOINT.feedback}/${feedbackId}`
-        return this._http.delete<void>(url)
-    }
+  deleteFeedback(feedbackId: number): Observable<any> {
+    const url = `${API_BASE_URL + API_ENDPOINT.feedback}/${feedbackId}`
+    return this._http.delete<void>(url)
+  }
 
-    // private handleError(error: any): Observable<never> {
-    //     console.error('An error occurred:', error);
-    //     return throwError(error);
-    // }
+  // private handleError(error: any): Observable<never> {
+  //     console.error('An error occurred:', error);
+  //     return throwError(error);
+  // }
 }
 
