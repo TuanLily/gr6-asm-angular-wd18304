@@ -10,6 +10,7 @@ export const API_ENDPOINT: IAPIEndpoint = {
   employees: '/api/employees',
   reviews: '/api/reviews',
   roles: '/api/roles',
+  bills: '/api/bills',
   auth: {
     base: API_BASE_URL + '/' + 'auth',
     login: '/api/auth/login',

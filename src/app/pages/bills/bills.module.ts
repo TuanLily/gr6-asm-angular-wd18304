@@ -22,6 +22,7 @@ import { NewsService } from './news.service';
 import { BillRoutingModule } from './bills-routing.module';
 import { BillsComponent } from './bills.component';
 import { ListComponent } from './list/list.component';
+import { PaginatorModule } from 'app/@theme/components/paginator/paginator.module';
 
 @NgModule({
   imports: [
@@ -42,7 +43,8 @@ import { ListComponent } from './list/list.component';
     NbAccordionModule,
     NbUserModule,
     BillRoutingModule,
-    NbTooltipModule
+    NbTooltipModule,
+    PaginatorModule
   ],
   declarations: [
     BillsComponent,

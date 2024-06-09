@@ -7,4 +7,5 @@ export interface IAPIEndpoint {
   employees: any;
   reviews: any;
   roles: any;
+  bills: any;
 }

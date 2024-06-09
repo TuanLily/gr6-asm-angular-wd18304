@@ -1,154 +1,140 @@
+<!-- Danh sách bill -->
 <nb-card>
-    <nb-card-body>
-        <div class="container">
-            <div class="card my-2">
-                <div class="card-body">
-                    <h5 class="card-title">Thêm / Cập nhật hóa đơn</h5>
-                    <form>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group my-3">
-                                    <label for="product">Sản phẩm:</label>
-                                    <input type="text" class="form-control my-1" id="product"
-                                        placeholder="Nhập tên sản phẩm">
-                                    <div class="text-danger">
-                                        <small>Vui lòng nhập tên sản phẩm.</small>
-                                    </div>
-                                </div>
-
-                                <div class="form-group my-3">
-                                    <label for="quantity">Số lượng:</label>
-                                    <input type="number" class="form-control my-1" id="quantity"
-                                        placeholder="Nhập số lượng">
-                                    <div class="text-danger">
-                                        <small>Vui lòng nhập số lượng.</small>
-                                    </div>
-                                </div>
-
-                                <div class="form-group my-3">
-                                    <label for="totalAmount">Thành tiền:</label>
-                                    <input type="number" class="form-control my-1" id="totalAmount"
-                                        placeholder="Nhập thành tiền">
-                                    <div class="text-danger">
-                                        <small>Vui lòng nhập thành tiền.</small>
-                                    </div>
-                                </div>
-
-                                <div class="form-group my-3">
-                                    <label for="customerId">Mã khách hàng:</label>
-                                    <input type="text" class="form-control my-1" id="customerId"
-                                        placeholder="Nhập mã khách hàng">
-                                    <div class="text-danger">
-                                        <small>Vui lòng nhập mã khách hàng.</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="form-group my-3">
-                                    <label for="voucher">Voucher:</label>
-                                    <input type="text" class="form-control my-1" id="voucher"
-                                        placeholder="Nhập voucher">
-                                    <div class="text-danger">
-                                        <small>Vui lòng nhập voucher.</small>
-                                    </div>
-                                </div>
-
-                                <div class="form-group my-3">
-                                    <label for="employee">Nhân viên:</label>
-                                    <select class="form-control my-1" id="employee">
-                                        <option>Nhân viên A</option>
-                                        <option>Nhân viên B</option>
-                                        <option>Nhân viên C</option>
-                                    </select>
-                                    <div class="text-danger">
-                                        <small>Vui lòng chọn nhân viên.</small>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex justify-content-end mt-4">
-                            <button nbButton status="warning" type="button" class="float-end mx-2"
-                                nbTooltip="Reset dữ liệu">
-                                <i class="fa-solid fa-rotate-left"></i>
-                            </button>
-                            <button nbButton type="submit" class="float-end" status="success" nbTooltip="Lưu dữ liệu">
-                                <i class="fa-solid fa-check"></i>
-                            </button>
-                        </div>
-                    </form>
-                </div>
+  <nb-card-header class="d-flex justify-content-between align-items-center">
+    <h5 class="card-title mb-0">Danh sách bill</h5>
+    <form class="d-flex" (ngSubmit)="onSearch()">
+      <input class="form-control me-2" type="search" placeholder="Tìm kiếm" [(ngModel)]="searchQuery" name="searchQuery" aria-label="Search">
+      <button type="submit" nbButton status="primary">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </form>
+  </nb-card-header>
+  <nb-card-body>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Mã sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Thành tiền</th>
+            <th>Tên khách hàng</th>
+            <th>Nhân viên</th>
+            <th>Mã voucher</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let bill of bills; let i = index">
+            <td class="align-middle">{{ i + 1 }}</td>
+            <td class="align-middle">{{ getProductName(bill.product_id)?.name }}</td>
+            <td class="align-middle">{{ bill.qty }}</td>
+            <td class="align-middle">{{ bill.total }}</td>
+            <td class="align-middle">{{ bill.customer_name }}</td>
+            <td class="align-middle">{{ getEmployeeName(bill.employee_id) }}</td>
+            <td class="align-middle">{{ bill.voucher_id }}</td>
+            <td class="align-middle text-center">
+              <div class="btn-group d-flex justify-content-center">
+                <button nbButton status="primary" type="button" class="btn-sm mx-1 btn-equal"
+                    (click)="editBill(bill.id)" nbTooltip="Sửa dữ liệu">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button nbButton status="danger" type="button" class="btn-sm mx-1 btn-equal"
+                    (click)="deleteBill(bill.id)" nbTooltip="Xóa dữ liệu">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
             </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ngx-paginator [apiUrl]="apiUrl" [current_page]="currentPage" [last_page]="totalPages" (dataList)="loadBills($event)"></ngx-paginator>
+    </div>
+  </nb-card-body>
+</nb-card>
 
-            <div class="card my-lg-5">
-                <div class="card-body">
-                    <h3 class="card-title">Danh sách hóa đơn</h3>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead class="table-secondary">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Sản phẩm</th>
-                                    <th>Số lượng</th>
-                                    <th>Thành tiền</th>
-                                    <th>Ngày tạo</th>
-                                    <th>Mã khách hàng</th>
-                                    <th>Voucher</th>
-                                    <th>Nhân viên</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Sản phẩm A</td>
-                                    <td>10</td>
-                                    <td>1,000,000</td>
-                                    <td>2023-05-15</td>
-                                    <td>KH001</td>
-                                    <td>VOUCHER123</td>
-                                    <td>Nhân viên A</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button nbButton status="primary" type="button" class="btn-sm mr-2 mx-1"
-                                                nbTooltip="Sửa dữ liệu">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                            </button>
-                                            <button nbButton status="danger" type="button" class="btn-sm"
-                                                nbTooltip="Xóa dữ liệu">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>Sản phẩm B</td>
-                                    <td>5</td>
-                                    <td>500,000</td>
-                                    <td>2023-05-16</td>
-                                    <td>KH002</td>
-                                    <td>VOUCHER456</td>
-                                    <td>Nhân viên B</td>
-                                    <td>
-                                        <div class="btn-group">
-                                            <button nbButton status="primary" type="button" class="btn-sm mr-2 mx-1"
-                                                nbTooltip="Sửa dữ liệu">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                            </button>
-                                            <button nbButton status="danger" type="button" class="btn-sm"
-                                                nbTooltip="Xóa dữ liệu">
-                                                <i class="fa-solid fa-trash"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+<!-- Thêm / Cập nhật bill -->
+<nb-card class="mt-3">
+  <nb-card-header>
+    <h5 class="card-title">Thêm / Cập nhật hóa đơn</h5>
+  </nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="form" (ngSubmit)="addBill()" #formElement>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group my-3">
+            <label for="productId">Mã sản phẩm<span class="spot">*</span>:</label>
+            <select class="form-control" id="productId" formControlName="product_id">
+              <option value="" disabled selected>Chọn mã sản phẩm</option>
+              <option *ngFor="let product of products" [value]="product.id">{{ product.name }}</option>
+            </select>
+            <div *ngIf="form.get('product_id').invalid && form.get('product_id').touched" class="text-danger">
+              <small *ngIf="form.get('product_id').hasError('required')">Vui lòng chọn mã sản phẩm.</small>
             </div>
+          </div>
         </div>
-    </nb-card-body>
+        <div class="col-md-6">
+          <div class="form-group my-3">
+            <label for="qty">Số lượng<span class="spot">*</span>:</label>
+            <input type="number" class="form-control" id="qty" formControlName="qty">
+            <div *ngIf="form.get('qty').invalid && form.get('qty').touched" class="text-danger">
+              <small *ngIf="form.get('qty').hasError('required')">Vui lòng nhập số lượng.</small>
+              <small *ngIf="form.get('qty').hasError('min')">Số lượng phải lớn hơn 0.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group my-3">
+            <label for="customerId">Tên khách hàng<span class="spot">*</span>:</label>
+            <input type="text" class="form-control" id="customerId" formControlName="customer_name">
+            <div *ngIf="form.get('customer_name').invalid && form.get('customer_name').touched" class="text-danger">
+              <small *ngIf="form.get('customer_name').hasError('required')">Vui lòng nhập tên khách hàng.</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group my-3">
+            <label for="employeeId">Mã nhân viên<span class="spot">*</span>:</label>
+            <select class="form-control" id="employeeId" formControlName="employee_id">
+              <option value="" disabled selected>Chọn mã nhân viên</option>
+              <option *ngFor="let employee of employees" [value]="employee.id">{{ employee.name }}</option>
+            </select>
+            <div *ngIf="form.get('employee_id').invalid && form.get('employee_id').touched" class="text-danger">
+              <small *ngIf="form.get('employee_id').hasError('required')">Vui lòng chọn mã nhân viên.</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group my-3">
+            <label for="total">Tổng tiền<span class="spot">*</span>:</label>
+            <input type="number" class="form-control" id="total" formControlName="total">
+            <div *ngIf="form.get('total').invalid && form.get('total').touched" class="text-danger">
+              <small *ngIf="form.get('total').hasError('required')">Vui lòng nhập tổng tiền.</small>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group my-3">
+            <label for="voucherId">Mã voucher:</label>
+            <input type="text" class="form-control" id="voucherId" formControlName="voucher_id">
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end mt-4">
+        <button nbButton status="warning" type="button" class="float-end mx-2" (click)="resetForm()" nbTooltip="Reset dữ liệu">
+          <i class="fa-solid fa-rotate-left"></i>
+        </button>
+        <button nbButton type="submit" class="float-end" [disabled]="!form.valid" status="success" nbTooltip="Lưu dữ liệu">
+          <i class="fa-solid fa-check"></i>
+        </button>
+      </div>
+    </form>
+  </nb-card-body>
 </nb-card>
