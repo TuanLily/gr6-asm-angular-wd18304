@@ -20,6 +20,7 @@
                         <th>Giá niêm yết</th>
                         <th>Giá khuyến mãi</th>
                         <th>Hình ảnh</th>
+                        <th>Trạng thái</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
@@ -32,6 +33,10 @@
                         <td class="align-middle text-center">
                             <img src="../../../../assets/images/{{product.image}}" alt="{{ product.name }}" width="80px"
                                 height="100px">
+                        </td>
+                        <td class="align-middle">
+                            <span *ngIf="product.status === 1" class="text-success">Đang bán</span>
+                            <span *ngIf="product.status === 0" class="text-danger">Tạm ngưng kinh doanh</span>
                         </td>
                         <td class="align-middle text-center">
                             <div class="btn-group d-flex justify-content-center">
@@ -63,14 +68,34 @@
     </nb-card-header>
     <nb-card-body>
         <form [formGroup]="form" (ngSubmit)="addProduct()" #formElement>
-            <div class="form-group my-3">
-                <label for="productName" class="my-1">Tên sản phẩm<span class="spot">*</span>:</label>
-                <input type="text" class="form-control" id="productName" [(ngModel)]="newProduct.name"
-                    formControlName="name">
-                <div *ngIf="form.get('name').invalid && form.get('name').touched" class="text-danger">
-                    <small *ngIf="form.get('name').hasError('required')">Vui lòng nhập tên sản phẩm.</small>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group my-3">
+                        <label for="productName" class="my-1">Tên sản phẩm<span class="spot">*</span>:</label>
+                        <input type="text" class="form-control" id="productName" [(ngModel)]="newProduct.name"
+                            formControlName="name">
+                        <div *ngIf="form.get('name').invalid && form.get('name').touched" class="text-danger">
+                            <small *ngIf="form.get('name').hasError('required')">Vui lòng nhập tên sản phẩm.</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group my-3">
+                        <label for="productImage" class="my-1">Hình ảnh sản phẩm<span class="spot">*</span>:</label>
+                        <input type="file" class="form-control" id="productImage" name="productImage"
+                            formControlName="image" (change)="onImageSelected($event)">
+                        <div *ngIf="form.get('image').invalid && form.get('image').touched" class="text-danger">
+                            <small *ngIf="form.get('image').hasError('required')">Vui lòng chọn hình ảnh sản
+                                phẩm.</small>
+                            <small *ngIf="form.get('image').hasError('invalidFormat')">Định dạng file không hợp
+                                lệ.</small>
+                            <small *ngIf="form.get('image').hasError('invalidSize')">Kích thước file vượt quá giới
+                                hạn.</small>
+                        </div>
+                    </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group my-3">
@@ -105,21 +130,6 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group my-3">
-                        <label for="productImage" class="my-1">Hình ảnh sản phẩm<span class="spot">*</span>:</label>
-                        <input type="file" class="form-control" id="productImage" name="productImage"
-                            formControlName="image" (change)="onImageSelected($event)">
-                        <div *ngIf="form.get('image').invalid && form.get('image').touched" class="text-danger">
-                            <small *ngIf="form.get('image').hasError('required')">Vui lòng chọn hình ảnh sản
-                                phẩm.</small>
-                            <small *ngIf="form.get('image').hasError('invalidFormat')">Định dạng file không hợp
-                                lệ.</small>
-                            <small *ngIf="form.get('image').hasError('invalidSize')">Kích thước file vượt quá giới
-                                hạn.</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-group my-3">
                         <label for="cateOption" class="my-1">Danh mục sản phẩm<span class="spot">*</span>:</label>
                         <select class="form-control" id="cateOption" formControlName="category_id">
                             <option value="" disabled selected>Vui lòng chọn danh mục</option>
@@ -130,6 +140,17 @@
                             class="text-danger">
                             <small>Vui lòng chọn một danh mục sản phẩm.</small>
                         </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group my-3">
+                        <label for="status" class="my-1">Trạng thái:</label>
+                        <select class="form-control" id="status" formControlName="status"
+                            [(ngModel)]="newProduct.status">
+                            <option disabled selected>-- Chọn trạng thái --</option>
+                            <option value="1">Đang kinh doanh</option>
+                            <option value="0">Ngừng kinh doanh</option>
+                        </select>
                     </div>
                 </div>
             </div>

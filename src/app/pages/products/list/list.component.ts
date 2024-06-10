@@ -23,7 +23,7 @@ export class ListComponent implements OnInit {
   @ViewChild('formElement') formElement: ElementRef;
 
   form: FormGroup;
-  newProduct: IProduct = { name: '', price: 0, sale_price: 0, image: '', category_id: '' };
+  newProduct: IProduct = { name: '', price: 0, sale_price: 0, image: '', status: 1, category_id: '' };
 
   // Biến để xác định trạng thái hiện tại: true = đang thêm mới, false = đang sửa
   isAddingNewProduct: boolean = true;
@@ -60,6 +60,7 @@ export class ListComponent implements OnInit {
       price: new FormControl('', [Validators.required, Validators.min(0)]),
       sale_price: new FormControl('', [Validators.required, Validators.min(0), this.salePriceValidator]),
       image: new FormControl(''),
+      status: new FormControl(''),
       category_id: new FormControl('', [Validators.required])
     });
 
@@ -70,10 +71,10 @@ export class ListComponent implements OnInit {
   salePriceValidator(control: FormControl): ValidationErrors | null {
     const formGroup = control.parent;
     if (!formGroup) return null;
-  
+
     const price = formGroup.get('price').value;
     const salePrice = control.value;
-  
+
     return salePrice <= price ? null : { salePriceInvalid: true };
   }
 
@@ -138,61 +139,42 @@ export class ListComponent implements OnInit {
       this.toastrService.danger('Vui lòng nhập đủ dữ liệu và kiểm tra lại các trường!', 'Lỗi');
       return;
     }
-
-    let productData: IProduct;
+  
     const imageValue = this.form.get('image').value;
-    if (this.isEditing && !this.isAddingNewProduct && !imageValue) {
-      productData = {
-        name: this.form.get('name').value,
-        price: this.form.get('price').value,
-        sale_price: this.form.get('sale_price').value,
-        image: this.oldImages,
-        category_id: this.form.get('category_id').value
-      };
-    } else {
-      productData = {
-        name: this.form.get('name').value,
-        price: this.form.get('price').value,
-        sale_price: this.form.get('sale_price').value,
-        image: imageValue,
-        category_id: this.form.get('category_id').value
-      };
-    }
-
+    const productData: IProduct = {
+      name: this.form.get('name').value,
+      price: this.form.get('price').value,
+      sale_price: this.form.get('sale_price').value,
+      image: imageValue ? imageValue : this.oldImages,
+      status: this.form.get('status').value,
+      category_id: this.form.get('category_id').value
+    };
+  
     this.spinner.show();
-
-    if (this.isEditing && !this.isAddingNewProduct) {
-      const productId = this.newProduct.id;
-      this.productService.updateProduct(productId, productData).subscribe(
-        () => {
-          this.toastrService.success('Cập nhật thành công!', 'Thành công');
-          this.isEditing = false;
-          this.spinner.hide();
-          this.loadProducts(this.currentPage); // Cập nhật danh sách sản phẩm sau khi chỉnh sửa
-        },
-        error => {
-          this.toastrService.danger('Đã xảy ra lỗi khi cập nhật sản phẩm!', 'Lỗi');
-          console.error('Error updating product:', error);
-          this.spinner.hide();
-        }
-      );
-    } else {
-      this.productService.addProduct(productData).subscribe(
-        () => {
-          this.toastrService.success('Thêm mới thành công!', 'Thành công');
-          this.spinner.hide();
-          this.loadProducts(1); // Cập nhật danh sách sản phẩm sau khi thêm mới
-        },
-        error => {
-          this.toastrService.danger('Đã xảy ra lỗi khi thêm sản phẩm!', 'Lỗi');
-          console.error('Error adding product:', error);
-          this.spinner.hide();
-        }
-      );
-    }
-
+  
+    const productServiceOption = this.isEditing && !this.isAddingNewProduct ?
+      this.productService.updateProduct(this.newProduct.id, productData) :
+      this.productService.addProduct(productData);
+  
+    productServiceOption.subscribe(
+      () => {
+        const successMessage = this.isEditing && !this.isAddingNewProduct ? 'Cập nhật thành công!' : 'Thêm mới thành công!';
+        this.toastrService.success(successMessage, 'Thành công');
+        this.isEditing = false;
+        this.spinner.hide();
+        this.loadProducts(this.currentPage); // Cập nhật danh sách sản phẩm sau khi thêm mới hoặc chỉnh sửa
+      },
+      error => {
+        const errorMessage = this.isEditing && !this.isAddingNewProduct ? 'cập nhật sản phẩm' : 'thêm sản phẩm';
+        this.toastrService.danger(`Đã xảy ra lỗi khi ${errorMessage}!`, 'Lỗi');
+        console.error(`Error ${errorMessage}:`, error);
+        this.spinner.hide();
+      }
+    );
+  
     this.form.reset();
   }
+  
 
   //* Hàm xử lý dữ liệu đưa lên form đề cập nhật sản phẩm
   editProduct(productId: number): void {

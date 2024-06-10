@@ -4,5 +4,6 @@ export interface IProduct {
     price: number;
     sale_price?: number;
     image?: string;
+    status: number;
     category_id?: string;
 }
