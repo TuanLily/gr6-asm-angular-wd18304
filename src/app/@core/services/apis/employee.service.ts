@@ -21,8 +21,14 @@ export class EmployeeService extends ApiService {
         super(_http);
     }
 
-    getAllEmployees(page: number, search: string = ''): Observable<any> {
-        const params = { page: page.toString(), search: search };
+    getAllEmployees(page?: number, search?: string): Observable<any> {
+        const params: any = {};
+        if (page !== undefined) {
+            params.page = page.toString();
+        }
+        if (search !== undefined) {
+            params.search = search;
+        }
         return this.get<any>(API_BASE_URL + API_ENDPOINT.employees, params);
     }
 

@@ -20,10 +20,21 @@ export class ProductService extends ApiService {
         super(_http);
     }
 
-    getAllProducts(page: number, search: string = ''): Observable<any> {
-        const params = { page: page.toString(), search: search };
+    // getAllProducts(page: number, search: string = ''): Observable<any> {
+    //     const params = { page: page.toString(), search: search };
+    //     return this.get<any>(API_BASE_URL + API_ENDPOINT.product, params);
+    // }
+    getAllProducts(page?: number, search?: string): Observable<any> {
+        const params: any = {};
+        if (page !== undefined) {
+            params.page = page.toString();
+        }
+        if (search !== undefined) {
+            params.search = search;
+        }
         return this.get<any>(API_BASE_URL + API_ENDPOINT.product, params);
     }
+    
 
     addProduct(product: IProduct): Observable<any> {
         return this.post<any>(API_BASE_URL + API_ENDPOINT.product, product);

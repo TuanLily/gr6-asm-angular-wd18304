@@ -23,27 +23,33 @@ export class CategoryService extends ApiService {
 
 
   constructor(private _http: HttpClient) {
-      super(_http);
+    super(_http);
   }
 
-  getAllCategories(page: number, search: string = ''): Observable<any> {
-    const params = { page: page.toString(), search: search };
-      return this.get(API_BASE_URL + API_ENDPOINT.categories, params);
+  getAllCategories(page?: number, search?: string): Observable<any> {
+    const params: any = {};
+    if (page !== undefined) {
+      params.page = page.toString();
+    }
+    if (search !== undefined) {
+      params.search = search;
+    }
+    return this.get(API_BASE_URL + API_ENDPOINT.categories, params);
   }
 
-  addCategories(Categories: ICategory ): Observable<any > {
-      return this.post(API_BASE_URL + API_ENDPOINT.categories, Categories);
+  addCategories(Categories: ICategory): Observable<any> {
+    return this.post(API_BASE_URL + API_ENDPOINT.categories, Categories);
   }
 
-  updateCategories(CategoriesId: number, Categories: ICategory ): Observable<any > {
-      const url = `${API_BASE_URL + API_ENDPOINT.categories}/${CategoriesId}`;
-      return this.patch(url, Categories);
+  updateCategories(CategoriesId: number, Categories: ICategory): Observable<any> {
+    const url = `${API_BASE_URL + API_ENDPOINT.categories}/${CategoriesId}`;
+    return this.patch(url, Categories);
   }
 
   deleteCategories(CategoriesId: number): Observable<any> {
-      
-      return this.delete(`${API_BASE_URL + API_ENDPOINT.categories}/${CategoriesId}`);
+
+    return this.delete(`${API_BASE_URL + API_ENDPOINT.categories}/${CategoriesId}`);
   }
 
-  
+
 }

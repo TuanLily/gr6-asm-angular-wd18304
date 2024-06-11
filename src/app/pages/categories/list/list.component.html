@@ -60,7 +60,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group my-3">
-                        <label for="categoriesName" class=" my-1">Tên danh mục:</label>
+                        <label for="categoriesName" class=" my-1">Tên danh mục<span class="spot">*</span>:</label>
                         <input type="text" class="form-control" id="categoriesName" formControlName="name"
                             [(ngModel)]="newCate.name">
                         <div *ngIf="form.get('name').invalid && form.get('name').touched" class="text-danger">

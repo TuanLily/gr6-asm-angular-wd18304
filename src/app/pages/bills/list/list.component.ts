@@ -89,8 +89,8 @@ export class ListComponent implements OnInit {
     this.loadEmployees();
   }
 
-  loadProducts(page: number = 1, search: string = ''): void {
-    this.productService.getAllProducts(page, search).subscribe(
+  loadProducts(): void {
+    this.productService.getAllProducts().subscribe(
       (data: any) => {
         this.products = data.products;
       },
@@ -100,9 +100,10 @@ export class ListComponent implements OnInit {
     );
   }
 
-  loadEmployees(page: number = 1, search: string = ''): void {
-    this.employeeService.getAllEmployees(page, search).subscribe(
+  loadEmployees(): void {
+    this.employeeService.getAllEmployees().subscribe(
       (data: any) => {
+        console.log(data);
         this.employees = data.employees;
       },
       (error) => {

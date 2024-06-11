@@ -120,11 +120,20 @@ export class ListComponent implements OnInit {
 
   //* Hàm load dữ liệu từ danh mục sang
   loadCategory(): void {
-    this.categoryService.getAllCategories().subscribe(cateData => {
+    // Gọi getAllCategories với page và search mặc định
+    this.categoryService.getAllCategories().subscribe(response => {
+      // Giả sử response trả về một đối tượng với thuộc tính `categories`
+      const categories = response.categories;
+  
       // Lọc các danh mục có status = 0
-      this.categoryData = cateData.filter(category => category.status === 0);
+      this.categoryData = categories.filter(category => category.status === 0);
+    },
+    error => {
+      console.error('Error loading categories:', error);
+      this.toastrService.danger('Đã xảy ra lỗi khi tải danh mục!', 'Error');
     });
   }
+  
 
   //* Hàm xử lý tìm kiếm sản phẩm
   onSearch(): void {

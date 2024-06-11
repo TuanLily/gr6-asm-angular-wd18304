@@ -24,7 +24,7 @@ export class ListComponent implements OnInit {
   @ViewChild('formElement') formElement: ElementRef;
 
   form: FormGroup;
-  newReviews: any = {product_id: '', customer_id: '', rate: '', content: '',  created_at: '', updated_at: '' };
+  newReviews: any = { product_id: '', customer_id: '', rate: '', content: '', created_at: '', updated_at: '' };
 
   // Biến để xác định trạng thái hiện tại: true = đang thêm mới, false = đang sửa
   isAddingNewReviews: boolean = true;
@@ -50,11 +50,11 @@ export class ListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params =>{
+    this.route.queryParams.subscribe(params => {
       const currentPage = params['page'] || 1;
       this.loadReviews(currentPage);
       this.loadCustomer();
-      this.loadProducts(currentPage);
+      this.loadProducts();
     })
 
     this.form = new FormGroup({
@@ -65,8 +65,8 @@ export class ListComponent implements OnInit {
     });
   }
 
- 
-    
+
+
   //* Hàm load toàn bộ dữ liệu ra giao diện
   loadReviews(page: number): void {
     this.spinner.show();
@@ -94,32 +94,19 @@ export class ListComponent implements OnInit {
   loadCustomer(page: number = 1, search: string = ''): void {
     this.customerService.getAllCustomers(page, search).subscribe(customer => {
       console.log(customer);
-        this.customerData = customer.customers;
+      this.customerData = customer.customers;
     });
-}
+  }
 
-  loadProducts(page: number): void {
-    this.spinner.show();
-
-    this.productService.getAllProducts(page, this.searchQuery).subscribe(data => {
-      this.spinner.hide();
-      this.products = data.products;
-      this.currentPage = data.currentPage;
-      this.totalPages = data.totalPages;
-
-      const queryParams: any = { page: page };
-
-      // Nếu có từ khóa tìm kiếm, thêm ?search vào đường dẫn Url
-      if (this.searchQuery && this.searchQuery.trim() !== '') {
-        queryParams.search = this.searchQuery;
+  loadProducts(): void {
+    this.productService.getAllProducts().subscribe(
+      (data: any) => {
+        this.products = data.products;
+      },
+      (error) => {
+        this.toastrService.danger('Đã xảy ra lỗi khi tải sản phẩm!', 'Error');
       }
-
-      // Cập nhật tham số ?page và ?search lên URL nếu khác với giá trị trước đó
-      this.router.navigate([], {
-        queryParams: queryParams,
-        replaceUrl: true
-      });
-    });
+    );
   }
 
 
@@ -137,7 +124,7 @@ export class ListComponent implements OnInit {
   onSearch(): void {
     // Gọi hàm loadReviews với trang hiện tại và từ khóa tìm kiếm
     this.loadReviews(this.currentPage);
-    this.loadProducts(this.currentPage);
+    this.loadProducts();
   }
 
   //* Hàm xử lý thêm mới hoặc cập nhật đánh giá
@@ -148,10 +135,10 @@ export class ListComponent implements OnInit {
     }
 
     let reviewsData: IReview;
-      const productValue= this.form.get('product_id').value;
-      const customerValue= this.form.get('customer_id').value;
-      const rateValue= this.form.get('rate').value;
-      const contentValue= this.form.get('content').value;
+    const productValue = this.form.get('product_id').value;
+    const customerValue = this.form.get('customer_id').value;
+    const rateValue = this.form.get('rate').value;
+    const contentValue = this.form.get('content').value;
 
     if (this.isEditing && !this.isAddingNewReviews && !productValue && !customerValue && !rateValue && !contentValue) {
       // Nếu đang trong chế độ sửa, cập nhật thông tin cho đánh giá được chọn

@@ -65,7 +65,7 @@ export class ListComponent implements OnInit {
         // Cập nhật danh sách các danh mục
         this.Categories = data.categories.map(category => ({
             ...category,
-            isLocker: category.name === 'Chưa phân loại' // Thêm cờ isLocker nếu tên của danh mục là "Locker"
+            isLocker: category.name === 'Chưa Phân Loại' // Thêm cờ isLocker nếu tên của danh mục là "Locker"
         }));
 
         this.currentPage = data.currentPage;
