@@ -1,6 +1,13 @@
 <nb-card>
-    <nb-card-header>
-        <h5 class="card-title">Danh sách danh mục</h5>
+    <nb-card-header class="d-flex justify-content-between align-items-center">
+        <h5 class="card-title mb-0">Danh sách danh mục</h5>
+        <form class="d-flex" (ngSubmit)="onSearch()">
+            <input class="form-control me-2" type="search" placeholder="Tìm kiếm" [(ngModel)]="searchQuery"
+                name="searchQuery" aria-label="Search">
+            <button type="submit" nbButton status="primary">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </form>
     </nb-card-header>
     <nb-card-body>
         <div class="container">
@@ -25,16 +32,19 @@
                             <td class="align-middle text-center">
                                 <div class="btn-group d-flex justify-content-center">
                                     <button nbButton status="primary" type="button" class="btn-sm mx-1 btn-equal"
-                                        (click)="editCate(cate.id)" nbTooltip="Sửa dữ liệu"><i
+                                    *ngIf="!cate.isLocker" (click)="editCate(cate.id)" nbTooltip="Sửa dữ liệu"><i
                                             class="fa-solid fa-pen-to-square"></i></button>
                                     <button nbButton status="danger" type="button" class="btn-sm mx-1 btn-equal"
-                                        (click)="deleteCategories(cate.id)" nbTooltip="Xóa dữ liệu"><i
+                                        *ngIf="!cate.isLocker" (click)="deleteCategories(cate.id)" nbTooltip="Xóa dữ liệu"><i
                                             class="fa-solid fa-trash"></i></button>
                                 </div>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+                <ngx-paginator [apiUrl]="apiUrl" [current_page]="currentPage" [last_page]="totalPages"
+                    (dataList)="loadCategories($event)">
+                </ngx-paginator>
             </div>
         </div>
     </nb-card-body>

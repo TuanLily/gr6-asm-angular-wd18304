@@ -1,12 +1,14 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import Swal from 'sweetalert2';
 import { ICategory } from 'app/@core/interfaces/categories.interface';
 import { CategoryService } from 'app/@core/services/apis/categories.service';
 import { SpinnerService } from "../../../@theme/components/spinner/spinner.service";
 import { BehaviorSubject } from 'rxjs';
+import { API_BASE_URL, API_ENDPOINT } from 'app/@core/config/api-endpoint.config';
 
 
 @Component({
@@ -24,13 +26,28 @@ export class ListComponent implements OnInit {
   isAddingNewCate: boolean = true;
   isEditing: boolean = false;
 
+  apiUrl = API_BASE_URL + API_ENDPOINT.categories;
+  currentPage: number = 1;
+  totalPages: number;
+  searchQuery: string = '';
+
   Categories: ICategory[] = [];
  
 
-  constructor(private toastrService: NbToastrService, private Categorieservice: CategoryService, private spinner: SpinnerService) { }
+  constructor(
+    private toastrService: NbToastrService, 
+    private CategorieService: CategoryService, 
+    private spinner: SpinnerService,
+    private route: ActivatedRoute,
+    private router: Router,
+  ) { }
 
   ngOnInit(): void {
-    this.loadCategories();
+    this.route.queryParams.subscribe(params => {
+      const currentPage = params['page'] || 1;
+      this.loadCategories(currentPage);
+    });
+
     this.form = new FormGroup({
       name: new FormControl('', Validators.required),
       status: new FormControl('')
@@ -39,10 +56,42 @@ export class ListComponent implements OnInit {
   }
 
   //* Hàm load toàn bộ dự liệu ra giao diện
-  loadCategories(): void {
-    this.Categorieservice.getAllCategories().subscribe(Categories => {
-      this.Categories = Categories;
+  loadCategories(page: number): void {
+    this.spinner.show(); // Hiển thị spinner khi bắt đầu tải dữ liệu
+
+    this.CategorieService.getAllCategories(page, this.searchQuery).subscribe(data => {
+        this.spinner.hide(); // Ẩn spinner khi dữ liệu đã được tải xong
+
+        // Cập nhật danh sách các danh mục
+        this.Categories = data.categories.map(category => ({
+            ...category,
+            isLocker: category.name === 'Chưa phân loại' // Thêm cờ isLocker nếu tên của danh mục là "Locker"
+        }));
+
+        this.currentPage = data.currentPage;
+        this.totalPages = data.totalPages;
+
+        const queryParams: any = { page: page };
+
+        // Nếu có từ khóa tìm kiếm, thêm ?search vào đường dẫn Url
+        if (this.searchQuery && this.searchQuery.trim() !== '') {
+            queryParams.search = this.searchQuery;
+        }
+
+        // Cập nhật tham số ?page và ?search lên URL nếu khác với giá trị trước đó
+        this.router.navigate([], {
+            queryParams: queryParams,
+            replaceUrl: true
+        });
+    }, error => {
+        this.spinner.hide(); // Ẩn spinner nếu có lỗi xảy ra
+        console.error('Error loading categories:', error);
     });
+}
+
+  onSearch(): void {
+    // Gọi hàm loadProducts với trang hiện tại và từ khóa tìm kiếm
+    this.loadCategories(this.currentPage);
   }
 
   addCategories(): void {
@@ -50,39 +99,48 @@ export class ListComponent implements OnInit {
       this.toastrService.danger('Vui lòng nhập đủ dữ liệu và kiểm tra lại các trường!', 'Error');
       return;
     }
-
+  
     let cateData: ICategory;
-    
-      cateData = {
-        name: this.form.get('name').value,
-        status: this.form.get('status').value
-        
-      };
-      this.spinner.show
-   
+  
+    // Lấy giá trị từ form
+    const name = this.form.get('name').value;
+    let status = this.form.get('status').value;
+  
+    // Kiểm tra nếu status là rỗng thì gán giá trị mặc định là 0
+    if (!status) {
+      status = 0;
+    }
+  
+    cateData = {
+      name: name,
+      status: status
+    };
+  
+    this.spinner.show();
+  
     if (this.isEditing === true && !this.isAddingNewCate) {
       // Nếu đang trong chế độ sửa, cập nhật thông tin cho danh mục được chọn
       const cateId = this.newCate.id;
-      this.Categorieservice.updateCategories(cateId, cateData).subscribe(
+      this.CategorieService.updateCategories(cateId, cateData).subscribe(
         () => {
           this.toastrService.success('Cập nhật thành công!', 'Success');
           this.isEditing = false;
           this.spinner.hide();
-          this.loadCategories();
+          this.loadCategories(this.currentPage);
         },
         error => {
           this.toastrService.danger('Đã xảy ra lỗi khi cập nhật!', 'Error');
           console.error('Error updating Categories:', error);
-          this.spinner.hide()
+          this.spinner.hide();
         }
       );
     } else {
       // Nếu không đang trong chế độ sửa, thêm danh mục mới vào danh sách
-      this.Categorieservice.addCategories(cateData).subscribe(
+      this.CategorieService.addCategories(cateData).subscribe(
         () => {
           this.toastrService.success('Thêm mới thành công!', 'Success');
           this.spinner.hide();
-          this.loadCategories();
+          this.loadCategories(1);
         },
         error => {
           this.toastrService.danger('Đã xảy ra lỗi khi thêm !', 'Error');
@@ -93,6 +151,7 @@ export class ListComponent implements OnInit {
     }
     this.form.reset();
   }
+  
 
   editCate(CateId: number): void {
     if (this.isEditing) {
@@ -124,7 +183,7 @@ export class ListComponent implements OnInit {
       cancelButtonText: 'Hủy bỏ'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.Categorieservice.deleteCategories(CategoriesId).subscribe(
+        this.CategorieService.deleteCategories(CategoriesId).subscribe(
           () => {
             const CategoriesIndex = this.Categories.findIndex(Categories => Categories.id === CategoriesId);
             if (CategoriesIndex !== -1) {

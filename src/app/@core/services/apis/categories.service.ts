@@ -26,9 +26,9 @@ export class CategoryService extends ApiService {
       super(_http);
   }
 
-  getAllCategories(): Observable<any> {
-    
-      return this.get(API_BASE_URL + API_ENDPOINT.categories);
+  getAllCategories(page: number, search: string = ''): Observable<any> {
+    const params = { page: page.toString(), search: search };
+      return this.get(API_BASE_URL + API_ENDPOINT.categories, params);
   }
 
   addCategories(Categories: ICategory ): Observable<any > {
