@@ -39,7 +39,7 @@ const routes: Routes = [{
       path: 'bills',
       loadChildren: () => import('./bills/bills.module')
         .then(m => m.BillsModule),
-      data: { breadcrumb: 'Mã giảm giá' },
+      data: { breadcrumb: 'Đơn hàng' },
     },
     {
       path: 'customers',

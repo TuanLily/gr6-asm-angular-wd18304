@@ -27,7 +27,7 @@
                   <tr *ngFor="let voucher of vouchers, let index = index">
                       <td class="align-middle">{{ index + 1 }}</td>
                       <td class="align-middle">{{ voucher.voucher_code }}</td>
-                      <td class="align-middle">{{ voucher.discount_rate }}đ</td>
+                      <td class="align-middle">{{ voucher.discount_rate }} %</td>
                       <td class="align-middle">
                           <div>Bắt đầu: {{ voucher.valid_from | date:'dd/MM/yyyy' }}</div>
                           <div>Kết thúc: {{ voucher.valid_to | date:'dd/MM/yyyy' }}</div>

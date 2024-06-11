@@ -5,5 +5,5 @@ export interface IBill {
   qty: number;
   total: number;
   employee_id: string;
-  voucher_id?: string;
+  voucher_code?: string;
 }

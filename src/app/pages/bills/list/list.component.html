@@ -29,10 +29,10 @@
             <td class="align-middle">{{ i + 1 }}</td>
             <td class="align-middle">{{ getProductName(bill.product_id)?.name }}</td>
             <td class="align-middle">{{ bill.qty }}</td>
-            <td class="align-middle">{{ bill.total }}</td>
+            <td class="align-middle">{{ formatCurrency(bill.total) }}</td>
             <td class="align-middle">{{ bill.customer_name }}</td>
             <td class="align-middle">{{ getEmployeeName(bill.employee_id) }}</td>
-            <td class="align-middle">{{ bill.voucher_id }}</td>
+            <td class="align-middle">{{ bill.voucher_code }}</td>
             <td class="align-middle text-center">
               <div class="btn-group d-flex justify-content-center">
                 <button nbButton status="primary" type="button" class="btn-sm mx-1 btn-equal"
@@ -110,20 +110,27 @@
       </div>
 
       <div class="row">
-        <div class="col-md-6">
-          <div class="form-group my-3">
-            <label for="total">Tổng tiền<span class="spot">*</span>:</label>
-            <input type="number" class="form-control" id="total" formControlName="total">
-            <div *ngIf="form.get('total').invalid && form.get('total').touched" class="text-danger">
-              <small *ngIf="form.get('total').hasError('required')">Vui lòng nhập tổng tiền.</small>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div class="form-group my-3">
             <label for="voucherId">Mã voucher:</label>
-            <input type="text" class="form-control" id="voucherId" formControlName="voucher_id">
+            <input type="text" class="form-control" id="voucherCode" formControlName="voucher_code" placeholder="Nhập voucher giảm giá">
           </div>
+        </div>
+      </div>
+
+      <hr />
+
+      <div class="row">
+        <div class="col-md-12">
+          <p class="my-3">
+            Tạm tính tiền hàng: <span>{{ formatCurrency(provisionalTotal) }}</span>
+          </p>
+          <p class="my-3">
+            Tiền giảm của voucher (nếu có): <span>{{ formatCurrency(discountAmount) }}</span>
+          </p>
+          <p class="my-3 font-weight-bold">
+            <strong> Thành tiền: <span>{{ formatCurrency(finalTotal) }}</span> </strong>
+          </p>
         </div>
       </div>
 

@@ -212,4 +212,8 @@ export class ListComponent implements OnInit {
       this.formElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
+
+  formatCurrency(value: number): string {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ' đ';
+  }
 }

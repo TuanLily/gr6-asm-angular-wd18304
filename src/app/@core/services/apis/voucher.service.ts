@@ -38,4 +38,16 @@ export class VoucherService extends ApiService {
         const url = `${API_BASE_URL + API_ENDPOINT.vouchers}/${voucherId}`;
         return this.delete<void>(url);
     }
+
+    getVoucherByCode(code: string): Observable<any> {
+      const params = new HttpParams().set('code', code);
+      const url = `${API_BASE_URL}${API_ENDPOINT.vouchers}/code`;
+      return this._http.get<any>(url, { params })
+          .pipe(
+              catchError(error => {
+                  // console.error('Error fetching voucher by code:', error);
+                  return throwError(error);
+              })
+          );
+  }
 }

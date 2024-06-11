@@ -32,12 +32,4 @@ export class BillService extends ApiService {
     const url = `${API_BASE_URL + API_ENDPOINT.bills}/${billId}`;
     return this.delete<void>(url);
   }
-
-  getAllProducts(): Observable<any> {
-    return this._http.get<any>(`${API_BASE_URL}${API_ENDPOINT.product}`);
-  }
-
-  getAllEmployees(): Observable<any> {
-    return this.get<any>(API_BASE_URL + API_ENDPOINT.employees);
-  }
 }
