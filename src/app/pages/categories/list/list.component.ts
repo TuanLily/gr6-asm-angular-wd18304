@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NbToastrService } from '@nebular/theme';
+import { NbThemeService, NbToastrService } from '@nebular/theme';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -32,15 +32,28 @@ export class ListComponent implements OnInit {
   searchQuery: string = '';
 
   Categories: ICategory[] = [];
- 
+
+  themes = [
+    { value: 'default', name: 'Light' },
+    { value: 'dark', name: 'Dark' },
+  ];
+
+  currentTheme = 'default';
+
 
   constructor(
-    private toastrService: NbToastrService, 
-    private CategorieService: CategoryService, 
+    private toastrService: NbToastrService,
+    private CategorieService: CategoryService,
+    private themeService: NbThemeService,
     private spinner: SpinnerService,
     private route: ActivatedRoute,
     private router: Router,
-  ) { }
+  ) {
+    this.themeService.onThemeChange()
+      .subscribe(theme => {
+        this.currentTheme = theme.name;
+      });
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -55,39 +68,40 @@ export class ListComponent implements OnInit {
 
   }
 
+
   //* Hàm load toàn bộ dự liệu ra giao diện
   loadCategories(page: number): void {
     this.spinner.show(); // Hiển thị spinner khi bắt đầu tải dữ liệu
 
     this.CategorieService.getAllCategories(page, this.searchQuery).subscribe(data => {
-        this.spinner.hide(); // Ẩn spinner khi dữ liệu đã được tải xong
+      this.spinner.hide(); // Ẩn spinner khi dữ liệu đã được tải xong
 
-        // Cập nhật danh sách các danh mục
-        this.Categories = data.categories.map(category => ({
-            ...category,
-            isLocker: category.name === 'Chưa Phân Loại' // Thêm cờ isLocker nếu tên của danh mục là "Locker"
-        }));
+      // Cập nhật danh sách các danh mục
+      this.Categories = data.categories.map(category => ({
+        ...category,
+        isLocker: category.name === 'Chưa Phân Loại' // Thêm cờ isLocker nếu tên của danh mục là "Locker"
+      }));
 
-        this.currentPage = data.currentPage;
-        this.totalPages = data.totalPages;
+      this.currentPage = data.currentPage;
+      this.totalPages = data.totalPages;
 
-        const queryParams: any = { page: page };
+      const queryParams: any = { page: page };
 
-        // Nếu có từ khóa tìm kiếm, thêm ?search vào đường dẫn Url
-        if (this.searchQuery && this.searchQuery.trim() !== '') {
-            queryParams.search = this.searchQuery;
-        }
+      // Nếu có từ khóa tìm kiếm, thêm ?search vào đường dẫn Url
+      if (this.searchQuery && this.searchQuery.trim() !== '') {
+        queryParams.search = this.searchQuery;
+      }
 
-        // Cập nhật tham số ?page và ?search lên URL nếu khác với giá trị trước đó
-        this.router.navigate([], {
-            queryParams: queryParams,
-            replaceUrl: true
-        });
+      // Cập nhật tham số ?page và ?search lên URL nếu khác với giá trị trước đó
+      this.router.navigate([], {
+        queryParams: queryParams,
+        replaceUrl: true
+      });
     }, error => {
-        this.spinner.hide(); // Ẩn spinner nếu có lỗi xảy ra
-        console.error('Error loading categories:', error);
+      this.spinner.hide(); // Ẩn spinner nếu có lỗi xảy ra
+      console.error('Error loading categories:', error);
     });
-}
+  }
 
   onSearch(): void {
     // Gọi hàm loadProducts với trang hiện tại và từ khóa tìm kiếm
@@ -99,25 +113,25 @@ export class ListComponent implements OnInit {
       this.toastrService.danger('Vui lòng nhập đủ dữ liệu và kiểm tra lại các trường!', 'Error');
       return;
     }
-  
+
     let cateData: ICategory;
-  
+
     // Lấy giá trị từ form
     const name = this.form.get('name').value;
     let status = this.form.get('status').value;
-  
+
     // Kiểm tra nếu status là rỗng thì gán giá trị mặc định là 0
     if (!status) {
       status = 0;
     }
-  
+
     cateData = {
       name: name,
       status: status
     };
-  
+
     this.spinner.show();
-  
+
     if (this.isEditing === true && !this.isAddingNewCate) {
       // Nếu đang trong chế độ sửa, cập nhật thông tin cho danh mục được chọn
       const cateId = this.newCate.id;
@@ -151,7 +165,7 @@ export class ListComponent implements OnInit {
     }
     this.form.reset();
   }
-  
+
 
   editCate(CateId: number): void {
     if (this.isEditing) {
@@ -210,11 +224,11 @@ export class ListComponent implements OnInit {
 
   scrollFormIntoView() {
     if (this.formElement) {
-        this.formElement.nativeElement.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
-        });
+      this.formElement.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
     }
-}
+  }
 
 }

@@ -1,4 +1,4 @@
-<nb-card>
+<nb-card [ngClass]="currentTheme">
     <nb-card-header class="d-flex justify-content-between align-items-center">
         <h5 class="card-title mb-0">Danh sách danh mục</h5>
         <form class="d-flex" (ngSubmit)="onSearch()">
@@ -23,11 +23,11 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let cate of Categories; let i = index">
-                            <th class="align-middle" scope="row">{{ i + 1 }}</th>
+                            <td class="align-middle">{{ i + 1 }}</td>
                             <td class="align-middle">{{ cate.name }}</td>
-                            <td class="align-middle">
-                                <span *ngIf="cate.status === 0" class="text-success">Đang hoạt động</span>
-                                <span *ngIf="cate.status === 1" class="text-danger">Đã ngừng hoạt động</span>
+                            <td class="align-middle text-center">
+                                <span *ngIf="cate.status === 0" class="badge badge-success">Đang hoạt động</span>
+                                <span *ngIf="cate.status === 1" class="badge badge-danger">Đã ngừng hoạt động</span>
                             </td>
                             <td class="align-middle text-center">
                                 <div class="btn-group d-flex justify-content-center">
@@ -51,7 +51,7 @@
 </nb-card>
 
 <!-- Form để thêm danh mục mới -->
-<nb-card class="my-lg-2">
+<nb-card class="my-lg-2" [ngClass]="currentTheme">
     <nb-card-header>
         <h5 class="card-title">Thêm / Cập nhật danh mục</h5>
     </nb-card-header>

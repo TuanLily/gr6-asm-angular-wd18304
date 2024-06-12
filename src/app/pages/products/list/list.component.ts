@@ -1,6 +1,6 @@
 // list.component.ts
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NbToastrService } from '@nebular/theme';
+import { NbThemeService, NbToastrService } from '@nebular/theme';
 import { FormGroup, FormControl, Validators, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -40,14 +40,28 @@ export class ListComponent implements OnInit {
 
   oldImages: string = '';
 
+  themes = [
+    { value: 'default', name: 'Light' },
+    { value: 'dark', name: 'Dark' },
+  ];
+
+  currentTheme = 'default';
+
   constructor(
     private toastrService: NbToastrService,
     private productService: ProductService,
     private categoryService: CategoryService,
+    private themeService: NbThemeService,
     private spinner: SpinnerService,
     private router: Router,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    this.themeService.onThemeChange()
+      .subscribe(theme => {
+        this.currentTheme = theme.name;
+      });
+  }
+
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -124,16 +138,16 @@ export class ListComponent implements OnInit {
     this.categoryService.getAllCategories().subscribe(response => {
       // Giả sử response trả về một đối tượng với thuộc tính `categories`
       const categories = response.categories;
-  
+
       // Lọc các danh mục có status = 0
       this.categoryData = categories.filter(category => category.status === 0);
     },
-    error => {
-      console.error('Error loading categories:', error);
-      this.toastrService.danger('Đã xảy ra lỗi khi tải danh mục!', 'Error');
-    });
+      error => {
+        console.error('Error loading categories:', error);
+        this.toastrService.danger('Đã xảy ra lỗi khi tải danh mục!', 'Error');
+      });
   }
-  
+
 
   //* Hàm xử lý tìm kiếm sản phẩm
   onSearch(): void {
@@ -148,7 +162,7 @@ export class ListComponent implements OnInit {
       this.toastrService.danger('Vui lòng nhập đủ dữ liệu và kiểm tra lại các trường!', 'Lỗi');
       return;
     }
-  
+
     const imageValue = this.form.get('image').value;
     const productData: IProduct = {
       name: this.form.get('name').value,
@@ -158,13 +172,13 @@ export class ListComponent implements OnInit {
       status: this.form.get('status').value,
       category_id: this.form.get('category_id').value
     };
-  
+
     this.spinner.show();
-  
+
     const productServiceOption = this.isEditing && !this.isAddingNewProduct ?
       this.productService.updateProduct(this.newProduct.id, productData) :
       this.productService.addProduct(productData);
-  
+
     productServiceOption.subscribe(
       () => {
         const successMessage = this.isEditing && !this.isAddingNewProduct ? 'Cập nhật thành công!' : 'Thêm mới thành công!';
@@ -180,10 +194,10 @@ export class ListComponent implements OnInit {
         this.spinner.hide();
       }
     );
-  
+
     this.form.reset();
   }
-  
+
 
   //* Hàm xử lý dữ liệu đưa lên form đề cập nhật sản phẩm
   editProduct(productId: number): void {

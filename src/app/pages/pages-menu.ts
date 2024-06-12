@@ -11,14 +11,8 @@ export const MENU_ITEMS: NbMenuItem[] = [
     link: '/pages/dashboard',
   },
   {
-    title: 'Sản phẩm',
-    icon: 'archive-outline',
-    children: [
-      {
-        title: 'Danh Sách',
-        link: '/pages/products/list',
-      },
-    ],
+    title: 'Quản Lý',
+    group: true,
   },
   {
     title: 'Danh Mục',
@@ -27,6 +21,16 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Danh Sách',
         link: '/pages/categories/list',
+      },
+    ],
+  },
+  {
+    title: 'Sản phẩm',
+    icon: 'archive-outline',
+    children: [
+      {
+        title: 'Danh Sách',
+        link: '/pages/products/list',
       },
     ],
   },
@@ -51,18 +55,8 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
-    title: 'Tài khoản khách hàng',
-    icon: 'person-outline',
-    children: [
-      {
-        title: 'Danh Sách',
-        link: '/pages/customers/list',
-      },
-    ],
-  },
-  {
     title: 'Đánh giá',
-    icon: 'message-square-outline',
+    icon: 'message-circle-outline',
     children: [
       {
         title: 'Danh Sách',
@@ -81,22 +75,40 @@ export const MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
+    title: 'Tài Khoản',
+    group: true,
+  },
+  {
+    title: 'Tài khoản khách hàng',
+    icon: 'person-outline',
+    children: [
+      {
+        title: 'Danh Sách',
+        link: '/pages/customers/list',
+      },
+    ],
+  },
+  {
+    title: 'Tài khoản nhân viên',
+    icon: 'person-add-outline',
+    children: [
+      {
+        title: 'Danh Sách',
+        link: '/pages/employees/list',
+      },
+    ],
+  },
+  {
+    title: 'Quyền Hạn',
+    group: true,
+  },
+  {
     title: 'Vai trò',
     icon: 'people-outline',
     children: [
       {
         title: 'Danh Sách',
         link: '/pages/roles/list',
-      },
-    ],
-  },
-  {
-    title: 'Tài Khoản Nhân Viên',
-    icon: 'people-outline',
-    children: [
-      {
-        title: 'Danh Sách',
-        link: '/pages/employees/list',
       },
     ],
   },

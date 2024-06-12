@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NbToastrService } from '@nebular/theme';
+import { NbThemeService, NbToastrService } from '@nebular/theme';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -20,7 +20,7 @@ import { API_BASE_URL, API_ENDPOINT } from 'app/@core/config/api-endpoint.config
 export class ListComponent implements OnInit {
   @ViewChild('formElement') formElement: ElementRef;
   form: FormGroup;
-  newEmployee: any = { name: '', username: '', phone: '', email: '', address: '', password: '',  salary: '' };
+  newEmployee: any = { name: '', username: '', phone: '', email: '', address: '', password: '', salary: '' };
 
   // Biến để xác định trạng thái hiện tại: true = đang thêm mới, false = đang sửa
   isAddingNewEmployee: boolean = true;
@@ -33,35 +33,50 @@ export class ListComponent implements OnInit {
   totalPages: number;
   searchQuery: string = '';
 
+
+  themes = [
+    { value: 'default', name: 'Light' },
+    { value: 'dark', name: 'Dark' },
+  ];
+
+  currentTheme = 'default';
+
   constructor(
-    private toastrService: NbToastrService, 
-    private employeeService: EmployeeService, 
+    private toastrService: NbToastrService,
+    private employeeService: EmployeeService,
+    private themeService: NbThemeService,
     private spinner: SpinnerService,
     private router: Router,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    this.themeService.onThemeChange()
+      .subscribe(theme => {
+        this.currentTheme = theme.name;
+      });
+  }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params =>{
+    this.route.queryParams.subscribe(params => {
       const currencyPage = params['page'] || 1;
       this.loadEmployees(currencyPage);
     })
-    
 
-      this.form = new FormGroup({
-        name: new FormControl('', Validators.required),
-        username: new FormControl('', Validators.required),
-        phone: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10), this.phoneValidator]),
-        email: new FormControl('', [Validators.required, Validators.email]),
-        address: new FormControl('', [Validators.required]),
-        password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-        salary: new FormControl('', [Validators.required])
-      });
+
+    this.form = new FormGroup({
+      name: new FormControl('', Validators.required),
+      username: new FormControl('', Validators.required),
+      phone: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10), this.phoneValidator]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      address: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+      salary: new FormControl('', [Validators.required])
+    });
   }
-  
-  scrollFormIntoView(){
-    if(this.formElement){
-      this.formElement.nativeElement.scrollIntoView({ behavior: 'smooth' , block: 'start'});
+
+
+  scrollFormIntoView() {
+    if (this.formElement) {
+      this.formElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 
@@ -80,7 +95,7 @@ export class ListComponent implements OnInit {
       return 'Số điện thoại phải là số';
     } else if (phoneControl?.hasError('maxlength')) {
       return 'Số điện thoại không lớn hơn 10 số';
-    } else if (phoneControl?.hasError('minlength')) { 
+    } else if (phoneControl?.hasError('minlength')) {
       return 'Số điện thoại không ít hơn 10 số';
     }
     return null;
@@ -114,7 +129,7 @@ export class ListComponent implements OnInit {
         queryParams: queryParams,
         replaceUrl: true
       });
-      
+
     });
   }
 
@@ -137,7 +152,7 @@ export class ListComponent implements OnInit {
     const addressValue = this.form.get('address').value;
     const passwordValue = this.form.get('password').value;
     const salaryValue = this.form.get('salary').value;
-  
+
     if (this.isEditing && !this.isAddingNewEmployee && !usernameValue && !phoneValue && !emailValue && !addressValue && !passwordValue && !salaryValue) {
       // Nếu là chế độ sửa và không có giá trị mới được nhập, sử dụng lại giá trị cũ
       employeeData = {
@@ -161,7 +176,7 @@ export class ListComponent implements OnInit {
         salary: salaryValue
       };
     }
-  
+
     if (this.isEditing === true && !this.isAddingNewEmployee) {
       // Nếu đang trong chế độ sửa, cập nhật thông tin cho nhân viên được chọn
       const employeeId = this.newEmployee.id;

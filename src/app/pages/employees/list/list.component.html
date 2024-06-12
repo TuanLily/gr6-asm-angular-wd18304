@@ -1,4 +1,4 @@
-<nb-card>
+<nb-card [ngClass]="currentTheme">
     <nb-card-header class="d-flex justify-content-between align-items-center">
         <h5 class="card-title mb-8">Danh sách nhân viên</h5>
         <form class="d-flex" (ngSubmit)="onSearch()">
@@ -51,7 +51,7 @@
     </nb-card-body>
 </nb-card>
 
-<nb-card class="mt-5">
+<nb-card class="mt-5" [ngClass]="currentTheme">
     <nb-card-header>
         <h5 class="card-title">Thêm / Cập nhật nhân viên</h5>
     </nb-card-header>

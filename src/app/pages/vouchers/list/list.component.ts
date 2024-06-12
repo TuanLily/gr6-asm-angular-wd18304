@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NbToastrService } from '@nebular/theme';
+import { NbThemeService, NbToastrService } from '@nebular/theme';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -32,13 +32,26 @@ export class ListComponent implements OnInit {
   totalPages: number;
   searchQuery: string = '';
 
+  themes = [
+    { value: 'default', name: 'Light' },
+    { value: 'dark', name: 'Dark' },
+  ];
+
+  currentTheme = 'default';
+
   constructor(
     private toastrService: NbToastrService,
     private voucherService: VoucherService,
+    private themeService: NbThemeService,
     private spinner: SpinnerService,
     private router: Router,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    this.themeService.onThemeChange()
+      .subscribe(theme => {
+        this.currentTheme = theme.name;
+      });
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {

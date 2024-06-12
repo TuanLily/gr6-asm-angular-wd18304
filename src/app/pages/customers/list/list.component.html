@@ -1,130 +1,135 @@
-<nb-card>
+<nb-card [ngClass]="currentTheme">
   <nb-card-header class="d-flex justify-content-between align-items-center">
     <h5 class="card-title mb-0">Danh sách khách hàng</h5>
     <form class="d-flex" (ngSubmit)="onSearch()">
-      <input class="form-control me-2" type="search" placeholder="Tìm kiếm" [(ngModel)]="searchQuery"
-          name="searchQuery" aria-label="Search">
+      <input class="form-control me-2" type="search" placeholder="Tìm kiếm" [(ngModel)]="searchQuery" name="searchQuery"
+        aria-label="Search">
       <button type="submit" nbButton status="primary">
-          <i class="fa-solid fa-magnifying-glass"></i>
+        <i class="fa-solid fa-magnifying-glass"></i>
       </button>
-  </form>
+    </form>
   </nb-card-header>
-<nb-card-body>
-<div class="table-responsive">
-  <table class="table table-bordered table-hover">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Tên Khách hàng</th>
-        <th>Tên đăng nhập</th>
-        <th>Email</th>
-        <th>SĐT</th>
-        <th>Địa chỉ</th>
-        <th>Thao tác</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let customer of customers, let i = index">
-        <td class="align-middle">{{i+1}}</td>
-        <td class="align-middle">{{customer.name}}</td>
-        <td class="align-middle">{{customer.username}}</td>
-        <td class="align-middle">{{customer.email}}</td>
-        <td class="align-middle">{{customer.tel}}</td>
-        <td class="align-middle">{{customer.address}}</td>
-        <td class="align-middle text-center"><div class="btn-group">
-          <button nbButton status="primary" type="button" class="btn-sm mr-2 mx-1"
-          (click)="editCustomer(customer.id)" nbTooltip="Sửa dữ liệu">
-          <i class="fa-solid fa-pen-to-square"></i></button>
-          <button nbButton status="danger" type="button" class="btn-sm"
-          (click)="deleteCustomer(customer.id)" nbTooltip="Xóa dữ liệu">
-          <i class="fa-solid fa-trash"></i></button>
-        </div></td>
-      </tr>
-    </tbody>
-  </table>
-  <ngx-paginator [apiUrl]="apiUrl" [current_page]="currentPage" [last_page]="totalPages"
-  (dataList)="loadCustomers($event)">
-</ngx-paginator>
-</div>
-</nb-card-body>
+  <nb-card-body>
+    <div class="table-responsive">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Tên Khách hàng</th>
+            <th>Tên đăng nhập</th>
+            <th>Email</th>
+            <th>SĐT</th>
+            <th>Địa chỉ</th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let customer of customers, let i = index">
+            <td class="align-middle">{{i+1}}</td>
+            <td class="align-middle">{{customer.name}}</td>
+            <td class="align-middle">{{customer.username}}</td>
+            <td class="align-middle">{{customer.email}}</td>
+            <td class="align-middle">{{customer.tel}}</td>
+            <td class="align-middle">{{customer.address}}</td>
+            <td class="align-middle text-center">
+              <div class="btn-group">
+                <button nbButton status="primary" type="button" class="btn-sm mr-2 mx-1"
+                  (click)="editCustomer(customer.id)" nbTooltip="Sửa dữ liệu">
+                  <i class="fa-solid fa-pen-to-square"></i></button>
+                <button nbButton status="danger" type="button" class="btn-sm" (click)="deleteCustomer(customer.id)"
+                  nbTooltip="Xóa dữ liệu">
+                  <i class="fa-solid fa-trash"></i></button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ngx-paginator [apiUrl]="apiUrl" [current_page]="currentPage" [last_page]="totalPages"
+        (dataList)="loadCustomers($event)">
+      </ngx-paginator>
+    </div>
+  </nb-card-body>
 </nb-card>
 
 <!-- Thêm / Cập nhật khách hàng -->
-<nb-card class="mt-3">
+<nb-card class="mt-3" [ngClass]="currentTheme">
   <nb-card-header>
-      <h5 class="card-title">Thêm / Cập nhật khách hàng</h5>
+    <h5 class="card-title">Thêm / Cập nhật khách hàng</h5>
   </nb-card-header>
   <nb-card-body>
-      <form [formGroup]="form" (ngSubmit)="addCustomer()" #customerForm="ngForm" #formElement>
-        <div class="row">
+    <form [formGroup]="form" (ngSubmit)="addCustomer()" #customerForm="ngForm" #formElement>
+      <div class="row">
         <div class="col-md-6">
-        <div class="form-group my-3">
-              <label for="customerName" class="my-1">Tên khách hàng<span class="spot">*</span>:</label>
-              <input type="text" class="form-control" id="customerName" [(ngModel)]="newCustomer.name"
-                     formControlName="name">
-              <div *ngIf="form.get('name').invalid && form.get('name').touched" class="text-danger">
-                  <small *ngIf="form.get('name').hasError('required')">Vui lòng nhập tên khách hàng.</small>
-              </div>
-          </div>
-          </div>
-
-            <div class="col-md-6">
           <div class="form-group my-3">
-              <label for="customerUsername" class="my-1">Tên tài khoản khách hàng<span class="spot">*</span>:</label>
-              <input type="text" class="form-control" id="customerUsername" [(ngModel)]="newCustomer.username"
-                     formControlName="username">
-              <div *ngIf="form.get('username').invalid && form.get('username').touched" class="text-danger">
-                  <small *ngIf="form.get('username').hasError('required')">Vui lòng nhập tên tài khoản khách hàng.</small>
-                  <small *ngIf="form.get('username').hasError('minLength')">Tên tài khoản không được dưới 6 kí tự.</small>
-              </div>
+            <label for="customerName" class="my-1">Tên khách hàng<span class="spot">*</span>:</label>
+            <input type="text" class="form-control" id="customerName" [(ngModel)]="newCustomer.name"
+              formControlName="name">
+            <div *ngIf="form.get('name').invalid && form.get('name').touched" class="text-danger">
+              <small *ngIf="form.get('name').hasError('required')">Vui lòng nhập tên khách hàng.</small>
+            </div>
           </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group my-3">
+            <label for="customerUsername" class="my-1">Tên tài khoản khách hàng<span class="spot">*</span>:</label>
+            <input type="text" class="form-control" id="customerUsername" [(ngModel)]="newCustomer.username"
+              formControlName="username">
+            <div *ngIf="form.get('username').invalid && form.get('username').touched" class="text-danger">
+              <small *ngIf="form.get('username').hasError('required')">Vui lòng nhập tên tài khoản khách hàng.</small>
+              <small *ngIf="form.get('username').hasError('minLength')">Tên tài khoản không được dưới 6 kí tự.</small>
+            </div>
           </div>
+        </div>
       </div>
       <div class="row">
         <div class="col-md-6">
           <div class="form-group my-3">
-              <label for="customerEmail" class="my-1">Email khách hàng<span class="spot">*</span>:</label>
-              <input type="email" class="form-control" id="customerEmail" [(ngModel)]="newCustomer.email"
-                     formControlName="email">
-              <div *ngIf="form.get('email').invalid && form.get('email').touched" class="text-danger">
-                  <small *ngIf="form.get('email').hasError('required')">Vui lòng nhập email khách hàng.</small>
-                  <small *ngIf="form.get('email').hasError('email')">Email không hợp lệ.</small>
-              </div>
-          </div>
-          </div>
-          <div class="col-md-6">
-          <div class="form-group my-3">
-              <label for="customerTel" class="my-1">Số điện thoại khách hàng<span class="spot">*</span>:</label>
-              <input type="text" class="form-control" id="customerTel" [(ngModel)]="newCustomer.tel"
-                     formControlName="tel">
-              <div *ngIf="form.get('tel').invalid && form.get('tel').touched" class="text-danger">
-                  <small *ngIf="form.get('tel').hasError('required')">Vui lòng nhập số điện thoại khách hàng. </small>
-                  <small *ngIf="form.get('tel').hasError('numeric') && form.get('tel').touched">Số điện thoại chỉ được chứa số. </small>
-                  <small *ngIf="form.get('tel').hasError('minlength') && form.get('tel').touched">Số điện thoại phải có ít nhất 10 ký tự. </small>
-                  <small *ngIf="form.get('tel').hasError('maxlength') && form.get('tel').touched">Số điện thoại không được quá 11 ký tự. </small>
-                </div>
-          </div>
+            <label for="customerEmail" class="my-1">Email khách hàng<span class="spot">*</span>:</label>
+            <input type="email" class="form-control" id="customerEmail" [(ngModel)]="newCustomer.email"
+              formControlName="email">
+            <div *ngIf="form.get('email').invalid && form.get('email').touched" class="text-danger">
+              <small *ngIf="form.get('email').hasError('required')">Vui lòng nhập email khách hàng.</small>
+              <small *ngIf="form.get('email').hasError('email')">Email không hợp lệ.</small>
+            </div>
           </div>
         </div>
+        <div class="col-md-6">
+          <div class="form-group my-3">
+            <label for="customerTel" class="my-1">Số điện thoại khách hàng<span class="spot">*</span>:</label>
+            <input type="text" class="form-control" id="customerTel" [(ngModel)]="newCustomer.tel"
+              formControlName="tel">
+            <div *ngIf="form.get('tel').invalid && form.get('tel').touched" class="text-danger">
+              <small *ngIf="form.get('tel').hasError('required')">Vui lòng nhập số điện thoại khách hàng. </small>
+              <small *ngIf="form.get('tel').hasError('numeric') && form.get('tel').touched">Số điện thoại chỉ được chứa
+                số. </small>
+              <small *ngIf="form.get('tel').hasError('minlength') && form.get('tel').touched">Số điện thoại phải có ít
+                nhất 10 ký tự. </small>
+              <small *ngIf="form.get('tel').hasError('maxlength') && form.get('tel').touched">Số điện thoại không được
+                quá 11 ký tự. </small>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="row">
-          <div class="form-group my-3">
-              <label for="customerAddress" class="my-1">Địa chỉ khách hàng<span class="spot">*</span>:</label>
-              <input type="text" class="form-control" id="customerAddress" [(ngModel)]="newCustomer.address"
-                     formControlName="address">
-              <div *ngIf="form.get('address').invalid && form.get('address').touched" class="text-danger">
-                  <small *ngIf="form.get('address').hasError('required')">Vui lòng nhập địa chỉ khách hàng.</small>
-              </div>
+        <div class="form-group my-3">
+          <label for="customerAddress" class="my-1">Địa chỉ khách hàng<span class="spot">*</span>:</label>
+          <input type="text" class="form-control" id="customerAddress" [(ngModel)]="newCustomer.address"
+            formControlName="address">
+          <div *ngIf="form.get('address').invalid && form.get('address').touched" class="text-danger">
+            <small *ngIf="form.get('address').hasError('required')">Vui lòng nhập địa chỉ khách hàng.</small>
           </div>
         </div>
-        <button nbButton type="submit" class="float-end" [disabled]="!form.valid" status="success"
+      </div>
+      <button nbButton type="submit" class="float-end" [disabled]="!form.valid" status="success"
         nbTooltip="Lưu dữ liệu">
         <i class="fa-solid fa-check"></i>
-    </button>
-          <!-- Nút hủy chỉnh sửa -->
-          <button nbButton status="warning" type="button" class="float-end mx-2" (click)="Reset()"
-                  nbTooltip="Reset dữ liệu">
-              <i class="fas fa-rotate-left"></i>
-          </button>
-      </form>
+      </button>
+      <!-- Nút hủy chỉnh sửa -->
+      <button nbButton status="warning" type="button" class="float-end mx-2" (click)="Reset()"
+        nbTooltip="Reset dữ liệu">
+        <i class="fas fa-rotate-left"></i>
+      </button>
+    </form>
   </nb-card-body>
 </nb-card>

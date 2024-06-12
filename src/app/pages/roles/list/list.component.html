@@ -1,4 +1,4 @@
-<nb-card>
+<nb-card [ngClass]="currentTheme">
     <nb-card-header class="d-flex justify-content-between align-items-center">
         <h5 class="card-title mb-0">Danh sách vai trò</h5>
         <form class="d-flex" (ngSubmit)="onSearch()">
@@ -24,11 +24,11 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let role of Roles; let i = index">
-                            <th class="align-middle" scope="row">{{ i + 1 }}</th>
+                            <td class="align-middle">{{ i + 1 }}</td>
                             <td class="align-middle">{{ role.name }}</td>
-                            <td class="align-middle">
-                                <span *ngIf="role.status === 0" class="text-success">Đang hoạt động</span>
-                                <span *ngIf="role.status === 1" class="text-danger">Đã ngừng hoạt động</span>
+                            <td class="align-middle text-center">
+                                <span *ngIf="role.status === 0" class="badge badge-success">Đang hoạt động</span>
+                                <span *ngIf="role.status === 1" class="badge badge-danger">Đã ngừng hoạt động</span>
                             </td>
                             <td class="align-middle text-center">
                                 <div class="btn-group d-flex justify-content-center">
@@ -52,7 +52,7 @@
 </nb-card>
 
 <!-- Form để thêm vai trò mới -->
-<nb-card class="my-lg-2">
+<nb-card class="my-lg-2"  [ngClass]="currentTheme">
     <nb-card-header>
         <h5 class="card-title">Thêm / Cập nhật vai trò</h5>
     </nb-card-header>
@@ -61,7 +61,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group my-3">
-                        <label for="RoleName" class=" my-1">Tên vai trò:</label>
+                        <label for="RoleName" class=" my-1">Tên vai trò<span class="spot">*</span>:</label>
                         <input type="text" class="form-control" id="RoleName" formControlName="name"
                             [(ngModel)]="newRole.name">
                         <div *ngIf="form.get('name').invalid && form.get('name').touched" class="text-danger">

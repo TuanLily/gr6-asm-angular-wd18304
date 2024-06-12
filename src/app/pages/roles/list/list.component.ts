@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NbToastrService } from '@nebular/theme';
+import { NbThemeService, NbToastrService } from '@nebular/theme';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -33,15 +33,28 @@ export class listComponent {
   searchQuery: string = '';
 
   Roles: IRole[] = [];
- 
+
+  themes = [
+    { value: 'default', name: 'Light' },
+    { value: 'dark', name: 'Dark' },
+  ];
+
+  currentTheme = 'default';
+
 
   constructor(
-    private toastrService: NbToastrService, 
-    private RoleService: RoleService, 
+    private toastrService: NbToastrService,
+    private RoleService: RoleService,
+    private themeService: NbThemeService,
     private spinner: SpinnerService,
     private router: Router,
     private route: ActivatedRoute
-  ) { }
+  ) {
+    this.themeService.onThemeChange()
+      .subscribe(theme => {
+        this.currentTheme = theme.name;
+      });
+  }
 
   ngOnInit(): void {
 
@@ -49,16 +62,16 @@ export class listComponent {
       const currentPage = params['page'] || 1;
       this.loadRoles(currentPage);
     });
-    
+
     this.form = new FormGroup({
-        name: new FormControl('', Validators.required),
-        status: new FormControl('')
-      });
-    
+      name: new FormControl('', Validators.required),
+      status: new FormControl('')
+    });
+
 
   }
 
-  
+
   //* Hàm load toàn bộ dự liệu ra giao diện
   loadRoles(page: number): void {
     this.RoleService.getAllRoles(page, this.searchQuery).subscribe(data => {
@@ -95,18 +108,18 @@ export class listComponent {
     let roleData: IRole;
 
     const name = this.form.get('name').value;
-  let status = this.form.get('status').value;
+    let status = this.form.get('status').value;
 
-  if (!status) {
-    status = 0;
-  }
-    
+    if (!status) {
+      status = 0;
+    }
+
     roleData = {
-        name: name,
-        status: status,
-      };
-      this.spinner.show
-   
+      name: name,
+      status: status,
+    };
+    this.spinner.show
+
     if (this.isEditing === true && !this.isAddingNewRole) {
       // Nếu đang trong chế độ sửa, cập nhật thông tin cho danh mục được chọn
       const roleId = this.newRole.id;
@@ -188,8 +201,8 @@ export class listComponent {
     });
   }
 
-  
- Reset(): void {
+
+  Reset(): void {
     this.isEditing = false;
     this.isAddingNewRole = false;
     this.form.reset();
@@ -198,12 +211,12 @@ export class listComponent {
 
   scrollFormIntoView() {
     if (this.formElement) {
-        this.formElement.nativeElement.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start' 
-        });
+      this.formElement.nativeElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
     }
-}
+  }
 
- 
+
 }

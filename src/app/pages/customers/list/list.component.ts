@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NbToastrService } from '@nebular/theme';
+import { NbThemeService, NbToastrService } from '@nebular/theme';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaginatorModule } from 'app/@theme/components/paginator/paginator.module';
@@ -7,7 +7,7 @@ import Swal from 'sweetalert2';
 import { ICustomer } from 'app/@core/interfaces/customers.interface';
 import { CustomerService } from 'app/@core/services/apis/customer.service';
 import { SpinnerService } from '../../../@theme/components/spinner/spinner.service';
-import { API_BASE_URL, API_ENDPOINT,} from 'app/@core/config/api-endpoint.config';
+import { API_BASE_URL, API_ENDPOINT, } from 'app/@core/config/api-endpoint.config';
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
@@ -36,18 +36,32 @@ export class ListComponent implements OnInit {
   totalPages: number;
   searchQuery: string = '';
 
+
+  themes = [
+    { value: 'default', name: 'Light' },
+    { value: 'dark', name: 'Dark' },
+  ];
+
+  currentTheme = 'default';
+
   constructor(
     private toastrService: NbToastrService,
     private customerService: CustomerService,
+    private themeService: NbThemeService,
     private spinner: SpinnerService,
     private router: Router,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    this.themeService.onThemeChange()
+      .subscribe(theme => {
+        this.currentTheme = theme.name;
+      });
+  }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const currentPage = params['page'] || 1;
-     this.loadCustomers(currentPage);
+      this.loadCustomers(currentPage);
     });
 
 
@@ -65,6 +79,7 @@ export class ListComponent implements OnInit {
     });
   }
 
+
   numericValidator(control: FormControl): { [key: string]: boolean } | null {
     const value = control.value;
     if (value && !/^[0-9]*$/.test(value)) {
@@ -79,7 +94,7 @@ export class ListComponent implements OnInit {
   loadCustomers(page: number): void {
     this.spinner.show();
 
-    this.customerService.getAllCustomers(page,this.searchQuery).subscribe((data) => {
+    this.customerService.getAllCustomers(page, this.searchQuery).subscribe((data) => {
 
 
       this.spinner.hide();
@@ -94,17 +109,17 @@ export class ListComponent implements OnInit {
         queryParams.search = this.searchQuery;
       }
 
-         // Cập nhật tham số ?page và ?search lên URL nếu khác với giá trị trước đó
-         this.router.navigate([], {
-          queryParams: queryParams,
-          replaceUrl: true
+      // Cập nhật tham số ?page và ?search lên URL nếu khác với giá trị trước đó
+      this.router.navigate([], {
+        queryParams: queryParams,
+        replaceUrl: true
 
+      });
     });
-  });
-}
+  }
 
-   //* Hàm xử lý tìm kiếm sản phẩm
-   onSearch(): void {
+  //* Hàm xử lý tìm kiếm sản phẩm
+  onSearch(): void {
     // Gọi hàm loadCustomers với trang hiện tại và từ khóa tìm kiếm
     this.loadCustomers(this.currentPage);
   }
@@ -154,8 +169,8 @@ export class ListComponent implements OnInit {
       this.customerService.addCustomer(customerData).subscribe(
         () => {
           this.toastrService.success('Thêm mới thành công!', 'Success');
-            this.spinner.hide();
-            this.loadCustomers(1);
+          this.spinner.hide();
+          this.loadCustomers(1);
         },
         (error) => {
           this.toastrService.danger(
