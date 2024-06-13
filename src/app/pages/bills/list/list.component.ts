@@ -106,6 +106,8 @@ export class ListComponent implements OnInit {
     this.productService.getAllProducts().subscribe(
       (data: any) => {
         this.products = data.products;
+        const values = this.form.value;
+        this.calculateTotals(values);
       },
       (error) => {
         this.toastrService.danger('Đã xảy ra lỗi khi tải sản phẩm!', 'Error');
@@ -116,7 +118,6 @@ export class ListComponent implements OnInit {
   loadEmployees(): void {
     this.employeeService.getAllEmployees().subscribe(
       (data: any) => {
-        console.log(data);
         this.employees = data.employees;
       },
       (error) => {
@@ -297,31 +298,50 @@ export class ListComponent implements OnInit {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' đ';
   }
 
-  calculateTotals(values) {
-    const product = this.products.find((p) => p.id === values.product_id);
+  calculateTotals(values: any): void {
+    const productId = parseInt(values.product_id, 10);
+    // console.log(productId);
+    if (!productId) {
+      // console.log('Product ID is empty.');
+    }
+
+    const product = this.products.find((p) => p.id === productId);
+    // console.log('>>> Product: ', product);
+
     const qty = values.qty || 0;
+
     if (product) {
-      this.provisionalTotal = product.price * qty;
+      this.provisionalTotal = product.sale_price * qty;
+      // console.log('tạm tính bằng', this.provisionalTotal);
     } else {
       this.provisionalTotal = 0;
     }
 
     if (values.voucher_code) {
-      this.voucherService.getVoucherByCode(values.voucher_code).subscribe((voucher) => {
-        if (voucher) {
-          // Trừ trực tiếp discount_rate khỏi provisionalTotal
-          this.discountAmount = (voucher.discount_rate / 100) * this.provisionalTotal;
-        } else {
-          this.discountAmount = 0;
-        }
-        // Trừ discountAmount trực tiếp khỏi provisionalTotal
-        this.finalTotal = Math.max(this.provisionalTotal - this.discountAmount, 0);
-        this.form.controls['total'].setValue(this.finalTotal);
-      });
+      this.voucherService
+        .getVoucherByCode(values.voucher_code)
+        .subscribe((voucher) => {
+          if (voucher) {
+            this.discountAmount =
+              (voucher.discount_rate / 100) * this.provisionalTotal;
+            // console.log('voucher bằng', this.discountAmount);
+          } else {
+            this.discountAmount = 0;
+          }
+          this.finalTotal = Math.max(
+            this.provisionalTotal - this.discountAmount,
+            10
+          );
+          // console.log('>>> Check tổng tiền: ', this.finalTotal);
+          this.form.patchValue(
+            { total: this.finalTotal },
+            { emitEvent: false }
+          );
+        });
     } else {
       this.discountAmount = 0;
       this.finalTotal = this.provisionalTotal;
-      this.form.controls['total'].setValue(this.finalTotal);
+      this.form.patchValue({ total: this.finalTotal }, { emitEvent: false });
     }
   }
 }

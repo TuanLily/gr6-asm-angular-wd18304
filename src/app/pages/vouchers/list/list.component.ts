@@ -61,7 +61,7 @@ export class ListComponent implements OnInit {
 
     this.form = new FormGroup({
       voucher_code: new FormControl('', Validators.required),
-      discount_rate: new FormControl('', [Validators.required, Validators.min(0)]),
+      discount_rate: new FormControl('', [Validators.required, Validators.min(0), Validators.max(100)]), // Thêm Validators.max(100) ở đây
       valid_from: new FormControl('', Validators.required),
       valid_to: new FormControl('', Validators.required),
       description: new FormControl('', Validators.required)
