@@ -107,3 +107,17 @@
 .dark .form-control::placeholder {
   color: #8590a8;
 }
+
+.fas{
+    color: yellow;
+}
+
+.fa-star {
+    color: gold;
+    margin-right: 2px;
+  }
+  
+.far.fa-star {
+    color: #ccc; /* Màu xám cho các ngôi sao trống */
+    margin-right: 2px;
+}

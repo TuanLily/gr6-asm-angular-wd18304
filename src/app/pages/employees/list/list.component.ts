@@ -117,6 +117,8 @@ export class ListComponent implements OnInit {
       this.currentPage = data.currentPage;
       this.totalPages = data.totalPages;
 
+      this.employees = data.employees.filter(employee => employee.status === 1);
+
       const queryParams: any = { page: page };
 
       // Nếu có từ khóa tìm kiếm, thêm ?search vào đường dẫn Url

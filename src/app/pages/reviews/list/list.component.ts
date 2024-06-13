@@ -63,18 +63,18 @@ export class ListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
+    this.loadProducts();
+    this.loadCustomer();
+    this.route.queryParams.subscribe(params =>{
       const currentPage = params['page'] || 1;
       this.loadReviews(currentPage);
-      this.loadCustomer();
-      this.loadProducts();
     })
 
     this.form = new FormGroup({
       product_id: new FormControl('', Validators.required),
       customer_id: new FormControl('', Validators.required),
       rate: new FormControl('', Validators.required),
-      content: new FormControl('', Validators.required),
+      content: new FormControl(''),
     });
   }
 
@@ -137,7 +137,6 @@ export class ListComponent implements OnInit {
   onSearch(): void {
     // Gọi hàm loadReviews với trang hiện tại và từ khóa tìm kiếm
     this.loadReviews(this.currentPage);
-    this.loadProducts();
   }
 
   //* Hàm xử lý thêm mới hoặc cập nhật đánh giá
