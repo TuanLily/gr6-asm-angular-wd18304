@@ -26,3 +26,82 @@
     }
   }
 }
+
+.custom-one-header{
+  background-color: rgb(83, 83, 227);
+  color: #fff;
+  border-color: #757575;
+}
+
+.custom-two-header{
+  background-color: #FFAA01;
+  color: #fff;
+  border-color: #757575;
+}
+.custom-three-header{
+  background-color: #34dc82;
+  color: #fff;
+  border-color: #757575;
+}
+
+
+/* Light Mode */
+.light .table-responsive {
+  background-color: #fff;
+  color: #000;
+}
+
+.light .table {
+  background-color: transparent;
+}
+
+.light .table-bordered {
+  border: 1px solid #dee2e6;
+}
+
+.light .table thead th {
+  background-color: #f8f9fa;
+  color: #000;
+  border-color: #dee2e6;
+}
+
+.light .table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.light .table tbody td {
+  background-color: #fff;
+  color: #000;
+  border-color: #dee2e6;
+}
+
+
+/* Dark Mode */
+.dark .table-responsive {
+  background-color: #222b45;
+  color: #fff;
+}
+
+.dark .table {
+  background-color: transparent;
+}
+
+.dark .table-bordered {
+  border: 1px solid #3b426b;
+}
+
+.dark .table thead th {
+  background-color: #2e3a59;
+  color: #fff;
+  border-color: #3b426b;
+}
+
+.dark .table tbody tr:hover {
+  background-color: #3b426b;
+}
+
+.dark .table tbody td {
+  background-color: #222b45;
+  color: #fff;
+  border-color: #3b426b;
+}

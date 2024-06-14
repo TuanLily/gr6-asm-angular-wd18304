@@ -1,6 +1,73 @@
 <nb-card>
   <nb-card-body>
-    <h1 class="text-center">Hi, Chào mừng bạn đến với quán Dom Tea</h1>
+    <h2 class="text-center">CHÀO MỪNG ĐẾN VỚI TRANG QUẢN LÝ QUÁN TRÀ SỮA DOM TEA </h2>
+    <div class="justify-content-center d-flex">
+      <img src="../../../assets/images/logo_DomTea.png" alt="IMG" width="150">
+    </div>
+  </nb-card-body>
+</nb-card>
+
+<div class="row justify-content-between">
+  <div class="col-md-4">
+    <nb-card>
+      <nb-card-header class="custom-one-header">
+        Tổng số sản phẩm
+      </nb-card-header>
+      <nb-card-body>
+        Some content for the info card.
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-md-4">
+    <nb-card>
+      <nb-card-header class="custom-two-header">
+        Tổng tài khoản nhân viên
+      </nb-card-header>
+      <nb-card-body>
+        Some content for the info card.
+      </nb-card-body>
+    </nb-card>
+  </div>
+  <div class="col-md-4">
+    <nb-card>
+      <nb-card-header class="custom-three-header">
+        Tổng số tài khoản khách hàng
+      </nb-card-header>
+      <nb-card-body>
+        Some content for the success card.
+      </nb-card-body>
+    </nb-card>
+  </div>
+</div>
+
+<nb-card>
+  <nb-card-body>
+    <div class="row">
+      <div class="col-md-12">
+        <h5 class="text-center">Thống kê giá sản phẩm theo hạng mức</h5>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Giá cao nhất</th>
+              <th>Giá thấp nhất</th>
+              <th>Giá trung bình</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ formatCurrency(productPriceStats?.maxPrice) }}</td>
+              <td>{{ formatCurrency(productPriceStats?.minPrice) }}</td>
+              <td>{{ formatCurrency(productPriceStats?.avgPrice) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>
+
+<nb-card [ngClass]="currentTheme">
+  <nb-card-body>
     <div class="row">
       <div class="col-md-6">
         <app-echarts [chartOptions]="columnChartOptions"></app-echarts>
@@ -9,33 +76,8 @@
         <app-echarts [chartOptions]="pieChartOptions"></app-echarts>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-6">
-        <app-echarts [chartOptions]="lineChartOptions"></app-echarts>
-      </div>
-      <div class="col-md-6">
-        <div class="row">
-          <div class="col-md-12">
-            <h5 class="text-center">Thống kê giá sản phẩm</h5>
-            <table class="table table-bordered">
-              <thead>
-                <tr>
-                  <th>Giá cao nhất</th>
-                  <th>Giá thấp nhất</th>
-                  <th>Giá trung bình</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>{{ formatCurrency(productPriceStats?.maxPrice) }}</td>
-                  <td>{{ formatCurrency(productPriceStats?.minPrice) }}</td>
-                  <td>{{ formatCurrency(productPriceStats?.avgPrice) }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
+
+    <app-echarts [chartOptions]="lineChartOptions"></app-echarts>
+
   </nb-card-body>
 </nb-card>
