@@ -27,21 +27,53 @@
   }
 }
 
-.custom-one-header{
+.custom-one-header {
   background-color: rgb(83, 83, 227);
   color: #fff;
   border-color: #757575;
 }
 
-.custom-two-header{
-  background-color: #FFAA01;
+.custom-two-header {
+  background-color: #ffaa01;
   color: #fff;
   border-color: #757575;
 }
-.custom-three-header{
+.custom-three-header {
   background-color: #34dc82;
   color: #fff;
   border-color: #757575;
+}
+
+nb-card-body {
+  .custom-title-count-procducts {
+    position: relative;
+    color: black;
+    text-decoration: none;
+    transition: color 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .custom-title-count-procducts::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 2px; 
+    bottom: 0;
+    left: 0;
+    background-color: #5353e3;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease;
+  }
+
+  .custom-title-count-procducts:hover::before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+
+  .custom-title-count-procducts:hover {
+    color: #5353e3;
+    opacity: 0.8;
+  }
 }
 
 
@@ -75,6 +107,13 @@
   border-color: #dee2e6;
 }
 
+.light nb-card-body{
+  .custom-title-count-procducts{
+    color: black;
+  }
+
+}
+
 
 /* Dark Mode */
 .dark .table-responsive {
@@ -104,4 +143,15 @@
   background-color: #222b45;
   color: #fff;
   border-color: #3b426b;
+}
+
+.dark nb-card-body{
+  .custom-title-count-procducts{
+    color: white;
+  }
+
+  .custom-title-count-procducts:hover{
+    color: #5c5cfc;
+  }
+
 }

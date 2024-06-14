@@ -19,4 +19,10 @@ export class statisticsService extends ApiService {
       API_BASE_URL + API_ENDPOINT.statistic.getProductPrices
     );
   }
+
+  getCountProducts(): Observable<any> {
+    return this.get(
+      API_BASE_URL + API_ENDPOINT.statistic.getCountProducts
+    );
+  }
 }

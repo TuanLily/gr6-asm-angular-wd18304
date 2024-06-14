@@ -14,6 +14,8 @@ export class DashboardComponent implements OnInit {
   lineChartOptions: any;
 
   productPriceStats: IProductPrices;
+  countProducts: number;
+
 
   themes = [
     { value: 'default', name: 'Light' },
@@ -146,6 +148,16 @@ export class DashboardComponent implements OnInit {
     this.statisticsService.getProductPrices().subscribe(data => {
       this.productPriceStats = data;
     });
+
+    this.statisticsService.getCountProducts().subscribe(
+      (data) => {
+        this.countProducts = data.count;
+      },
+      (error) => {
+        console.error('Error fetching product count', error);
+      }
+    );
+    
   }
 
   // *Định dạng tiền tệ

@@ -18,13 +18,17 @@ import {
   NbCheckboxModule,
   NbInputModule,
   NbThemeModule,
-  NbTooltipModule
+  NbTooltipModule,
+  NbIconModule
 } from '@nebular/theme';
 
 import { ThemeModule } from '../../@theme/theme.module';
+import { RouterModule } from '@angular/router';
+import { AppRoutingModule } from 'app/app-routing.module';
 @NgModule({
   imports: [
     CommonModule,
+    RouterModule,
     BreadcrumbModule,
     NgxEchartsModule.forRoot({
       echarts: () => import('echarts')
@@ -41,8 +45,9 @@ import { ThemeModule } from '../../@theme/theme.module';
     NbCheckboxModule,
     NbInputModule,
     NbThemeModule,
+    NbIconModule,
     NbTooltipModule,
-    ThemeModule
+    ThemeModule,
   ],
   declarations: [
     DashboardComponent,
