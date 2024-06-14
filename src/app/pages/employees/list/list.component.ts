@@ -61,15 +61,15 @@ export class ListComponent implements OnInit {
       this.loadEmployees(currencyPage);
     })
 
-
     this.form = new FormGroup({
       name: new FormControl('', Validators.required),
       username: new FormControl('', Validators.required),
-      phone: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(10), this.phoneValidator]),
+      phone: new FormControl('', [Validators.required, Validators.minLength(10), Validators.maxLength(11),
+      this.phoneValidator, this.phoneRegex]),
       email: new FormControl('', [Validators.required, Validators.email]),
       address: new FormControl('', [Validators.required]),
       password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-      salary: new FormControl('', [Validators.required])
+      salary: new FormControl('', [Validators.required, Validators.min(0)])
     });
   }
 
@@ -86,6 +86,13 @@ export class ListComponent implements OnInit {
     return isValid ? null : { invalidPhone: true };
   }
 
+  phoneRegex(control: FormControl) {
+    const phoneRegex = /([\+84|84|0]+(3|5|7|8|9|1[2|6|8|9]))+([0-9]{8})\b/
+    const valid = phoneRegex.test(control.value);
+    return valid ? null : { validPhone: true };
+  }
+
+
   // Bắt phone đang gặp lỗi nào
   getPhoneErrorMessage() {
     const phoneControl = this.form.get('phone');
@@ -94,9 +101,11 @@ export class ListComponent implements OnInit {
     } else if (phoneControl?.hasError('invalidPhone')) {
       return 'Số điện thoại phải là số';
     } else if (phoneControl?.hasError('maxlength')) {
-      return 'Số điện thoại không lớn hơn 10 số';
+      return 'Số điện thoại không lớn hơn 11 số';
     } else if (phoneControl?.hasError('minlength')) {
       return 'Số điện thoại không ít hơn 10 số';
+    } else if (phoneControl?.hasError('validPhone')) {
+      return 'Số điện thoại không phải định dạng số VN'
     }
     return null;
   }

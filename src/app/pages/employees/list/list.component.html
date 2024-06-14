@@ -147,6 +147,9 @@
                             <small *ngIf="form.get('salary').hasError('required')">
                                 Vui lòng nhập lương
                             </small>
+                            <small *ngIf="form.get('salary').hasError('min')">
+                                Lương phải là số dương
+                            </small>
                         </div>
                     </div>
 
