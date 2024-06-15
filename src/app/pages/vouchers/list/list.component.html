@@ -63,11 +63,11 @@
     <nb-card-body>
         <form [formGroup]="form" (ngSubmit)="addVoucher()" #formElement>
             <div class="form-group my-3">
-                <label for="voucherCode" class="my-1">Mã voucher<span class="spot">*</span>:</label>
-                <input type="text" clasßs="form-control" id="voucherCode" formControlName="voucher_code">
-                <div *ngIf="form.get('voucher_code').invalid && form.get('voucher_code').touched" class="text-danger">
-                    <small *ngIf="form.get('voucher_code').hasError('required')">Vui lòng nhập mã voucher.</small>
-                </div>
+              <label for="voucherCode" class="my-1">Mã voucher<span class="spot">*</span>:</label>
+              <input type="text" class="form-control" id="voucherCode" formControlName="voucher_code">
+              <div *ngIf="form.get('voucher_code').invalid && form.get('voucher_code').touched" class="text-danger">
+                  <small *ngIf="form.get('voucher_code').hasError('required')">Vui lòng nhập mã voucher.</small>
+              </div>
             </div>
             <div class="form-group my-3">
                 <label for="discountRate" class="my-1">Giá trị<span class="spot">*</span>:</label>

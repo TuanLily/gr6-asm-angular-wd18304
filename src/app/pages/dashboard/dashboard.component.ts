@@ -22,6 +22,7 @@ export class DashboardComponent implements OnInit {
   countCustomers: number;
   countEmployees: number;
 
+
   themes = [
     { value: 'default', name: 'Light' },
     { value: 'dark', name: 'Dark' },
@@ -33,6 +34,52 @@ export class DashboardComponent implements OnInit {
     private statisticsService: statisticsService,
     private themeService: NbThemeService
   ) {
+    this.columnChartOptions = {
+      title: {
+        text: 'Biểu đồ',
+        textStyle: {
+          fontFamily: 'Open Sans, sans-serif',
+          fontSize: 18,
+          fontWeight: 'bold',
+          color: '#333',
+        },
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow',
+        },
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true,
+      },
+      xAxis: [
+        {
+          type: 'category',
+          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+          axisTick: {
+            alignWithLabel: true,
+          },
+        },
+      ],
+      yAxis: [
+        {
+          type: 'value',
+        },
+      ],
+      series: [
+        {
+          name: 'Direct',
+          type: 'bar',
+          barWidth: '60%',
+          data: [10, 52, 200, 334, 390, 330, 220],
+        },
+      ],
+    };
+
     this.lineChartOptions = {
       title: {
         text: 'Biểu đồ',
@@ -102,9 +149,53 @@ export class DashboardComponent implements OnInit {
       ],
     };
 
+    this.areaChartOptions = {
+      title: {
+        text: 'Thống kê Doanh thu',
+        left: 'center',
+      },
+      tooltip: {
+        trigger: 'axis',
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: [
+          'Tháng 1',
+          'Tháng 2',
+          'Tháng 3',
+          'Tháng 4',
+          'Tháng 5',
+          'Tháng 6',
+          'Tháng 7',
+          'Tháng 8',
+          'Tháng 9',
+          'Tháng 10',
+          'Tháng 11',
+          'Tháng 12',
+        ],
+      },
+      yAxis: {
+        type: 'value',
+      },
+      series: [
+        {
+          name: 'Doanh thu',
+          type: 'line',
+          stack: 'Tổng',
+          areaStyle: {},
+          data: [
+            820, 932, 901, 934, 1290, 1330, 1320, 1410, 1500, 1600, 1700, 1800,
+          ],
+        },
+      ],
+    };
+
   }
 
   ngOnInit(): void {
+    this.initCharts();
+
     this.statisticsService.getProductPrices().subscribe((data) => {
       this.productPriceStats = data;
     });
@@ -139,7 +230,7 @@ export class DashboardComponent implements OnInit {
       } else {
         console.error('Expected an array but got:', data);
       }
-  
+
       this.pieChartOptions2 = this.getPieChartOptions2();
     });
 
@@ -148,7 +239,6 @@ export class DashboardComponent implements OnInit {
       this.initCharts();
     });
 
-    this.initCharts();
     this.statisticsService.getCountCustomers().subscribe(
       (data) => {
         this.countCustomers = data.count;
@@ -168,9 +258,9 @@ export class DashboardComponent implements OnInit {
     );
 
   }
-  
+
   initCharts(): void {
-    
+
     this.pieChartOptions = this.getPieChartOptions();
     this.pieChartOptions2 = this.getPieChartOptions2();
 
