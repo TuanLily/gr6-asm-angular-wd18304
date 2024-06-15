@@ -14,9 +14,11 @@ export class DashboardComponent implements OnInit {
   pieChartOptions: any;
   lineChartOptions: any;
   areaChartOptions: any;
+  pieChartOptions2: any;
 
   productPriceStats: IProductPrices;
   countProducts: number;
+  pieChartData: any[] = [];
 
   themes = [
     { value: 'default', name: 'Light' },
@@ -97,6 +99,7 @@ export class DashboardComponent implements OnInit {
         },
       ],
     };
+
   }
 
   ngOnInit(): void {
@@ -125,6 +128,19 @@ export class DashboardComponent implements OnInit {
       this.pieChartOptions.series[0].data = chartData;
     });
 
+    this.statisticsService.getCountCateProducts().subscribe((data) => {
+      if (data && Array.isArray(data.data)) {
+        this.pieChartData = data.data.map((item) => ({
+          value: item.product_count,
+          name: item.name
+        }));
+      } else {
+        console.error('Expected an array but got:', data);
+      }
+  
+      this.pieChartOptions2 = this.getPieChartOptions2();
+    });
+
     this.themeService.onThemeChange().subscribe((theme: any) => {
       this.currentTheme = theme.name;
       this.initCharts();
@@ -132,9 +148,12 @@ export class DashboardComponent implements OnInit {
 
     this.initCharts();
   }
-
+  
   initCharts(): void {
+    
     this.pieChartOptions = this.getPieChartOptions();
+    this.pieChartOptions2 = this.getPieChartOptions2();
+
   }
 
   getPieChartOptions(): any {
@@ -197,6 +216,68 @@ export class DashboardComponent implements OnInit {
       ],
     };
   }
+
+  getPieChartOptions2(): any {
+    const textColor = this.currentTheme === 'dark' ? '#fff' : '#000';
+
+    return {
+      title: {
+        text: 'Thống Kê Số Lượng Sản Phẩm Theo Danh Mục',
+        textStyle: {
+          fontFamily: 'Open Sans, sans-serif',
+          fontSize: 18,
+          fontWeight: 'bold',
+          color: textColor,
+        },
+      },
+      tooltip: {
+        trigger: 'item',
+        textStyle: {
+          fontFamily: 'Open Sans, sans-serif',
+          fontSize: 12,
+        },
+      },
+      legend: {
+        top: '5%',
+        left: 'center',
+        textStyle: {
+          fontFamily: 'Open Sans, sans-serif',
+          fontSize: 12,
+          color: textColor,
+        },
+      },
+      series: [
+        {
+          name: 'Lượng Sản Phẩm Theo Danh Mục',
+          type: 'pie',
+          radius: ['40%', '70%'],
+          avoidLabelOverlap: false,
+          itemStyle: {
+            borderRadius: 10,
+            borderColor: '#fff',
+            borderWidth: 2,
+          },
+          label: {
+            show: false,
+            position: 'center',
+          },
+          emphasis: {
+            label: {
+              show: true,
+              fontSize: 40,
+              fontWeight: 'bold',
+              color: textColor,
+            },
+          },
+          labelLine: {
+            show: false,
+          },
+          data: this.pieChartData,
+        },
+      ],
+    };
+  }
+
 
   // *Định dạng tiền tệ
   formatCurrency(value: number): string {
