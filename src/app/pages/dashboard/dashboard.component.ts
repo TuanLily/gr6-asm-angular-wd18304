@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NbThemeService } from '@nebular/theme';
 import { IProductPrices } from 'app/@core/interfaces/statistic.interface';
 import { statisticsService } from 'app/@core/services/apis/statistic.service';
+
 @Component({
   selector: 'ngx-dashboard',
   styleUrls: ['./dashboard.component.scss'],
@@ -12,10 +13,10 @@ export class DashboardComponent implements OnInit {
   columnChartOptions: any;
   pieChartOptions: any;
   lineChartOptions: any;
+  areaChartOptions: any;
 
   productPriceStats: IProductPrices;
   countProducts: number;
-
 
   themes = [
     { value: 'default', name: 'Light' },
@@ -24,108 +25,19 @@ export class DashboardComponent implements OnInit {
 
   currentTheme = 'default';
 
-
   constructor(
     private statisticsService: statisticsService,
-    private themeService: NbThemeService,
-
-
+    private themeService: NbThemeService
   ) {
-    this.themeService.onThemeChange()
-      .subscribe(theme => {
-        this.currentTheme = theme.name;
-      });
-
-    this.columnChartOptions = {
+    this.lineChartOptions = {
       title: {
-        text: 'Biểu đồ'
+        text: 'Biểu đồ',
       },
       tooltip: {
         trigger: 'axis',
         axisPointer: {
-          type: 'shadow'
-        }
-      },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-      },
-      xAxis: [
-        {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          axisTick: {
-            alignWithLabel: true
-          }
-        }
-      ],
-      yAxis: [
-        {
-          type: 'value'
-        }
-      ],
-      series: [
-        {
-          name: 'Direct',
-          type: 'bar',
-          barWidth: '60%',
-          data: [10, 52, 200, 334, 390, 330, 220]
-        }
-      ]
-    };
-
-    this.pieChartOptions = {
-      title: {
-        text: 'Biểu đồ'
-      },
-      tooltip: {
-        trigger: 'item'
-      },
-      legend: {
-        top: '5%',
-        left: 'center'
-      },
-      series: [
-        {
-          name: 'Access From',
-          type: 'pie',
-          radius: ['40%', '70%'],
-          avoidLabelOverlap: false,
-          itemStyle: {
-            borderRadius: 10,
-            borderColor: '#fff',
-            borderWidth: 2
-          },
-          label: {
-            show: false,
-            position: 'center'
-          },
-          emphasis: {
-            label: {
-              show: true,
-              fontSize: 40,
-              fontWeight: 'bold'
-            }
-          },
-          labelLine: {
-            show: false
-          },
-          data: [
-            { value: 1048, name: 'Search Engine' },
-            { value: 735, name: 'Direct' },
-            { value: 580, name: 'Email' },
-            { value: 484, name: 'Union Ads' },
-            { value: 300, name: 'Video Ads' }
-          ]
-        }
-      ]
-    };
-
-    this.lineChartOptions = {
-      title: {
-        text: 'Biểu đồ'
+          type: 'shadow',
+        },
       },
       xAxis: {
         type: 'category',
@@ -139,13 +51,56 @@ export class DashboardComponent implements OnInit {
           name: 'Biểu đồ đường',
           type: 'line',
           data: [150, 230, 224, 218, 135, 147, 260],
+          smooth: true,
+        },
+      ],
+    };
+
+    this.areaChartOptions = {
+      title: {
+        text: 'Thống kê Doanh thu',
+        left: 'center',
+      },
+      tooltip: {
+        trigger: 'axis',
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: [
+          'Tháng 1',
+          'Tháng 2',
+          'Tháng 3',
+          'Tháng 4',
+          'Tháng 5',
+          'Tháng 6',
+          'Tháng 7',
+          'Tháng 8',
+          'Tháng 9',
+          'Tháng 10',
+          'Tháng 11',
+          'Tháng 12',
+        ],
+      },
+      yAxis: {
+        type: 'value',
+      },
+      series: [
+        {
+          name: 'Doanh thu',
+          type: 'line',
+          stack: 'Tổng',
+          areaStyle: {},
+          data: [
+            820, 932, 901, 934, 1290, 1330, 1320, 1410, 1500, 1600, 1700, 1800,
+          ],
         },
       ],
     };
   }
 
   ngOnInit(): void {
-    this.statisticsService.getProductPrices().subscribe(data => {
+    this.statisticsService.getProductPrices().subscribe((data) => {
       this.productPriceStats = data;
     });
 
@@ -157,7 +112,90 @@ export class DashboardComponent implements OnInit {
         console.error('Error fetching product count', error);
       }
     );
-    
+
+    this.statisticsService.getBillStatus().subscribe((data) => {
+      const statusCounts = data.statusCounts;
+
+      const chartData = [
+        { value: statusCounts['0'] || 0, name: 'Đang giao' },
+        { value: statusCounts['1'] || 0, name: 'Đã giao' },
+        { value: statusCounts['2'] || 0, name: 'Đã huỷ' },
+      ];
+
+      this.pieChartOptions.series[0].data = chartData;
+    });
+
+    this.themeService.onThemeChange().subscribe((theme: any) => {
+      this.currentTheme = theme.name;
+      this.initCharts();
+    });
+
+    this.initCharts();
+  }
+
+  initCharts(): void {
+    this.pieChartOptions = this.getPieChartOptions();
+  }
+
+  getPieChartOptions(): any {
+    const textColor = this.currentTheme === 'dark' ? '#fff' : '#000';
+
+    return {
+      title: {
+        text: 'Biểu đồ Tình Trạng Đơn Hàng',
+        textStyle: {
+          fontFamily: 'Open Sans, sans-serif',
+          fontSize: 18,
+          fontWeight: 'bold',
+          color: textColor,
+        },
+      },
+      tooltip: {
+        trigger: 'item',
+        textStyle: {
+          fontFamily: 'Open Sans, sans-serif',
+          fontSize: 12,
+        },
+      },
+      legend: {
+        top: '5%',
+        left: 'center',
+        textStyle: {
+          fontFamily: 'Open Sans, sans-serif',
+          fontSize: 12,
+          color: textColor,
+        },
+      },
+      series: [
+        {
+          name: 'Tình Trạng Đơn Hàng',
+          type: 'pie',
+          radius: ['40%', '70%'],
+          avoidLabelOverlap: false,
+          itemStyle: {
+            borderRadius: 10,
+            borderColor: '#fff',
+            borderWidth: 2,
+          },
+          label: {
+            show: false,
+            position: 'center',
+          },
+          emphasis: {
+            label: {
+              show: true,
+              fontSize: 40,
+              fontWeight: 'bold',
+              color: textColor,
+            },
+          },
+          labelLine: {
+            show: false,
+          },
+          data: this.pieChartOptions ? this.pieChartOptions.series[0].data : [],
+        },
+      ],
+    };
   }
 
   // *Định dạng tiền tệ

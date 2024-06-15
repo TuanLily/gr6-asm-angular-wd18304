@@ -24,6 +24,6 @@ export const API_ENDPOINT: IAPIEndpoint = {
   statistic: {
     getProductPrices: '/api/statistics/product-prices',
     getCountProducts: '/api/statistics/count-products',
-
+    getBillStatus: '/api/statistics/bill-status',
   }
 };
