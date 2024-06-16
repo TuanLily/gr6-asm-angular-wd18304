@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NbThemeService, NbToastrService } from '@nebular/theme';
+import { NbThemeService,NbToastrService } from '@nebular/theme';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -45,6 +45,7 @@ export class ListComponent implements OnInit {
 
   currentTheme = 'default';
 
+
   constructor(
     private toastrService: NbToastrService,
     private feedbackService: FeedbackService,
@@ -53,11 +54,11 @@ export class ListComponent implements OnInit {
     private spinner: SpinnerService,
     private router: Router,
     private route: ActivatedRoute) {
-    this.themeService.onThemeChange()
+      this.themeService.onThemeChange()
       .subscribe(theme => {
         this.currentTheme = theme.name;
       });
-  }
+    }
 
   ngOnInit(): void {
     this.loadCustomers();
@@ -71,7 +72,6 @@ export class ListComponent implements OnInit {
       customer_id: new FormControl('', Validators.required),
     });
   }
-
 
   //* Hàm load toàn bộ dữ liệu ra giao diện
   loadFeedbacks(page: number): void {
@@ -99,13 +99,7 @@ export class ListComponent implements OnInit {
 
 
   }
-  // loadCustomers(): void {
-  //   const page = this.currentPage || 1;
-  //   const searchQuery = this.searchQuery || '';
-  //   this.customerService.getAllCustomers(page, searchQuery).subscribe(customer => {
-  //     this.customerData = customer;
-  //   });
-  // }
+
 
   loadCustomers(page: number = 1, search: string = ''): void {
     this.customerService.getAllCustomers(page, search).subscribe(
@@ -120,11 +114,7 @@ export class ListComponent implements OnInit {
     );
   }
 
-  // getCustomerNameById(customerId: number): string {
-  //   console.log(customerId);
-  //   const customer = this.customerData.find(c => c.id === customerId);
-  //   return customer ? customer.name : 'Unknown Customer';
-  // }
+
 
   onSearch(): void {
     // Gọi hàm loadfeedbacks với trang hiện tại và từ khóa tìm kiếm
@@ -143,24 +133,24 @@ export class ListComponent implements OnInit {
     };
 
     if (this.isEditing && !this.isAddingNewFeedback) {
-      // Nếu đang trong chế độ sửa, cập nhật thông tin cho đánh giá được chọn
-      const feedbackId = this.newFeedback.id;
-      console.log(feedbackId);
+    // Nếu đang trong chế độ sửa, cập nhật thông tin cho đánh giá được chọn
+    const feedbackId = this.newFeedback.id;
+    console.log(feedbackId);
 
-      this.feedbackService.updateFeedback(feedbackId, feedbackData).subscribe(
-        () => {
-          this.toastrService.success('Cập nhật thành công!', 'Success');
-          this.isEditing = false;
-          this.spinner.hide();
-          this.loadFeedbacks(this.currentPage);
-        },
-        error => {
-          this.toastrService.danger('Đã xảy ra lỗi khi cập nhật đánh giá!', 'Error');
-          console.error('Error updating feedback:', error);
-          this.spinner.hide();
-        }
-      );
-    }
+    this.feedbackService.updateFeedback(feedbackId, feedbackData).subscribe(
+      () => {
+        this.toastrService.success('Cập nhật thành công!', 'Success');
+        this.isEditing = false;
+        this.spinner.hide();
+        this.loadFeedbacks(this.currentPage);
+      },
+      error => {
+        this.toastrService.danger('Đã xảy ra lỗi khi cập nhật đánh giá!', 'Error');
+        console.error('Error updating feedback:', error);
+        this.spinner.hide();
+      }
+    );
+  }
     else {
       // Nếu không đang trong chế độ sửa, thêm đánh giá mới vào danh sách
       this.feedbackService.addFeedback(feedbackData).subscribe(

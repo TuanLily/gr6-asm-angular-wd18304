@@ -25,6 +25,8 @@ export const API_ENDPOINT: IAPIEndpoint = {
     getProductPrices: '/api/statistics/product-prices',
     getCountProducts: '/api/statistics/count-products',
     getBillStatus: '/api/statistics/bill-status',
-    getCountCateProducts: '/api/statistics/count-cate-product'
+    getCountCateProducts: '/api/statistics/count-cate-product',
+    getCountCustomers: '/api/statistics/count-customers',
+    getCountEmployees: '/api/statistics/count-employees'
   }
 };

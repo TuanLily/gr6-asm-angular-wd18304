@@ -19,6 +19,8 @@ export class DashboardComponent implements OnInit {
   productPriceStats: IProductPrices;
   countProducts: number;
   pieChartData: any[] = [];
+  countCustomers: number;
+  countEmployees: number;
 
   themes = [
     { value: 'default', name: 'Light' },
@@ -147,6 +149,24 @@ export class DashboardComponent implements OnInit {
     });
 
     this.initCharts();
+    this.statisticsService.getCountCustomers().subscribe(
+      (data) => {
+        this.countCustomers = data.count;
+      },
+      (error) => {
+        console.error('Error fetching customer count', error);
+      }
+    );
+
+    this.statisticsService.getCountEmployees().subscribe(
+      (data) => {
+        this.countEmployees = data.count;
+      },
+      (error) => {
+        console.error('Error fetching employee count', error);
+      }
+    );
+
   }
   
   initCharts(): void {

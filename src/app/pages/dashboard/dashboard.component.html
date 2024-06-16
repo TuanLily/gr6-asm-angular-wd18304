@@ -21,23 +21,30 @@
         </nb-card-body>
       </nb-card>
     </div>
+
     <div class="col-md-4">
       <nb-card>
         <nb-card-header class="custom-two-header">
+          <nb-icon icon="archive-outline"></nb-icon>
           Tổng tài khoản nhân viên
         </nb-card-header>
-        <nb-card-body>
-          Some content for the info card.
+        <nb-card-body class="fw-bold text-center fs-3">
+          <a  class="custom-title-count-procducts"  [routerLink]="['/pages/employees/list']"
+          routerLinkActive="router-link-active" nbTooltip="Xem chi tiết ở đây">{{countEmployees}} NHÂN VIÊN </a>
         </nb-card-body>
       </nb-card>
     </div>
+
     <div class="col-md-4">
       <nb-card>
         <nb-card-header class="custom-three-header">
+          <nb-icon icon="archive-outline"></nb-icon>
           Tổng số tài khoản khách hàng
         </nb-card-header>
-        <nb-card-body>
-          Some content for the success card.
+        <nb-card-body class="fw-bold text-center fs-3">
+          <a class="custom-title-count-procducts" [routerLink]="['/pages/customers/list']"
+          routerLinkActive="router-link-active" nbTooltip="Xem chi tiết ở đây">
+          {{countCustomers}} KHÁCH HÀNG </a>
         </nb-card-body>
       </nb-card>
     </div>

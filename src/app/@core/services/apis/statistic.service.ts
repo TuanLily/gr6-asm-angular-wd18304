@@ -37,4 +37,15 @@ export class statisticsService extends ApiService {
     );
   }
   
+  getCountCustomers(): Observable<any> {
+    return this.get(
+      API_BASE_URL + API_ENDPOINT.statistic.getCountCustomers
+    );
+  }
+  getCountEmployees(): Observable<any> {
+    return this.get(
+      API_BASE_URL + API_ENDPOINT.statistic.getCountEmployees
+    );
+  }
+
 }
