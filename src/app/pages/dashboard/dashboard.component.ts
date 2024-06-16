@@ -18,9 +18,11 @@ export class DashboardComponent implements OnInit {
 
   productPriceStats: IProductPrices;
   countProducts: number;
-  pieChartData: any[] = [];
   countCustomers: number;
   countEmployees: number;
+  pieChartData: any[] = [];
+  billStatusData: any[] = [];
+  totalRevenuesData: any[] = [];
 
 
   themes = [
@@ -33,54 +35,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private statisticsService: statisticsService,
     private themeService: NbThemeService
-  ) {
-    this.columnChartOptions = {
-      title: {
-        text: 'Biểu đồ',
-        textStyle: {
-          fontFamily: 'Open Sans, sans-serif',
-          fontSize: 18,
-          fontWeight: 'bold',
-          color: '#333',
-        },
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow',
-        },
-      },
-      grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true,
-      },
-      xAxis: [
-        {
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          axisTick: {
-            alignWithLabel: true,
-          },
-        },
-      ],
-      yAxis: [
-        {
-          type: 'value',
-        },
-      ],
-      series: [
-        {
-          name: 'Direct',
-          type: 'bar',
-          barWidth: '60%',
-          data: [10, 52, 200, 334, 390, 330, 220],
-        },
-      ],
-    };
-
-  }
+  ) { }
 
   ngOnInit(): void {
     this.initCharts();
@@ -90,12 +45,13 @@ export class DashboardComponent implements OnInit {
       this.initCharts();
     });
 
-    
 
+    //* Hàm sử lý thống kê giá tiền sản phẩm theo hạng mức
     this.statisticsService.getProductPrices().subscribe((data) => {
       this.productPriceStats = data;
     });
 
+    //* Hàm sử lý thống kê tổng số lượng sản phẩm
     this.statisticsService.getCountProducts().subscribe(
       (data) => {
         this.countProducts = data.count;
@@ -104,22 +60,28 @@ export class DashboardComponent implements OnInit {
         console.error('Error fetching product count', error);
       }
     );
-    this.pieChartOptions = this.getPieChartOptions();
 
+    //* Hàm sử lý thống số lượng đơn hàng theo trạng thái
     this.statisticsService.getBillStatus().subscribe((data) => {
-      const statusCounts = data.statusCounts;
-    
-      const chartData = [
-        { value: statusCounts[0] || 0, name: 'Đang giao' },
-        { value: statusCounts[1] || 0, name: 'Đã giao' },
-        { value: statusCounts[2] || 0, name: 'Đã huỷ' },
-      ];
-    
-      if (this.pieChartOptions && this.pieChartOptions.series && this.pieChartOptions.series[0]) {
-        this.pieChartOptions.series[0].data = chartData;
+      if (data && data.statusCounts) {
+        const statusCounts = data.statusCounts;
+
+
+        this.billStatusData = [
+          { value: statusCounts["0"] || 0, name: 'Đang giao' },
+          { value: statusCounts["1"] || 0, name: 'Đã giao' },
+          { value: statusCounts["2"] || 0, name: 'Đã huỷ' },
+        ];
+
+        this.pieChartOptions = this.getPieChartOptions();
+      } else {
+        console.error('Data or statusCounts is null/undefined', data);
       }
+    }, (error) => {
+      console.error('Failed to load bill status', error);
     });
 
+    //* Hàm sử lý thống kê số lượng sản phẩm theo danh mục
     this.statisticsService.getCountCateProducts().subscribe((data) => {
       if (data && Array.isArray(data.data)) {
         this.pieChartData = data.data.map((item) => ({
@@ -133,6 +95,8 @@ export class DashboardComponent implements OnInit {
       this.pieChartOptions2 = this.getPieChartOptions2();
     });
 
+
+    //* Hàm sử lý thống kê tổng số lượng tài khoản khách hàng
     this.statisticsService.getCountCustomers().subscribe(
       (data) => {
         this.countCustomers = data.count;
@@ -142,6 +106,7 @@ export class DashboardComponent implements OnInit {
       }
     );
 
+    //* Hàm sử lý thống kê tổng số lượng tài khoản nhân viên
     this.statisticsService.getCountEmployees().subscribe(
       (data) => {
         this.countEmployees = data.count;
@@ -151,18 +116,35 @@ export class DashboardComponent implements OnInit {
       }
     );
 
+    //* Hàm sử lý thống kê doanh thu theo tháng
+    this.statisticsService.getTotalRevenues().subscribe((data) => {
+      if (data && data.monthlyRevenues) {
+        this.totalRevenuesData = data.monthlyRevenues.map(item => ({
+          value: item.total,
+          name: item.month
+        }));
+
+        this.columnChartOptions = this.getColumnChartOptions();
+      } else {
+        console.error('Expected an array but got:', data);
+      }
+    }, (error) => {
+      console.error('Failed to load total revenues', error);
+    });
+
   }
 
   initCharts(): void {
 
     this.pieChartOptions = this.getPieChartOptions();
     this.pieChartOptions2 = this.getPieChartOptions2();
+    this.columnChartOptions = this.getColumnChartOptions();
 
   }
 
   getPieChartOptions(): any {
     const textColor = this.currentTheme === 'dark' ? '#fff' : '#000';
-  
+
     return {
       title: {
         text: 'Biểu đồ Tình Trạng Đơn Hàng',
@@ -215,11 +197,12 @@ export class DashboardComponent implements OnInit {
           labelLine: {
             show: false,
           },
-          data: [],
+          data: this.billStatusData, // Sử dụng dữ liệu được truy xuất từ biến billStatusData
         },
       ],
     };
   }
+
 
   getPieChartOptions2(): any {
     const textColor = this.currentTheme === 'dark' ? '#fff' : '#000';
@@ -282,6 +265,92 @@ export class DashboardComponent implements OnInit {
     };
   }
 
+  getColumnChartOptions(): any {
+    const textColor = this.currentTheme === 'dark' ? '#fff' : '#000';
+
+    return {
+      title: {
+        text: 'Biểu đồ Doanh Thu Theo 12 Tháng',
+        textStyle: {
+          fontFamily: 'Open Sans, sans-serif',
+          fontSize: 18,
+          fontWeight: 'bold',
+          color: textColor,
+        },
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'shadow',
+        },
+        textStyle: {
+          fontFamily: 'Open Sans, sans-serif',
+          fontSize: 12,
+        },
+      },
+      legend: {
+        top: '5%',
+        left: 'center',
+        textStyle: {
+          fontFamily: 'Open Sans, sans-serif',
+          fontSize: 12,
+          color: textColor,
+        },
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true,
+      },
+      xAxis: [
+        {
+          type: 'category',
+          data: this.totalRevenuesData.map(item => item.name), // Dữ liệu trục x được truy xuất từ totalRevenuesData
+          axisTick: {
+            alignWithLabel: true,
+          },
+          axisLabel: {
+            color: textColor,
+          },
+          axisLine: {
+            lineStyle: {
+              color: textColor,
+            },
+          },
+        },
+      ],
+      yAxis: [
+        {
+          type: 'value',
+          axisLabel: {
+            color: textColor,
+          },
+          axisLine: {
+            lineStyle: {
+              color: textColor,
+            },
+          },
+          splitLine: {
+            lineStyle: {
+              color: textColor,
+            },
+          },
+        },
+      ],
+      series: [
+        {
+          name: 'Doanh Thu',
+          type: 'bar',
+          barWidth: '60%',
+          data: this.totalRevenuesData.map(item => item.value), // Dữ liệu trục y được truy xuất từ totalRevenuesData
+          itemStyle: {
+            color: '#5470C6',
+          },
+        },
+      ],
+    };
+  }
 
   // *Định dạng tiền tệ
   formatCurrency(value: number): string {
