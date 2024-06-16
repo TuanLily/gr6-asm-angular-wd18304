@@ -3,7 +3,8 @@
   <nb-card-header class="d-flex justify-content-between align-items-center">
     <h5 class="card-title mb-0">Danh sách bill</h5>
     <form class="d-flex" (ngSubmit)="onSearch()">
-      <input class="form-control me-2" type="search" placeholder="Tìm kiếm" [(ngModel)]="searchQuery" name="searchQuery" aria-label="Search">
+      <input class="form-control me-2" type="search" placeholder="Tìm kiếm" [(ngModel)]="searchQuery" name="searchQuery"
+        aria-label="Search">
       <button type="submit" nbButton status="primary">
         <i class="fa-solid fa-magnifying-glass"></i>
       </button>
@@ -15,40 +16,41 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Mã sản phẩm</th>
+            <th>Tên khách hàng</th>
+            <th>Tên sản phẩm</th>
             <th>Số lượng</th>
             <th>Thành tiền</th>
-            <th>Tên khách hàng</th>
             <th>Nhân viên</th>
-            <th>Mã voucher</th>
+            <th>Ngày tạo</th>
             <th>Thao tác</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let bill of bills; let i = index">
             <td class="align-middle">{{ i + 1 }}</td>
+            <td class="align-middle">{{ bill.customer_name }}</td>
             <td class="align-middle">{{ getProductName(bill.product_id)?.name }}</td>
             <td class="align-middle">{{ bill.qty }}</td>
             <td class="align-middle">{{ formatCurrency(bill.total) }}</td>
-            <td class="align-middle">{{ bill.customer_name }}</td>
             <td class="align-middle">{{ getEmployeeName(bill.employee_id) }}</td>
-            <td class="align-middle">{{ bill.voucher_code }}</td>
+            <td class="align-middle">{{ bill.created_at | date:'dd/MM/yyyy HH:mm:ss' }}</td>
             <td class="align-middle text-center">
               <div class="btn-group d-flex justify-content-center">
                 <button nbButton status="primary" type="button" class="btn-sm mx-1 btn-equal"
-                    (click)="editBill(bill.id)" nbTooltip="Sửa dữ liệu">
-                    <i class="fa-solid fa-pen-to-square"></i>
+                  (click)="editBill(bill.id)" nbTooltip="Sửa dữ liệu">
+                  <i class="fa-solid fa-pen-to-square"></i>
                 </button>
                 <button nbButton status="danger" type="button" class="btn-sm mx-1 btn-equal"
-                    (click)="deleteBill(bill.id)" nbTooltip="Xóa dữ liệu">
-                    <i class="fa-solid fa-trash"></i>
+                  (click)="deleteBill(bill.id)" nbTooltip="Xóa dữ liệu">
+                  <i class="fa-solid fa-trash"></i>
                 </button>
-            </div>
+              </div>
             </td>
           </tr>
         </tbody>
       </table>
-      <ngx-paginator [apiUrl]="apiUrl" [current_page]="currentPage" [last_page]="totalPages" (dataList)="loadBills($event)"></ngx-paginator>
+      <ngx-paginator [apiUrl]="apiUrl" [current_page]="currentPage" [last_page]="totalPages"
+        (dataList)="loadBills($event)"></ngx-paginator>
     </div>
   </nb-card-body>
 </nb-card>
@@ -113,7 +115,8 @@
         <div class="col-md-12">
           <div class="form-group my-3">
             <label for="voucherId">Mã voucher:</label>
-            <input type="text" class="form-control" id="voucherCode" formControlName="voucher_code" placeholder="Nhập voucher giảm giá">
+            <input type="text" class="form-control" id="voucherCode" formControlName="voucher_code"
+              placeholder="Nhập voucher giảm giá">
           </div>
         </div>
       </div>
@@ -135,10 +138,12 @@
       </div>
 
       <div class="d-flex justify-content-end mt-4">
-        <button nbButton status="warning" type="button" class="float-end mx-2" (click)="resetForm()" nbTooltip="Reset dữ liệu">
+        <button nbButton status="warning" type="button" class="float-end mx-2" (click)="resetForm()"
+          nbTooltip="Reset dữ liệu">
           <i class="fa-solid fa-rotate-left"></i>
         </button>
-        <button nbButton type="submit" class="float-end" [disabled]="!form.valid" status="success" nbTooltip="Lưu dữ liệu">
+        <button nbButton type="submit" class="float-end" [disabled]="!form.valid" status="success"
+          nbTooltip="Lưu dữ liệu">
           <i class="fa-solid fa-check"></i>
         </button>
       </div>

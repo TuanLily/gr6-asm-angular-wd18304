@@ -46,37 +46,95 @@
 
 nb-card-body {
   .custom-title-count-procducts {
-      position: relative;
-      color: black;
-      text-decoration: none;
-      transition: color 0.3s ease, opacity 0.3s ease;
+    position: relative;
+    color: black;
+    text-decoration: none;
+    transition: color 0.3s ease, opacity 0.3s ease;
   }
 
   .custom-title-count-procducts::before {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 2px;
-      bottom: 0;
-      left: 0;
-      background-color: #5353e3;
-      transform: scaleX(0);
-      transform-origin: bottom right;
-      transition: transform 0.3s ease;
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #5353e3;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease;
   }
 
   .custom-title-count-procducts:hover::before {
-      transform: scaleX(1);
-      transform-origin: bottom left;
+    transform: scaleX(1);
+    transform-origin: bottom left;
   }
 
   .custom-title-count-procducts:hover {
-      color: #5353e3;
-      opacity: 0.8;
+    color: #5353e3;
+    opacity: 0.8;
+  }
+
+  .custom-title-count-customers {
+    position: relative;
+    color: black;
+    text-decoration: none;
+    transition: color 0.3s ease, opacity 0.3s ease;
+  }
+
+  .custom-title-count-customers::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #34dc82;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease;
+  }
+
+  .custom-title-count-customers:hover::before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+
+  .custom-title-count-customers:hover {
+    color: #34dc82;
+    opacity: 0.8;
+  }
+
+  .custom-title-count-employees {
+    position: relative;
+    color: black;
+    text-decoration: none;
+    transition: color 0.3s ease, opacity 0.3s ease;
+  }
+
+  .custom-title-count-employees::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #ffaa01;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease;
+  }
+
+  .custom-title-count-employees:hover::before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+
+  .custom-title-count-employees:hover {
+    color: #ffaa01;
+    opacity: 0.8;
   }
 }
-
-
 
 /* Light Mode */
 .light .table-responsive {
@@ -108,13 +166,13 @@ nb-card-body {
   border-color: #dee2e6;
 }
 
-.light nb-card-body{
-  .custom-title-count-procducts{
+.light nb-card-body {
+  .custom-title-count-procducts,
+  .custom-title-count-employees,
+  .custom-title-count-customers {
     color: black;
   }
-
 }
-
 
 /* Dark Mode */
 .dark .table-responsive {
@@ -146,13 +204,28 @@ nb-card-body {
   border-color: #3b426b;
 }
 
-.dark nb-card-body{
-  .custom-title-count-procducts{
+.dark nb-card-body {
+  .custom-title-count-procducts {
     color: white;
   }
 
-  .custom-title-count-procducts:hover{
+  .custom-title-count-procducts:hover {
     color: #5c5cfc;
   }
 
+  .custom-title-count-employees {
+    color: white;
+  }
+
+  .custom-title-count-employees:hover {
+    color: #ffaa01;
+  }
+
+  .custom-title-count-customers {
+    color: white;
+  }
+
+  .custom-title-count-customers:hover {
+    color: #34dc82;
+  }
 }

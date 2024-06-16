@@ -29,7 +29,7 @@
           Tổng tài khoản nhân viên
         </nb-card-header>
         <nb-card-body class="fw-bold text-center fs-3">
-          <a  class="custom-title-count-procducts"  [routerLink]="['/pages/employees/list']"
+          <a  class="custom-title-count-employees"  [routerLink]="['/pages/employees/list']"
           routerLinkActive="router-link-active" nbTooltip="Xem chi tiết ở đây">{{countEmployees}} NHÂN VIÊN </a>
         </nb-card-body>
       </nb-card>
@@ -42,7 +42,7 @@
           Tổng số tài khoản khách hàng
         </nb-card-header>
         <nb-card-body class="fw-bold text-center fs-3">
-          <a class="custom-title-count-procducts" [routerLink]="['/pages/customers/list']"
+          <a class="custom-title-count-customers" [routerLink]="['/pages/customers/list']"
           routerLinkActive="router-link-active" nbTooltip="Xem chi tiết ở đây">
           {{countCustomers}} KHÁCH HÀNG </a>
         </nb-card-body>
@@ -80,14 +80,13 @@
     <nb-card-body>
       <div class="row">
         <div class="col-md-6">
-          <app-echarts [chartOptions]="columnChartOptions"></app-echarts>
+          <app-echarts [chartOptions]="pieChartOptions2"></app-echarts>
         </div>
         <div class="col-md-6">
           <app-echarts [chartOptions]="pieChartOptions"></app-echarts>
         </div>
       </div>
-      <app-echarts [chartOptions]="pieChartOptions2"></app-echarts>
-      <app-echarts [chartOptions]="lineChartOptions"></app-echarts>
+      <app-echarts [chartOptions]="columnChartOptions"></app-echarts>
 
 
     </nb-card-body>

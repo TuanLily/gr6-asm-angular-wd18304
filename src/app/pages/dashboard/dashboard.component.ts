@@ -80,121 +80,17 @@ export class DashboardComponent implements OnInit {
       ],
     };
 
-    this.lineChartOptions = {
-      title: {
-        text: 'Biểu đồ',
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          type: 'shadow',
-        },
-      },
-      xAxis: {
-        type: 'category',
-        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-      },
-      yAxis: {
-        type: 'value',
-      },
-      series: [
-        {
-          name: 'Biểu đồ đường',
-          type: 'line',
-          data: [150, 230, 224, 218, 135, 147, 260],
-          smooth: true,
-        },
-      ],
-    };
-
-    this.areaChartOptions = {
-      title: {
-        text: 'Thống kê Doanh thu',
-        left: 'center',
-      },
-      tooltip: {
-        trigger: 'axis',
-      },
-      xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        data: [
-          'Tháng 1',
-          'Tháng 2',
-          'Tháng 3',
-          'Tháng 4',
-          'Tháng 5',
-          'Tháng 6',
-          'Tháng 7',
-          'Tháng 8',
-          'Tháng 9',
-          'Tháng 10',
-          'Tháng 11',
-          'Tháng 12',
-        ],
-      },
-      yAxis: {
-        type: 'value',
-      },
-      series: [
-        {
-          name: 'Doanh thu',
-          type: 'line',
-          stack: 'Tổng',
-          areaStyle: {},
-          data: [
-            820, 932, 901, 934, 1290, 1330, 1320, 1410, 1500, 1600, 1700, 1800,
-          ],
-        },
-      ],
-    };
-
-    this.areaChartOptions = {
-      title: {
-        text: 'Thống kê Doanh thu',
-        left: 'center',
-      },
-      tooltip: {
-        trigger: 'axis',
-      },
-      xAxis: {
-        type: 'category',
-        boundaryGap: false,
-        data: [
-          'Tháng 1',
-          'Tháng 2',
-          'Tháng 3',
-          'Tháng 4',
-          'Tháng 5',
-          'Tháng 6',
-          'Tháng 7',
-          'Tháng 8',
-          'Tháng 9',
-          'Tháng 10',
-          'Tháng 11',
-          'Tháng 12',
-        ],
-      },
-      yAxis: {
-        type: 'value',
-      },
-      series: [
-        {
-          name: 'Doanh thu',
-          type: 'line',
-          stack: 'Tổng',
-          areaStyle: {},
-          data: [
-            820, 932, 901, 934, 1290, 1330, 1320, 1410, 1500, 1600, 1700, 1800,
-          ],
-        },
-      ],
-    };
-
   }
 
   ngOnInit(): void {
     this.initCharts();
+
+    this.themeService.onThemeChange().subscribe((theme: any) => {
+      this.currentTheme = theme.name;
+      this.initCharts();
+    });
+
+    
 
     this.statisticsService.getProductPrices().subscribe((data) => {
       this.productPriceStats = data;
@@ -208,17 +104,20 @@ export class DashboardComponent implements OnInit {
         console.error('Error fetching product count', error);
       }
     );
+    this.pieChartOptions = this.getPieChartOptions();
 
     this.statisticsService.getBillStatus().subscribe((data) => {
       const statusCounts = data.statusCounts;
-
+    
       const chartData = [
-        { value: statusCounts['0'] || 0, name: 'Đang giao' },
-        { value: statusCounts['1'] || 0, name: 'Đã giao' },
-        { value: statusCounts['2'] || 0, name: 'Đã huỷ' },
+        { value: statusCounts[0] || 0, name: 'Đang giao' },
+        { value: statusCounts[1] || 0, name: 'Đã giao' },
+        { value: statusCounts[2] || 0, name: 'Đã huỷ' },
       ];
-
-      this.pieChartOptions.series[0].data = chartData;
+    
+      if (this.pieChartOptions && this.pieChartOptions.series && this.pieChartOptions.series[0]) {
+        this.pieChartOptions.series[0].data = chartData;
+      }
     });
 
     this.statisticsService.getCountCateProducts().subscribe((data) => {
@@ -232,11 +131,6 @@ export class DashboardComponent implements OnInit {
       }
 
       this.pieChartOptions2 = this.getPieChartOptions2();
-    });
-
-    this.themeService.onThemeChange().subscribe((theme: any) => {
-      this.currentTheme = theme.name;
-      this.initCharts();
     });
 
     this.statisticsService.getCountCustomers().subscribe(
@@ -268,7 +162,7 @@ export class DashboardComponent implements OnInit {
 
   getPieChartOptions(): any {
     const textColor = this.currentTheme === 'dark' ? '#fff' : '#000';
-
+  
     return {
       title: {
         text: 'Biểu đồ Tình Trạng Đơn Hàng',
@@ -321,7 +215,7 @@ export class DashboardComponent implements OnInit {
           labelLine: {
             show: false,
           },
-          data: this.pieChartOptions ? this.pieChartOptions.series[0].data : [],
+          data: [],
         },
       ],
     };
