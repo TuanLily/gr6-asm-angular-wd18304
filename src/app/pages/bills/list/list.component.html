@@ -115,11 +115,14 @@
         <div class="col-md-12">
           <div class="form-group my-3">
             <label for="voucherId">Mã voucher:</label>
-            <input type="text" class="form-control" id="voucherCode" formControlName="voucher_code"
-              placeholder="Nhập voucher giảm giá">
+            <input type="text" class="form-control" id="voucherCode" formControlName="voucher_code" placeholder="Nhập voucher giảm giá">
+            <div *ngIf="voucherErrorMessage" class="text-danger my-1">
+              <small>{{ voucherErrorMessage }}</small>
+            </div>
           </div>
         </div>
       </div>
+
 
       <hr />
 

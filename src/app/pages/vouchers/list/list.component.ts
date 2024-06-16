@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ValidatorFn } from '@angular/forms';
 import { NbThemeService, NbToastrService } from '@nebular/theme';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import Swal from 'sweetalert2';
@@ -9,6 +9,23 @@ import { IVoucher } from 'app/@core/interfaces/vouchers.interface';
 import { VoucherService } from 'app/@core/services/apis/voucher.service';
 import { SpinnerService } from '../../../@theme/components/spinner/spinner.service';
 import { API_BASE_URL, API_ENDPOINT } from 'app/@core/config/api-endpoint.config';
+
+const dateComparisonValidator: ValidatorFn = (control: FormGroup): { [key: string]: boolean } | null => {
+  const validFrom = control.get('valid_from').value;
+  const validTo = control.get('valid_to').value;
+
+  if (validFrom && validTo) {
+      const fromDate = new Date(validFrom);
+      const toDate = new Date(validTo);
+      const currentDate = new Date();
+
+      if (toDate <= fromDate || toDate <= currentDate) {
+          return { 'dateInvalid': true };
+      }
+  }
+
+  return null;
+};
 
 @Component({
   selector: 'app-list',
@@ -21,7 +38,6 @@ export class ListComponent implements OnInit {
   form: FormGroup;
   newVoucher: IVoucher = { voucher_code: '', discount_rate: 0, valid_from: '', valid_to: '', description: '' };
 
-  // Biến để xác định trạng thái hiện tại: true = đang thêm mới, false = đang sửa
   isAddingNewVoucher: boolean = true;
   isEditing: boolean = false;
 
@@ -45,7 +61,8 @@ export class ListComponent implements OnInit {
     private themeService: NbThemeService,
     private spinner: SpinnerService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder
   ) {
     this.themeService.onThemeChange()
       .subscribe(theme => {
@@ -59,16 +76,15 @@ export class ListComponent implements OnInit {
       this.loadVouchers(currentPage);
     });
 
-    this.form = new FormGroup({
-      voucher_code: new FormControl('', Validators.required),
-      discount_rate: new FormControl('', [Validators.required, Validators.min(0), Validators.max(100)]), // Thêm Validators.max(100) ở đây
-      valid_from: new FormControl('', Validators.required),
-      valid_to: new FormControl('', Validators.required),
-      description: new FormControl('', Validators.required)
-    });
+    this.form = this.formBuilder.group({
+      voucher_code: ['', Validators.required],
+      discount_rate: ['', [Validators.required, Validators.min(0), Validators.max(100)]],
+      valid_from: ['', Validators.required],
+      valid_to: ['', Validators.required],
+      description: ['', Validators.required]
+    }, { validator: dateComparisonValidator });
   }
 
-  // *Định dạng ngày
   formatDate(value: string): string {
     const date = new Date(value);
     const year = date.getFullYear();
@@ -77,7 +93,6 @@ export class ListComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  // *Hàm load toàn bộ dữ liệu ra giao diện (bao gồm chức năng phân trang và tìm kiếm voucher theo từ khóa)
   loadVouchers(page: number): void {
     this.spinner.show();
 
@@ -89,12 +104,10 @@ export class ListComponent implements OnInit {
 
       const queryParams: any = { page: page };
 
-      // Nếu có từ khóa tìm kiếm, thêm ?search vào đường dẫn Url
       if (this.searchQuery && this.searchQuery.trim() !== '') {
         queryParams.search = this.searchQuery;
       }
 
-      // Cập nhật tham số ?page và ?search lên URL nếu khác với giá trị trước đó
       this.router.navigate([], {
         queryParams: queryParams,
         replaceUrl: true
@@ -102,13 +115,10 @@ export class ListComponent implements OnInit {
     });
   }
 
-  //* Hàm xử lý tìm kiếm voucher
   onSearch(): void {
-    // Gọi hàm loadVouchers với trang hiện tại và từ khóa tìm kiếm
     this.loadVouchers(this.currentPage);
   }
 
-  //* Hàm xử lý thêm mới hoặc cập nhật voucher
   addVoucher(): void {
     if (!this.form.valid) {
       this.toastrService.danger('Vui lòng nhập đủ dữ liệu và kiểm tra lại các trường!', 'Error');
@@ -132,7 +142,7 @@ export class ListComponent implements OnInit {
           this.toastrService.success('Cập nhật thành công!', 'Success');
           this.isEditing = false;
           this.spinner.hide();
-          this.loadVouchers(this.currentPage); // Cập nhật danh sách voucher sau khi chỉnh sửa
+          this.loadVouchers(this.currentPage);
         },
         error => {
           this.toastrService.danger('Đã xảy ra lỗi khi cập nhật voucher!', 'Error');
@@ -145,7 +155,7 @@ export class ListComponent implements OnInit {
         () => {
           this.toastrService.success('Thêm mới thành công!', 'Success');
           this.spinner.hide();
-          this.loadVouchers(1); // Cập nhật danh sách voucher sau khi thêm mới
+          this.loadVouchers(1);
         },
         error => {
           this.toastrService.danger('Đã xảy ra lỗi khi thêm voucher!', 'Error');
@@ -158,7 +168,6 @@ export class ListComponent implements OnInit {
     this.form.reset();
   }
 
-  //* Hàm xử lý dữ liệu đưa lên form đề cập nhật voucher
   editVoucher(voucherId: number): void {
     if (this.isEditing) {
       return;
@@ -182,7 +191,6 @@ export class ListComponent implements OnInit {
     this.scrollFormIntoView();
   }
 
-  //* Hàm xóa voucher
   deleteVoucher(voucherId: number): void {
     Swal.fire({
       title: 'Xác nhận xóa',
@@ -211,7 +219,6 @@ export class ListComponent implements OnInit {
     });
   }
 
-  //* Hàm reset lại form
   resetForm(): void {
     this.isEditing = false;
     this.isAddingNewVoucher = false;
@@ -219,7 +226,6 @@ export class ListComponent implements OnInit {
     this.toastrService.success('Dữ liệu trên form đã được reset!', 'Thành công');
   }
 
-  // *Hàm này thực hiện chức năng scroll trang khi click vào nút sửa voucher
   scrollFormIntoView() {
     if (this.formElement) {
       this.formElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });

@@ -1,10 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { NbThemeService, NbToastrService } from '@nebular/theme';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import Swal from 'sweetalert2';
-
+import { NbThemeService, NbToastrService } from '@nebular/theme';
 import { IBill } from 'app/@core/interfaces/bills.interface';
 import { BillService } from 'app/@core/services/apis/bill.service';
 import { SpinnerService } from 'app/@theme/components/spinner/spinner.service';
@@ -15,7 +13,6 @@ import {
 import { EmployeeService } from 'app/@core/services/apis/employee.service';
 import { ProductService } from 'app/@core/services/apis/product.service';
 import { VoucherService } from 'app/@core/services/apis/voucher.service';
-import { Pipe, PipeTransform } from '@angular/core';
 
 @Component({
   selector: 'app-list',
@@ -58,6 +55,7 @@ export class ListComponent implements OnInit {
   ];
 
   currentTheme = 'default';
+  voucherErrorMessage: string = '';
 
   constructor(
     private toastrService: NbToastrService,
@@ -70,10 +68,9 @@ export class ListComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    this.themeService.onThemeChange()
-      .subscribe(theme => {
-        this.currentTheme = theme.name;
-      });
+    this.themeService.onThemeChange().subscribe((theme) => {
+      this.currentTheme = theme.name;
+    });
   }
 
   ngOnInit(): void {
@@ -284,7 +281,6 @@ export class ListComponent implements OnInit {
     return this.products.find((product) => product.id === productId);
   }
 
-  // *Hàm này thực hiện chức năng scroll trang khi click vào nút sửa voucher
   scrollFormIntoView() {
     if (this.formElement) {
       this.formElement.nativeElement.scrollIntoView({
@@ -300,45 +296,62 @@ export class ListComponent implements OnInit {
 
   calculateTotals(values: any): void {
     const productId = parseInt(values.product_id, 10);
-    // console.log(productId);
-    if (!productId) {
-      // console.log('Product ID is empty.');
-    }
-
     const product = this.products.find((p) => p.id === productId);
-    // console.log('>>> Product: ', product);
-
     const qty = values.qty || 0;
 
     if (product) {
       this.provisionalTotal = product.sale_price * qty;
-      // console.log('tạm tính bằng', this.provisionalTotal);
     } else {
       this.provisionalTotal = 0;
     }
 
-    if (values.voucher_code) {
-      this.voucherService
-        .getVoucherByCode(values.voucher_code)
-        .subscribe((voucher) => {
+    const voucherCode = values.voucher_code;
+
+    if (voucherCode) {
+      this.voucherService.getVoucherByCode(voucherCode).subscribe(
+        (voucher) => {
           if (voucher) {
-            this.discountAmount =
-              (voucher.discount_rate / 100) * this.provisionalTotal;
-            // console.log('voucher bằng', this.discountAmount);
+            const currentDate = new Date().getTime();
+            const validFrom = new Date(voucher.valid_from).getTime();
+            const validTo = new Date(voucher.valid_to).getTime();
+
+            if (currentDate < validFrom) {
+              this.voucherErrorMessage = 'Voucher chưa có hiệu lực';
+              this.discountAmount = 0;
+            } else if (currentDate > validTo) {
+              this.voucherErrorMessage = 'Voucher đã hết hạn';
+              this.discountAmount = 0;
+            } else {
+              this.voucherErrorMessage = '';
+              this.discountAmount =
+                (voucher.discount_rate / 100) * this.provisionalTotal;
+            }
           } else {
+            this.voucherErrorMessage = 'Voucher không hợp lệ';
             this.discountAmount = 0;
           }
+
           this.finalTotal = Math.max(
             this.provisionalTotal - this.discountAmount,
             10
           );
-          // console.log('>>> Check tổng tiền: ', this.finalTotal);
           this.form.patchValue(
             { total: this.finalTotal },
             { emitEvent: false }
           );
-        });
+        },
+        (error) => {
+          this.voucherErrorMessage = 'Lỗi khi kiểm tra voucher';
+          this.discountAmount = 0;
+          this.finalTotal = this.provisionalTotal;
+          this.form.patchValue(
+            { total: this.finalTotal },
+            { emitEvent: false }
+          );
+        }
+      );
     } else {
+      this.voucherErrorMessage = '';
       this.discountAmount = 0;
       this.finalTotal = this.provisionalTotal;
       this.form.patchValue({ total: this.finalTotal }, { emitEvent: false });

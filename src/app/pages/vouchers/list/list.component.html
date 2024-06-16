@@ -100,6 +100,9 @@
                             <small *ngIf="form.get('valid_to').hasError('required')">Vui lòng chọn thời gian hết hiệu
                                 lực.</small>
                         </div>
+                        <div *ngIf="form.errors?.dateInvalid" class="text-danger">
+                          <small>Ngày hết hiệu lực phải lớn hơn ngày có hiệu lực và hiện tại.</small>
+                      </div>
                     </div>
                 </div>
             </div>
