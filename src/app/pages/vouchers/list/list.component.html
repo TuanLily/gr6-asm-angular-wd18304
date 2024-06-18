@@ -19,7 +19,6 @@
                         <th>Mã voucher</th>
                         <th>Giá trị</th>
                         <th>Thời gian</th>
-                        <th>Mô tả</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
@@ -32,7 +31,6 @@
                             <div>Bắt đầu: {{ voucher.valid_from | date:'dd/MM/yyyy' }}</div>
                             <div>Kết thúc: {{ voucher.valid_to | date:'dd/MM/yyyy' }}</div>
                         </td>
-                        <td class="align-middle">{{ voucher.description }}</td>
                         <td class="align-middle text-center">
                             <div class="btn-group d-flex justify-content-center">
                                 <button nbButton status="primary" type="button" class="btn-sm mx-1 btn-equal"
@@ -63,11 +61,13 @@
     <nb-card-body>
         <form [formGroup]="form" (ngSubmit)="addVoucher()" #formElement>
             <div class="form-group my-3">
-              <label for="voucherCode" class="my-1">Mã voucher<span class="spot">*</span>:</label>
-              <input type="text" class="form-control" id="voucherCode" formControlName="voucher_code">
-              <div *ngIf="form.get('voucher_code').invalid && form.get('voucher_code').touched" class="text-danger">
-                  <small *ngIf="form.get('voucher_code').hasError('required')">Vui lòng nhập mã voucher.</small>
-              </div>
+                <label for="voucherCode" class="my-1">Mã voucher<span class="spot">*</span>:</label>
+                <input type="text" class="form-control" id="voucherCode" formControlName="voucher_code">
+                <div *ngIf="form.get('voucher_code').invalid && form.get('voucher_code').touched" class="text-danger">
+                    <small *ngIf="form.get('voucher_code').hasError('required')">Vui lòng nhập mã voucher.</small>
+                    <small *ngIf="form.get('voucher_code').hasError('duplicate')">Mã voucher đã tồn tại, vui lòng nhập
+                        mã khác.</small>
+                </div>
             </div>
             <div class="form-group my-3">
                 <label for="discountRate" class="my-1">Giá trị<span class="spot">*</span>:</label>
@@ -77,32 +77,36 @@
                         voucher.</small>
                     <small *ngIf="form.get('discount_rate').hasError('min')">Giá trị voucher không được nhỏ hơn
                         0.</small>
-                    <small class="text-danger">Giá trị voucher không được lớn hơn 100.</small>
+                    <small *ngIf="form.get('discount_rate').hasError('max')">Giá trị voucher không được lớn hơn
+                        100.</small>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group my-3">
                         <label for="validFrom" class="my-1">Thời gian có hiệu lực<span class="spot">*</span>:</label>
-                        <input type="date" class="form-control" id="validFrom" formControlName="valid_from">
+                        <input type="date" class="form-control" id="validFrom" formControlName="valid_from"
+                            [min]="minValidDate()">
                         <div *ngIf="form.get('valid_from').invalid && form.get('valid_from').touched"
                             class="text-danger">
                             <small *ngIf="form.get('valid_from').hasError('required')">Vui lòng chọn thời gian có hiệu
                                 lực.</small>
+                            <small *ngIf="form.get('valid_from').hasError('dateRangeInvalid')">Thời gian có hiệu lực
+                                không được lớn hơn thời gian hết hiệu lực.</small>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-6">
                     <div class="form-group my-3">
                         <label for="validTo" class="my-1">Thời gian hết hiệu lực<span class="spot">*</span>:</label>
-                        <input type="date" class="form-control" id="validTo" formControlName="valid_to">
+                        <input type="date" class="form-control" id="validTo" formControlName="valid_to"
+                            [min]="minValidDate()" [disabled]="form.get('valid_to').hasError('invalidDate')">
                         <div *ngIf="form.get('valid_to').invalid && form.get('valid_to').touched" class="text-danger">
                             <small *ngIf="form.get('valid_to').hasError('required')">Vui lòng chọn thời gian hết hiệu
                                 lực.</small>
+                            <small *ngIf="form.get('valid_to').hasError('invalidDate')">Thời gian hết hiệu lực không hợp
+                                lệ.</small>
                         </div>
-                        <div *ngIf="form.errors?.dateInvalid" class="text-danger">
-                          <small>Ngày hết hiệu lực phải lớn hơn ngày có hiệu lực và hiện tại.</small>
-                      </div>
                     </div>
                 </div>
             </div>
