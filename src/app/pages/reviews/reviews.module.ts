@@ -13,7 +13,7 @@ import {
   NbCheckboxModule,
   NbInputModule,
   NbThemeModule,
-  NbTooltipModule
+  NbTooltipModule,
 } from '@nebular/theme';
 
 import { ThemeModule } from '../../@theme/theme.module';
@@ -23,6 +23,7 @@ import { ReviewsRoutingModule } from './reviews-routing.module';
 import { ReviewsComponent } from './reviews.component';
 import { ListComponent } from './list/list.component';
 import { PaginatorModule } from 'app/@theme/components/paginator/paginator.module';
+import { NgxStarRatingModule } from 'ngx-star-rating';
 
 
 @NgModule({
@@ -46,7 +47,8 @@ import { PaginatorModule } from 'app/@theme/components/paginator/paginator.modul
     NbTooltipModule,
     ReviewsRoutingModule,
     NbTooltipModule,
-    PaginatorModule
+    PaginatorModule,
+    NgxStarRatingModule
   ],
   declarations: [
     ReviewsComponent,

@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { NbThemeService, NbToastrService } from '@nebular/theme';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import Swal from 'sweetalert2';
@@ -39,6 +39,8 @@ export class ListComponent implements OnInit {
   totalPages: number;
   searchQuery: string = '';
 
+
+
   themes = [
     { value: 'default', name: 'Light' },
     { value: 'dark', name: 'Dark' },
@@ -65,7 +67,7 @@ export class ListComponent implements OnInit {
   ngOnInit(): void {
     this.loadProducts();
     this.loadCustomer();
-    this.route.queryParams.subscribe(params =>{
+    this.route.queryParams.subscribe(params => {
       const currentPage = params['page'] || 1;
       this.loadReviews(currentPage);
     })
@@ -73,12 +75,25 @@ export class ListComponent implements OnInit {
     this.form = new FormGroup({
       product_id: new FormControl('', Validators.required),
       customer_id: new FormControl('', Validators.required),
-      rate: new FormControl('', Validators.required),
+      rate: new FormControl(5, [Validators.required, this.ratingValidator]),
       content: new FormControl(''),
     });
+    this.form.get('rate')?.markAsTouched();
   }
 
+  onRate(event: any): void {
+    this.newReviews.rate = event;
+    this.form.get('rate').setValue(event);
+  }
 
+  ratingValidator(control: FormControl): ValidationErrors | null {
+    const formGroup = control.parent;
+    if (!formGroup) return null;
+
+    const rate = control.value;
+
+    return rate >= 1 && rate <= 5 ? null : { invalidRating: true };
+  }
 
   //* Hàm load toàn bộ dữ liệu ra giao diện
   loadReviews(page: number): void {
@@ -202,7 +217,12 @@ export class ListComponent implements OnInit {
         }
       );
     }
-    this.form.reset();
+    this.form.reset({
+      product_id: '',
+      customer_id: '',
+      rate: 5,
+      content: ''
+    });
   }
 
   //* Hàm xử lý dữ liệu đưa lên form để cập nhật đánh giá
@@ -223,8 +243,8 @@ export class ListComponent implements OnInit {
       });
       this.isAddingNewReviews = false;
       this.isEditing = true;
-      this.form.get('product_id')?.disable(); // Disable product_id khi ở chế độ chỉnh sửa
-      this.form.get('customer_id')?.disable(); // Disable customer_id khi ở chế độ chỉnh sửa
+      this.form.get('product_id')?.disable();
+      this.form.get('customer_id')?.disable();
       this.toastrService.info('Sẵn sàng cập nhật!', 'Thông tin');
     }
     this.scrollFormIntoView();
@@ -262,12 +282,18 @@ export class ListComponent implements OnInit {
 
   Reset(): void {
     this.isEditing = false;
-    this.isAddingNewReviews = true; // Chuyển về trạng thái thêm mới
-    this.form.reset();
-    this.form.get('product_id')?.enable(); // Mở lại chỗ chọn tên sản phẩm (product_id) khi reset form
-    this.form.get('customer_id')?.enable(); // Mở lại chỗ chọn tên khách hàng (customer_id) khi reset form
+    this.isAddingNewReviews = true;
+    this.form.reset({
+      product_id: '',
+      customer_id: '',
+      rate: 5,
+      content: ''
+    });
+    this.form.get('product_id')?.enable();
+    this.form.get('customer_id')?.enable();
     this.toastrService.success('Dữ liệu trên form đã được reset!', 'Thành công');
   }
+
 
   scrollFormIntoView(): void {
     if (this.formElement) {
