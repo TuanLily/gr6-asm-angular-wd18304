@@ -38,7 +38,7 @@ export class EmployeeService extends ApiService {
 
     updateEmployee(employeeId: number, employee: IEmployee): Observable<any> {
         const url = `${API_BASE_URL + API_ENDPOINT.employees}/${employeeId}`;
-        return this.patch<any>(url, employee);
+        return this.put<any>(url, employee);
     }
 
     deleteEmployee(employeeId: number): Observable<any> {

@@ -225,28 +225,44 @@ export class ListComponent implements OnInit {
   //* Hàm xử lý dữ liệu đưa lên form đề cập nhật sản phẩm
   editEmployee(employeeId: number): void {
     if (this.isEditing) {
-      return;
+        return;
     }
 
     const employeeIndex = this.employees.findIndex(employee => employee.id === employeeId);
     if (employeeIndex !== -1) {
-      this.newEmployee = { ...this.employees[employeeIndex] };
+        this.newEmployee = { ...this.employees[employeeIndex] };
 
-      this.form.patchValue({
-        name: this.newEmployee.name,
-        phone: this.newEmployee.phone,
-        email: this.newEmployee.email,
-        address: this.newEmployee.address,
-        password: this.newEmployee.password,
-        salary: this.newEmployee.salary,
-      });
-      this.isAddingNewEmployee = false;
-      this.isEditing = true;
-      this.form.get('password').disable();
-      this.toastrService.info('Sẵn sàng cập nhật!', 'Thông tin');
+        // Lưu mật khẩu ban đầu
+        const storedPassword = this.newEmployee.password;
+
+        this.form.patchValue({
+            name: this.newEmployee.name,
+            phone: this.newEmployee.phone,
+            email: this.newEmployee.email,
+            address: this.newEmployee.address,
+            salary: this.newEmployee.salary,
+        });
+        
+        this.isAddingNewEmployee = false;
+        this.isEditing = true;
+        
+        // Disable trường password để không thể thay đổi
+        this.form.get('password').disable();
+
+        // Hiển thị thông báo
+        this.toastrService.info('Sẵn sàng cập nhật!', 'Thông tin');
+
+        // Thêm xử lý khi cập nhật
+        this.form.valueChanges.subscribe((values) => {
+            if (values.password && values.password !== storedPassword) {
+                // Nếu mật khẩu mới khác với mật khẩu ban đầu, giữ nguyên mật khẩu ban đầu
+                this.form.patchValue({ password: storedPassword }, { emitEvent: true });
+            }
+        });
     }
     this.scrollFormIntoView();
-  }
+}
+
 
   deleteEmployee(employeeId: number): void {
     Swal.fire({
